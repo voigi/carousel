@@ -1,0 +1,393 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9fafb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    background-color: white;
+}
+
+.container {
+    max-width: 1200px;
+   
+    width: 100%;
+    /* height: 100%; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.carousel-container {
+    
+    position: relative;
+    width: 100%;
+    margin-top: 3vh;
+    max-width: 1200px;
+    overflow: hidden;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 50px;
+}
+
+.carousel-item {
+    margin: 0;
+    min-width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.carousel-item img {
+    width: 1200px;
+    height: 627px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-item video {
+    width: 1200px;
+    height: 625px;
+    display: block;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.format-select {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.carousel-button {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 24px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 100;
+    transition: background-color 0.3s ease;
+}
+
+.carousel-button.prev {
+    left: 15px;
+}
+
+.carousel-button.next {
+    right: 15px;
+}
+
+#uploadFile {
+    margin-right: 10px; /* Espacement entre l'input et le bouton */
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+    width: 100%;
+    max-width: 300px; /* Limiter la largeur de l'input */
+}
+
+.add-btn{
+    background-color: #0073b1;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+.cancel-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+#replaceCancelButton,#addCancelButton {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    /* cursor: pointer; */
+    transition: background-color 0.3s ease;
+}
+#addCancelButton{
+ cursor: pointer;
+}
+
+#replaceCancelButton{
+  position: relative;
+  left: 43vw;
+
+}
+
+.add-btn:hover {
+    background-color: #005f8b;
+}
+
+.auto-scroll-select {
+    position: relative;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 86%;
+}
+
+.select-container,#defil-container {
+    
+    display: inline-block;
+    max-width: 350px;
+    margin-bottom: 20px;
+  
+}
+
+
+select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-size: 16px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus {
+    outline: none;
+    border-color: #0073b1;
+    box-shadow: 0 0 5px rgba(0, 115, 177, 0.5);
+}
+
+select:hover {
+    border-color: #aaa;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal button {
+    margin: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.carousel {
+    padding: 0;
+    display: flex;
+    overflow: visible;
+    position: relative;
+    transition: transform 0.5s ease;
+}
+
+.fa-trash {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: red;
+    font-size: 24px;
+}
+
+.carousel-item i.edit-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+}
+
+/* Conteneur pour aligner les boutons et les inputs */
+#replaceFileInput,
+#replaceMediaButton {
+    display: none;
+    margin-top: 15px;
+}
+
+/* Afficher les éléments lorsque l'édition est active */
+#replaceFileInput.active,
+#replaceMediaButton.active {
+    display: inline-block;
+    margin: 0;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+}
+#replaceFileInput.active {
+    margin-left: 10px; /* Espacement à gauche du bouton */
+    position: relative;
+   /*l'input replaceFileInput.active est positionné à gauche du bouton replaceMediaButton.active , */
+   left: 16.9vw;
+   top: 8vh;
+    
+}
+#replaceMediaButton.active {
+    display: inline-block;
+    background-color: #0073b1;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    margin: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px; /* Espacement à gauche du bouton */
+    position: relative;
+    left: 33.7vw;
+}
+#replaceMediaButton.active:hover {
+    background-color: #005f8b;
+}
+
+/* Alignement en ligne des champs dans le conteneur */
+.input-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+/* Conteneur d'édition */
+.upload-container {
+    position: relative; /* Permet à l'input et au bouton de se positionner relativement */
+    display: flex;
+    justify-content: center; /* Garde les éléments centrés */
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Input et bouton d'édition sont cachés par défaut */
+#replaceFileInput,
+#replaceMediaButton {
+    position: absolute; /* Pour qu'ils se superposent sans déplacer les autres éléments */
+    top: 75%; /* Ajuste en fonction du placement souhaité */
+    right: 25%; /* Peut aussi être left selon où tu veux le positionner */
+    display: none; /* Caché par défaut */
+}
+
+/* Afficher l'input et le bouton lorsque l'édition est active */
+#replaceFileInput.active,
+#replaceMediaButton.active {
+    display: inline-block;
+}
+
+/* Style pour ne pas décaler les éléments lors de l'édition */
+.upload-container.active .carousel-item {
+    justify-content: center; /* Maintient centré les autres éléments */
+}
+.replace-container {
+
+ position: relative;
+ left:1vw;
+ bottom: 5vh;
+}
+#replaceMediaButton {
+    position: relative;
+    top: 4vh;
+    left:32vw;
+  
+}
+input:disabled, select:disabled, button:disabled {
+    background-color: #e0e0e0; /* Couleur de fond grisée */
+    cursor: not-allowed; /* Changement du curseur pour indiquer que c'est désactivé */
+    opacity: 0.6; /* Rendre les éléments un peu transparents */
+}
+.finish-btn {
+    background-color: #4CAF50; /* Vert */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px; /* Ajoute un espacement */
+}
+
+.finish-btn:hover {
+    background-color: #45a049; /* Couleur au survol */
+}

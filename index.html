@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrousel Intuitif</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Section du carrousel -->
+        <div class="carousel-container">
+            <div class="carousel">
+                <!-- Les éléments du carrousel seront ajoutés ici dynamiquement -->
+            </div>
+            <button class="carousel-button prev" type="button" aria-label="Précédent">&#10094;</button>
+            <button class="carousel-button next" type="button" aria-label="Suivant">&#10095;</button>
+        </div>
+
+        <!-- Section pour l'ajout de fichiers avec une bordure -->
+        <div class="upload-container">
+            <div class="upload-section">
+                <h1 id="mediaTitle">Ajouter des Médias</h1>
+                
+                <!-- Container pour le sélecteur de format -->
+                <div class="select-container">
+                    <label for="mediaFormat" class="format-label">Choisir un format :</label>
+                    <select id="mediaFormat" class="format-select" aria-labelledby="mediaTitle">
+                        <option value="" selected disabled>Veuillez choisir un format</option>
+                        <option value="image">Image (1200 x 627 px) - JPG, PNG, GIF</option>
+                        <option value="video">Vidéo (1200 x 675 px) - MP4, MOV</option>
+                        <option value="square">Carré (1200 x 1200 px) - JPG, PNG</option>
+                    </select>
+                </div>
+                 
+                <!-- Champ d'upload de fichiers -->
+                <input type="file" id="uploadFile" accept="image/*,video/*" multiple aria-label="Ajouter des fichiers">
+                
+                <!-- Bouton d'ajout de média -->
+                <button id="addMediaButton" class="add-btn" type="button">Ajouter Médias</button>
+                <button id="addCancelButton" type="button">Annuler</button>
+                
+              
+                <!-- Champ et bouton de remplacement (par défaut masqué) -->
+                
+
+                  <div class="replace-container">
+                    <input type="file" id="replaceFileInput" style="display:none;" accept="image/*,video/*" multiple aria-label="Ajouter des fichiers">
+                    <button id="replaceMediaButton" style="display:none;">Remplacer Média</button>
+                    <button id="replaceCancelButton" style="display: none;" type="button">Annuler</button>
+                  </div>
+                    
+
+
+
+                <!-- Message d'erreur -->
+                <p id="errorMessage" class="error-message" role="alert"></p>
+        
+                <!-- Sélecteur pour activer ou non le défilement automatique -->
+               
+                    <div id="defil-container">
+                    <label for="autoScrollSelect" class="scroll-label">Activer le défilement :</label>
+                    <select id="autoScrollSelect" class="auto-scroll-select">
+                        <option value="" selected disabled>Activer le défilement ?</option>
+                        <option value="yes">Oui</option>
+                        <option value="no">Non</option>
+                    </select>
+                </div>
+
+                 
+               
+    
+             
+                
+                
+
+                <!-- Modal de confirmation de suppression -->
+                <div id="deleteModal" class="modal" aria-hidden="true">
+                    <div class="modal-content">
+                        <p>Voulez-vous vraiment supprimer ce média ?</p>
+                        <button id="confirmDelete" type="button">Oui</button>
+                        <button id="cancelDelete" type="button">Non</button>
+                    </div>
+                </div>
+                <div id="finishModal" class="modal" aria-hidden="true">
+                    <div class="modal-content">
+                        <p>Avez vous vraiment fini ?</p>
+                        <button id="confirmFinish" type="button">Oui</button>
+                        <button id="cancelFinish" type="button">Non</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="finishButton" class="finish-btn" style="display: none;" type="button">J'ai fini</button>
+    </div>                                <!-- Boutons pour démarrer et arrêter l'enregistrement -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js"></script>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
