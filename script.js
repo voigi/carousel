@@ -482,11 +482,11 @@ async function createVideoFromCarousel() {
         await ffmpeg.load();
     }
 
-    const items = document.querySelectorAll('.carousel-item'); // Sélectionne les items du carousel
+    const items = document.querySelectorAll('.carousel-item'); // Sélectionne les éléments du carrousel
     let fileIndex = 0;
     const inputs = []; // Garder la trace des fichiers ajoutés (images et vidéos)
 
-    // Parcourir les éléments du carousel pour récupérer les images et vidéos
+    // Parcourir les éléments du carrousel pour récupérer les images et vidéos
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
@@ -499,7 +499,10 @@ async function createVideoFromCarousel() {
             // Écrire l'image dans le système de fichiers de FFmpeg
             const imageFileName = `image${fileIndex}.jpg`;
             ffmpeg.FS('writeFile', imageFileName, imageFile);
-            inputs.push(imageFileName); // Ajouter l'image aux inputs
+
+            // Ajouter l'image comme une vidéo statique (définir durée de 3 secondes par exemple)
+            await ffmpeg.run('-loop', '1', '-t', '3', '-i', imageFileName, `video_${fileIndex}.mp4`);
+            inputs.push(`video_${fileIndex}.mp4`); // Ajouter la vidéo générée à partir de l'image aux inputs
         } else if (mediaType === 'video') {
             // Récupérer la vidéo
             const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
@@ -514,10 +517,10 @@ async function createVideoFromCarousel() {
     }
 
     // Créer une liste de fichiers pour FFmpeg (concaténation des inputs)
-    const inputFileList = inputs.map((input, index) => `file '${input}'`).join('\n');
+    const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
-    // Utiliser FFmpeg pour concaténer les images et vidéos dans un seul fichier vidéo
+    // Utiliser FFmpeg pour concaténer les vidéos dans un seul fichier
     await ffmpeg.run('-f', 'concat', '-safe', '0', '-i', 'input.txt', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', 'output.mp4');
 
     // Lire la vidéo générée depuis le système de fichiers de FFmpeg
@@ -534,6 +537,7 @@ async function createVideoFromCarousel() {
 
     alert('Vidéo générée avec succès !');
 }
+
 
 
 
