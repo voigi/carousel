@@ -476,66 +476,80 @@ addMediaButton.addEventListener('click', () => {
 });
 
 
-async function createVideoFromCarousel() {
+async function createScrollingCarouselVideo() {
     // Charger FFmpeg s'il n'est pas déjà chargé
     if (!ffmpeg.isLoaded()) {
         await ffmpeg.load();
     }
 
-    const items = document.querySelectorAll('.carousel-item'); // Sélectionne les éléments du carrousel
-    let fileIndex = 0;
-    const inputs = []; // Garder la trace des fichiers ajoutés (images et vidéos)
+    const items = document.querySelectorAll('.carousel-item');
+    const fps = 30; // Définit la fluidité de l'animation
+    const videoWidth = 1280; // Largeur pour LinkedIn
+    const videoHeight = 720; // Hauteur pour LinkedIn
+    const itemDuration = 3; // Durée (en secondes) de chaque élément visible lors du défilement
 
-    // Parcourir les éléments du carrousel pour récupérer les images et vidéos
+    let fileIndex = 0;
+    const inputs = [];
+
+    // Traite chaque média pour le défilement
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
 
         if (mediaType === 'img') {
-            // Récupérer l'image
             const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
             const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
-
-            // Écrire l'image dans le système de fichiers de FFmpeg
             const imageFileName = `image${fileIndex}.jpg`;
-            ffmpeg.FS('writeFile', imageFileName, imageFile);
 
-            // Ajouter l'image comme une vidéo statique (définir durée de 3 secondes par exemple)
-            await ffmpeg.run('-loop', '1', '-t', '3', '-i', imageFileName, `video_${fileIndex}.mp4`);
-            inputs.push(`video_${fileIndex}.mp4`); // Ajouter la vidéo générée à partir de l'image aux inputs
+            ffmpeg.FS('writeFile', imageFileName, imageFile);
+            
+            // Créer une animation de défilement pour l'image
+            await ffmpeg.run(
+                '-loop', '1', '-t', itemDuration.toString(), '-i', imageFileName,
+                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+                '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
+                `scroll_image_${fileIndex}.mp4`
+            );
+            inputs.push(`scroll_image_${fileIndex}.mp4`);
         } else if (mediaType === 'video') {
-            // Récupérer la vidéo
             const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
             const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
-
-            // Écrire la vidéo dans le système de fichiers de FFmpeg
             const videoFileName = `video${fileIndex}.mp4`;
+
             ffmpeg.FS('writeFile', videoFileName, videoFile);
-            inputs.push(videoFileName); // Ajouter la vidéo aux inputs
+
+            // Ajouter un filtre pour faire défiler la vidéo en conservant l’audio
+            await ffmpeg.run(
+                '-i', videoFileName,
+                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+                '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
+                `scroll_video_${fileIndex}.mp4`
+            );
+            inputs.push(`scroll_video_${fileIndex}.mp4`);
         }
         fileIndex++;
     }
 
-    // Créer une liste de fichiers pour FFmpeg (concaténation des inputs)
+    // Concaténation des segments avec défilement de gauche à droite
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
-    // Utiliser FFmpeg pour concaténer les vidéos dans un seul fichier
-    await ffmpeg.run('-f', 'concat', '-safe', '0', '-i', 'input.txt', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', 'output.mp4');
+    await ffmpeg.run(
+        '-f', 'concat', '-safe', '0', '-i', 'input.txt',
+        '-c:v', 'libx264', '-preset', 'fast', '-pix_fmt', 'yuv420p',
+        'carousel_scroll_output.mp4'
+    );
 
-    // Lire la vidéo générée depuis le système de fichiers de FFmpeg
-    const data = ffmpeg.FS('readFile', 'output.mp4');
-
-    // Créer un lien pour télécharger la vidéo
+    const data = ffmpeg.FS('readFile', 'carousel_scroll_output.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     const a = document.createElement('a');
     a.href = videoURL;
-    a.download = 'carousel-video.mp4';
+    a.download = 'carousel-scroll.mp4';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    alert('Vidéo générée avec succès !');
+    alert('Vidéo du carrousel générée avec effet de défilement !');
 }
 
 
