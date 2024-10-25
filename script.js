@@ -476,7 +476,7 @@ addMediaButton.addEventListener('click', () => {
 });
 
 
-async function createScrollingCarouselVideo() {
+async function createVideoFromCarousel() {
     // Charger FFmpeg s'il n'est pas déjà chargé
     if (!ffmpeg.isLoaded()) {
         await ffmpeg.load();
