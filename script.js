@@ -477,70 +477,72 @@ addMediaButton.addEventListener('click', () => {
 
 
 async function createVideoFromCarousel() {
-    if (!ffmpeg.isLoaded()) {
-        await ffmpeg.load();
-    }
+    if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
+    const fps = 15;
+    const videoWidth = 1280;
+    const videoHeight = 720;
+    const itemDuration = 1.5; // Durée par média
+
     let fileIndex = 0;
     const inputs = [];
 
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
+        const mediaSrc = mediaElement.src;
 
         if (mediaType === 'img') {
-            try {
-                const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
-                const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
+            const imageBlob = await fetch(mediaSrc).then(r => r.blob());
+            const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
+            const imageFileName = `image${fileIndex}.jpg`;
 
-                // Convertir en JPG pour éviter les erreurs PNG
-                const imageFileName = `image${fileIndex}.jpg`;
-                ffmpeg.FS('writeFile', imageFileName, imageFile);
-                inputs.push(imageFileName);
-            } catch (error) {
-                console.error("Erreur lors de la lecture d'une image :", error);
-            }
+            ffmpeg.FS('writeFile', imageFileName, imageFile);
+            await ffmpeg.run(
+                '-loop', '1', '-t', itemDuration.toString(), '-i', imageFileName,
+                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+                '-c:v', 'libx264', '-crf', '30', '-preset', 'ultrafast',
+                `scroll_image_${fileIndex}.mp4`
+            );
+            inputs.push(`scroll_image_${fileIndex}.mp4`);
         } else if (mediaType === 'video') {
-            try {
-                const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
-                const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
+            const videoBlob = await fetch(mediaSrc).then(r => r.blob());
+            const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
+            const videoFileName = `video${fileIndex}.mp4`;
 
-                const videoFileName = `video${fileIndex}.mp4`;
-                ffmpeg.FS('writeFile', videoFileName, videoFile);
-                inputs.push(videoFileName);
-            } catch (error) {
-                console.error("Erreur lors de la lecture d'une vidéo :", error);
-            }
+            ffmpeg.FS('writeFile', videoFileName, videoFile);
+            await ffmpeg.run(
+                '-i', videoFileName, 
+                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', // Conserver l'audio
+                '-crf', '30', '-preset', 'ultrafast',
+                `scroll_video_${fileIndex}.mp4`
+            );
+            inputs.push(`scroll_video_${fileIndex}.mp4`);
         }
         fileIndex++;
     }
 
-    // Créer un fichier de liste pour concaténer les médias
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
-    try {
-        await ffmpeg.run(
-            '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-            '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k',
-            '-pix_fmt', 'yuv420p', 'output.mp4'
-        );
+    await ffmpeg.run(
+        '-f', 'concat', '-safe', '0', '-i', 'input.txt',
+        '-c:v', 'libx264', '-c:a', 'aac', '-pix_fmt', 'yuv420p', '-preset', 'ultrafast',
+        'carousel_scroll_optimized.mp4'
+    );
 
-        const data = ffmpeg.FS('readFile', 'output.mp4');
-        const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-        const a = document.createElement('a');
-        a.href = videoURL;
-        a.download = 'carousel-video.mp4';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+    const data = ffmpeg.FS('readFile', 'carousel_scroll_optimized.mp4');
+    const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+    const a = document.createElement('a');
+    a.href = videoURL;
+    a.download = 'carousel-scroll-linkedin.mp4';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 
-        alert('Vidéo générée avec succès avec audio inclus !');
-    } catch (error) {
-        console.error("Erreur lors de la génération de la vidéo:", error);
-        alert("La conversion a échoué. Vérifiez les formats des médias sources.");
-    }
+    alert('Vidéo optimisée avec audio générée pour LinkedIn!');
 }
 
 
