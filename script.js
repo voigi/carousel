@@ -480,7 +480,6 @@ async function createVideoFromCarousel() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
-    const fps = 15;
     const videoWidth = 1280;
     const videoHeight = 720;
     const itemDuration = 1.5; // Durée par média
@@ -512,11 +511,12 @@ async function createVideoFromCarousel() {
             const videoFileName = `video${fileIndex}.mp4`;
 
             ffmpeg.FS('writeFile', videoFileName, videoFile);
+            // Garder la piste audio
             await ffmpeg.run(
-                '-i', videoFileName, 
+                '-i', videoFileName,
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', // Conserver l'audio
-                '-crf', '30', '-preset', 'ultrafast',
+                '-c:v', 'libx264', '-crf', '30', '-preset', 'ultrafast',
+                '-c:a', 'aac', '-b:a', '128k', // Assurez-vous que l'audio est encodé en AAC
                 `scroll_video_${fileIndex}.mp4`
             );
             inputs.push(`scroll_video_${fileIndex}.mp4`);
@@ -524,9 +524,11 @@ async function createVideoFromCarousel() {
         fileIndex++;
     }
 
+    // Préparer la liste d'entrée pour la concaténation
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
+    // Utilisation de filter_complex pour inclure l'audio
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
         '-c:v', 'libx264', '-c:a', 'aac', '-pix_fmt', 'yuv420p', '-preset', 'ultrafast',
@@ -544,6 +546,7 @@ async function createVideoFromCarousel() {
 
     alert('Vidéo optimisée avec audio générée pour LinkedIn!');
 }
+
 
 
 
