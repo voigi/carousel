@@ -480,10 +480,10 @@ async function createVideoFromCarousel() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
-    const fps = 15; // Réduit le framerate pour accélérer le rendu
+    const fps = 15;
     const videoWidth = 1280;
     const videoHeight = 720;
-    const itemDuration = 2; // Durée par média réduite pour accélérer
+    const itemDuration = 1.5; // Durée par média réduite
 
     let fileIndex = 0;
     const inputs = [];
@@ -499,11 +499,11 @@ async function createVideoFromCarousel() {
             const imageFileName = `image${fileIndex}.jpg`;
 
             ffmpeg.FS('writeFile', imageFileName, imageFile);
-
             await ffmpeg.run(
                 '-loop', '1', '-t', itemDuration.toString(), '-i', imageFileName,
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-preset', 'veryfast', `scroll_image_${fileIndex}.mp4`
+                '-c:v', 'libx264', '-crf', '30', '-preset', 'ultrafast',
+                `scroll_image_${fileIndex}.mp4`
             );
             inputs.push(`scroll_image_${fileIndex}.mp4`);
         } else if (mediaType === 'video') {
@@ -512,10 +512,10 @@ async function createVideoFromCarousel() {
             const videoFileName = `video${fileIndex}.mp4`;
 
             ffmpeg.FS('writeFile', videoFileName, videoFile);
-
             await ffmpeg.run(
                 '-i', videoFileName, '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-crf', '28', '-preset', 'veryfast', `scroll_video_${fileIndex}.mp4`
+                '-crf', '30', '-preset', 'ultrafast',
+                `scroll_video_${fileIndex}.mp4`
             );
             inputs.push(`scroll_video_${fileIndex}.mp4`);
         }
@@ -527,20 +527,20 @@ async function createVideoFromCarousel() {
 
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-        '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-preset', 'veryfast',
-        'carousel_scroll_output.mp4'
+        '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-preset', 'ultrafast',
+        'carousel_scroll_optimized.mp4'
     );
 
-    const data = ffmpeg.FS('readFile', 'carousel_scroll_output.mp4');
+    const data = ffmpeg.FS('readFile', 'carousel_scroll_optimized.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     const a = document.createElement('a');
     a.href = videoURL;
-    a.download = 'carousel-scroll-optimized.mp4';
+    a.download = 'carousel-scroll-linkedin.mp4';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    alert('Vidéo du carrousel générée avec optimisations !');
+    alert('Vidéo optimisée générée pour LinkedIn!');
 }
 
 
