@@ -490,23 +490,34 @@ async function createVideoFromCarousel() {
         const mediaType = mediaElement.tagName.toLowerCase();
 
         if (mediaType === 'img') {
-            const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
-            const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
-            const imageFileName = `image${fileIndex}.jpg`;
-            ffmpeg.FS('writeFile', imageFileName, imageFile);
-            inputs.push(imageFileName);
+            try {
+                const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
+                const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
+
+                // Convertir en JPG pour éviter les erreurs PNG
+                const imageFileName = `image${fileIndex}.jpg`;
+                ffmpeg.FS('writeFile', imageFileName, imageFile);
+                inputs.push(imageFileName);
+            } catch (error) {
+                console.error("Erreur lors de la lecture d'une image :", error);
+            }
         } else if (mediaType === 'video') {
-            const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
-            const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
-            const videoFileName = `video${fileIndex}.mp4`;
-            ffmpeg.FS('writeFile', videoFileName, videoFile);
-            inputs.push(videoFileName);
+            try {
+                const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
+                const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
+
+                const videoFileName = `video${fileIndex}.mp4`;
+                ffmpeg.FS('writeFile', videoFileName, videoFile);
+                inputs.push(videoFileName);
+            } catch (error) {
+                console.error("Erreur lors de la lecture d'une vidéo :", error);
+            }
         }
         fileIndex++;
     }
 
-    // Construire un fichier de concaténation pour FFmpeg
-    const inputFileList = inputs.map((input) => `file '${input}'`).join('\n');
+    // Créer un fichier de liste pour concaténer les médias
+    const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
     try {
