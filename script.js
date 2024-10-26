@@ -477,66 +477,59 @@ addMediaButton.addEventListener('click', () => {
 
 
 async function createVideoFromCarousel() {
-    // Charger FFmpeg s'il n'est pas déjà chargé
     if (!ffmpeg.isLoaded()) {
         await ffmpeg.load();
     }
 
-    const items = document.querySelectorAll('.carousel-item'); // Sélectionne les items du carousel
+    const items = document.querySelectorAll('.carousel-item');
     let fileIndex = 0;
-    const inputs = []; // Garder la trace des fichiers ajoutés (images et vidéos)
+    const inputs = [];
 
-    // Parcourir les éléments du carousel pour récupérer les images et vidéos
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
 
         if (mediaType === 'img') {
-            // Récupérer l'image
             const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
             const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
-
-            // Écrire l'image dans le système de fichiers de FFmpeg
             const imageFileName = `image${fileIndex}.jpg`;
             ffmpeg.FS('writeFile', imageFileName, imageFile);
-            inputs.push(imageFileName); // Ajouter l'image aux inputs
+            inputs.push(imageFileName);
         } else if (mediaType === 'video') {
-            // Récupérer la vidéo
             const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
             const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
-
-            // Écrire la vidéo dans le système de fichiers de FFmpeg
             const videoFileName = `video${fileIndex}.mp4`;
             ffmpeg.FS('writeFile', videoFileName, videoFile);
-            inputs.push(videoFileName); // Ajouter la vidéo aux inputs
+            inputs.push(videoFileName);
         }
         fileIndex++;
     }
 
-    // Créer une liste de fichiers pour FFmpeg (concaténation des inputs)
-    const inputFileList = inputs.map((input, index) => `file '${input}'`).join('\n');
+    // Construire un fichier de concaténation pour FFmpeg
+    const inputFileList = inputs.map((input) => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
-    // Utiliser FFmpeg pour concaténer les images et vidéos avec audio
-    await ffmpeg.run(
-        '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-        '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '192k',
-        '-pix_fmt', 'yuv420p', 'output.mp4'
-    );
+    try {
+        await ffmpeg.run(
+            '-f', 'concat', '-safe', '0', '-i', 'input.txt',
+            '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k',
+            '-pix_fmt', 'yuv420p', 'output.mp4'
+        );
 
-    // Lire la vidéo générée depuis le système de fichiers de FFmpeg
-    const data = ffmpeg.FS('readFile', 'output.mp4');
+        const data = ffmpeg.FS('readFile', 'output.mp4');
+        const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+        const a = document.createElement('a');
+        a.href = videoURL;
+        a.download = 'carousel-video.mp4';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
 
-    // Créer un lien pour télécharger la vidéo
-    const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-    const a = document.createElement('a');
-    a.href = videoURL;
-    a.download = 'carousel-video.mp4';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    alert('Vidéo générée avec succès avec audio inclus !');
+        alert('Vidéo générée avec succès avec audio inclus !');
+    } catch (error) {
+        console.error("Erreur lors de la génération de la vidéo:", error);
+        alert("La conversion a échoué. Vérifiez les formats des médias sources.");
+    }
 }
 
 
