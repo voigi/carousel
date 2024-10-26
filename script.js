@@ -477,66 +477,57 @@ addMediaButton.addEventListener('click', () => {
 
 
 async function createVideoFromCarousel() {
-    // Charger FFmpeg s'il n'est pas déjà chargé
-    if (!ffmpeg.isLoaded()) {
-        await ffmpeg.load();
-    }
+    if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
-    const fps = 30; // Définit la fluidité de l'animation
-    const videoWidth = 1280; // Largeur pour LinkedIn
-    const videoHeight = 720; // Hauteur pour LinkedIn
-    const itemDuration = 3; // Durée (en secondes) de chaque élément visible lors du défilement
+    const fps = 15; // Réduit le framerate pour accélérer le rendu
+    const videoWidth = 1280;
+    const videoHeight = 720;
+    const itemDuration = 2; // Durée par média réduite pour accélérer
 
     let fileIndex = 0;
     const inputs = [];
 
-    // Traite chaque média pour le défilement
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
+        const mediaSrc = mediaElement.src;
 
         if (mediaType === 'img') {
-            const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
+            const imageBlob = await fetch(mediaSrc).then(r => r.blob());
             const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
             const imageFileName = `image${fileIndex}.jpg`;
 
             ffmpeg.FS('writeFile', imageFileName, imageFile);
-            
-            // Créer une animation de défilement pour l'image
+
             await ffmpeg.run(
                 '-loop', '1', '-t', itemDuration.toString(), '-i', imageFileName,
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
-                `scroll_image_${fileIndex}.mp4`
+                '-c:v', 'libx264', '-preset', 'veryfast', `scroll_image_${fileIndex}.mp4`
             );
             inputs.push(`scroll_image_${fileIndex}.mp4`);
         } else if (mediaType === 'video') {
-            const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
+            const videoBlob = await fetch(mediaSrc).then(r => r.blob());
             const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
             const videoFileName = `video${fileIndex}.mp4`;
 
             ffmpeg.FS('writeFile', videoFileName, videoFile);
 
-            // Ajouter un filtre pour faire défiler la vidéo en conservant l’audio
             await ffmpeg.run(
-                '-i', videoFileName,
-                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
-                `scroll_video_${fileIndex}.mp4`
+                '-i', videoFileName, '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+                '-crf', '28', '-preset', 'veryfast', `scroll_video_${fileIndex}.mp4`
             );
             inputs.push(`scroll_video_${fileIndex}.mp4`);
         }
         fileIndex++;
     }
 
-    // Concaténation des segments avec défilement de gauche à droite
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-        '-c:v', 'libx264', '-preset', 'fast', '-pix_fmt', 'yuv420p',
+        '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-preset', 'veryfast',
         'carousel_scroll_output.mp4'
     );
 
@@ -544,13 +535,14 @@ async function createVideoFromCarousel() {
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     const a = document.createElement('a');
     a.href = videoURL;
-    a.download = 'carousel-scroll.mp4';
+    a.download = 'carousel-scroll-optimized.mp4';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    alert('Vidéo du carrousel générée avec effet de défilement !');
+    alert('Vidéo du carrousel générée avec optimisations !');
 }
+
 
 
 
