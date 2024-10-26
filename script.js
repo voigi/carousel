@@ -531,8 +531,9 @@ async function createVideoFromCarousel() {
     // Utilisation de filter_complex pour inclure l'audio
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-        '-c:v', 'libx264', '-c:a', 'aac', '-pix_fmt', 'yuv420p', '-preset', 'ultrafast',
-        'carousel_scroll_optimized.mp4'
+    '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', // Ajout du codec audio ici
+    '-pix_fmt', 'yuv420p', '-preset', 'ultrafast',
+    'carousel_scroll_optimized.mp4'
     );
 
     const data = ffmpeg.FS('readFile', 'carousel_scroll_optimized.mp4');
