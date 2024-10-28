@@ -480,10 +480,11 @@ async function createVideoFromCarousel() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
-    const fps = 30; // Framerate
+    const fps = 30;
     const videoWidth = 1280;
     const videoHeight = 720;
-    const itemDuration = 1.5; // Durée par média
+    const itemDuration = 1.5;
+    const videoBitrate = '2999k';
 
     let fileIndex = 0;
     const inputs = [];
@@ -502,8 +503,9 @@ async function createVideoFromCarousel() {
             await ffmpeg.run(
                 '-loop', '1', '-t', itemDuration.toString(), '-i', imageFileName,
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-b:v', '2999k', '-r', '30', '-preset', 'ultrafast',
-                `scroll_image_${fileIndex}.mp4`
+                '-b:v', videoBitrate, '-r', fps.toString(),
+                '-c:v', 'libx264', '-preset', 'superfast', '-crf', '23',
+                '-threads', '4', `scroll_image_${fileIndex}.mp4`
             );
             inputs.push(`scroll_image_${fileIndex}.mp4`);
         } else if (mediaType === 'video') {
@@ -514,9 +516,10 @@ async function createVideoFromCarousel() {
             ffmpeg.FS('writeFile', videoFileName, videoFile);
             await ffmpeg.run(
                 '-i', videoFileName, '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-b:v', '2999k', '-r', '30',
-                '-c:v', 'libx264', '-c:a', 'libmp3lame', '-b:a', '160k', '-ar', '48000',
-                `scroll_video_${fileIndex}.mp4`
+                '-b:v', videoBitrate, '-r', fps.toString(),
+                '-c:v', 'libx264', '-preset', 'superfast', '-crf', '23',
+                '-c:a', 'libmp3lame', '-b:a', '160k', '-ar', '48000', '-ac', '2',
+                '-threads', '4', `scroll_video_${fileIndex}.mp4`
             );
             inputs.push(`scroll_video_${fileIndex}.mp4`);
         }
@@ -528,8 +531,9 @@ async function createVideoFromCarousel() {
 
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-        '-c:v', 'libx264', '-b:v', '2999k', '-r', '30',
-        '-c:a', 'libmp3lame', '-b:a', '160k', '-ar', '48000', '-ac', '2', '-preset', 'ultrafast',
+        '-c:v', 'libx264', '-b:v', videoBitrate, '-r', fps.toString(), '-pix_fmt', 'yuv420p',
+        '-preset', 'superfast', '-crf', '23', '-threads', '4',
+        '-c:a', 'libmp3lame', '-b:a', '160k', '-ar', '48000', '-ac', '2',
         'carousel_scroll_optimized.mp4'
     );
 
@@ -544,6 +548,7 @@ async function createVideoFromCarousel() {
 
     alert('Vidéo optimisée générée pour LinkedIn!');
 }
+
 
 
 
