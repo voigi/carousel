@@ -483,7 +483,7 @@ async function createVideoFromCarousel() {
     const fps = 15;
     const videoWidth = 1280;
     const videoHeight = 720;
-    const itemDuration = 1.5; // Durée réduite pour chaque média
+    const itemDuration = 1.5;
 
     let fileIndex = 0;
     const inputs = [];
@@ -512,13 +512,16 @@ async function createVideoFromCarousel() {
             const videoFileName = `video${fileIndex}.mp4`;
 
             ffmpeg.FS('writeFile', videoFileName, videoFile);
+
+            // Extraire l'audio en AAC, puis le convertir en MP3
+            await ffmpeg.run('-i', videoFileName, '-vn', '-c:a', 'mp3', '-b:a', '128k', `audio_${fileIndex}.mp3`);
+            
+            // Convertir la vidéo en MP4 avec audio MP3
             await ffmpeg.run(
-                '-i', videoFileName, 
-                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-crf', '30', '-preset', 'ultrafast',
-                '-c:a', 'aac', '-b:a', '128k',
-                `scroll_video_${fileIndex}.mp4`
+                '-i', videoFileName, '-i', `audio_${fileIndex}.mp3`, '-c:v', 'libx264', '-crf', '30', '-preset', 'ultrafast',
+                '-c:a', 'mp3', '-b:a', '128k', '-shortest', `scroll_video_${fileIndex}.mp4`
             );
+
             inputs.push(`scroll_video_${fileIndex}.mp4`);
         }
         fileIndex++;
@@ -527,10 +530,11 @@ async function createVideoFromCarousel() {
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
+    // Concaténer tous les fichiers vidéo
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-        '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-pix_fmt', 'yuv420p',
-        '-preset', 'ultrafast', 'carousel_scroll_optimized_with_audio.mp4'
+        '-c:v', 'libx264', '-c:a', 'mp3', '-b:a', '128k', '-pix_fmt', 'yuv420p',
+        '-preset', 'ultrafast', '-shortest', 'carousel_scroll_optimized_with_audio.mp4'
     );
 
     const data = ffmpeg.FS('readFile', 'carousel_scroll_optimized_with_audio.mp4');
@@ -542,8 +546,9 @@ async function createVideoFromCarousel() {
     a.click();
     document.body.removeChild(a);
 
-    alert('Vidéo optimisée avec audio générée pour LinkedIn!');
+    alert('Vidéo optimisée avec audio MP3 générée pour LinkedIn!');
 }
+
 
 
 
