@@ -483,8 +483,8 @@ async function createVideoFromCarousel() {
     const fps = 30;
     const videoWidth = 1280;
     const videoHeight = 720;
-    const itemDuration = 1.5;
-    const videoBitrate = '2999k';
+    const itemDuration = 1.0; // Durée par média réduite pour accélérer
+    const videoBitrate = '2500k'; // Légère réduction pour accélérer le traitement
 
     let fileIndex = 0;
     const inputs = [];
@@ -504,7 +504,7 @@ async function createVideoFromCarousel() {
                 '-loop', '1', '-t', itemDuration.toString(), '-i', imageFileName,
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
                 '-b:v', videoBitrate, '-r', fps.toString(),
-                '-c:v', 'libx264', '-preset', 'superfast', '-crf', '23',
+                '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '28', // Paramètres optimisés
                 '-threads', '4', `scroll_image_${fileIndex}.mp4`
             );
             inputs.push(`scroll_image_${fileIndex}.mp4`);
@@ -517,8 +517,8 @@ async function createVideoFromCarousel() {
             await ffmpeg.run(
                 '-i', videoFileName, '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
                 '-b:v', videoBitrate, '-r', fps.toString(),
-                '-c:v', 'libx264', '-preset', 'superfast', '-crf', '23',
-                '-c:a', 'libmp3lame', '-b:a', '160k', '-ar', '48000', '-ac', '2',
+                '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '28',
+                '-c:a', 'libmp3lame', '-b:a', '128k', '-ar', '44100', '-ac', '2',
                 '-threads', '4', `scroll_video_${fileIndex}.mp4`
             );
             inputs.push(`scroll_video_${fileIndex}.mp4`);
@@ -532,8 +532,8 @@ async function createVideoFromCarousel() {
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
         '-c:v', 'libx264', '-b:v', videoBitrate, '-r', fps.toString(), '-pix_fmt', 'yuv420p',
-        '-preset', 'superfast', '-crf', '23', '-threads', '4',
-        '-c:a', 'libmp3lame', '-b:a', '160k', '-ar', '48000', '-ac', '2',
+        '-preset', 'veryfast', '-crf', '28', '-threads', '4',
+        '-c:a', 'libmp3lame', '-b:a', '128k', '-ar', '44100', '-ac', '2',
         'carousel_scroll_optimized.mp4'
     );
 
@@ -548,6 +548,7 @@ async function createVideoFromCarousel() {
 
     alert('Vidéo optimisée générée pour LinkedIn!');
 }
+
 
 
 
