@@ -476,7 +476,7 @@ addMediaButton.addEventListener('click', () => {
 });
 
 
-async function createOptimizedCarouselVideoWithAudio() {
+async function createVideoFromCarousel(){
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
