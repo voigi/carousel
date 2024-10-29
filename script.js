@@ -480,10 +480,10 @@ async function createVideoFromCarousel() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
-    const fps = 30;
+    const fps = 25;
+    const durationPerItem = 1.5;
     const videoWidth = 1280;
     const videoHeight = 720;
-    const itemDuration = 1.5; // Durée par média réduite
 
     let fileIndex = 0;
     const inputs = [];
@@ -491,65 +491,58 @@ async function createVideoFromCarousel() {
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
-        const mediaSrc = mediaElement.src;
 
         if (mediaType === 'img') {
-            const imageBlob = await fetch(mediaSrc).then(r => r.blob());
+            const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
             const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
             const imageFileName = `image${fileIndex}.jpg`;
 
             ffmpeg.FS('writeFile', imageFileName, imageFile);
             await ffmpeg.run(
-                '-loop', '1', '-t', itemDuration.toString(), '-i', imageFileName,
-                '-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo', // Flux audio silencieux pour les images
+                '-loop', '1', '-t', durationPerItem.toString(), '-i', imageFileName,
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-crf', '35', '-b:v', '1500k', '-r', fps.toString(),
-                '-preset', 'veryfast', '-shortest', `scroll_image_${fileIndex}.mp4`
+                '-c:v', 'libx264', '-crf', '28', '-preset', 'ultrafast',
+                `temp_video_${fileIndex}.mp4`
             );
-            inputs.push(`scroll_image_${fileIndex}.mp4`);
+            inputs.push(`temp_video_${fileIndex}.mp4`);
         } else if (mediaType === 'video') {
-            const videoBlob = await fetch(mediaSrc).then(r => r.blob());
+            const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
             const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
             const videoFileName = `video${fileIndex}.mp4`;
 
             ffmpeg.FS('writeFile', videoFileName, videoFile);
-
-            // Conserver l'audio original de la vidéo
             await ffmpeg.run(
                 '-i', videoFileName,
-                '-map', '0:v', '-map', '0:a?', // Audio conditionnel : inclus si présent
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-crf', '35', '-b:v', '1500k', '-r', fps.toString(),
-                '-c:v', 'libx264', '-preset', 'veryfast',
-                '-c:a', 'libmp3lame', '-b:a', '128k', '-ar', '44100', '-ac', '2',
-                `scroll_video_${fileIndex}.mp4`
+                '-c:v', 'libx264', '-c:a aac', '-b:a', '128k', '-ar', '48000',
+                '-preset', 'ultrafast',
+                `temp_video_${fileIndex}.mp4`
             );
-            inputs.push(`scroll_video_${fileIndex}.mp4`);
+            inputs.push(`temp_video_${fileIndex}.mp4`);
         }
         fileIndex++;
     }
 
-    // Créer le fichier concaténé final avec les segments
+    // Combinaison des vidéos
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-        '-c:v', 'libx264', '-b:v', '1500k', '-r', fps.toString(),
-        '-c:a', 'libmp3lame', '-b:a', '128k', '-ar', '44100', '-ac', '2',
-        '-preset', 'veryfast', 'carousel_scroll_optimized.mp4'
+        '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-pix_fmt', 'yuv420p',
+        '-preset', 'ultrafast', 'carousel_with_audio.mp4'
     );
 
-    const data = ffmpeg.FS('readFile', 'carousel_scroll_optimized.mp4');
+    const data = ffmpeg.FS('readFile', 'carousel_with_audio.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     const a = document.createElement('a');
     a.href = videoURL;
-    a.download = 'carousel-scroll-linkedin.mp4';
+    a.download = 'carousel_with_audio.mp4';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-
-    alert('Vidéo générée avec audio pour LinkedIn!');
+    
+    alert('Vidéo avec audio générée avec succès!');
 }
 
 
