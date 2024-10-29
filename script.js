@@ -480,14 +480,12 @@ async function createVideoFromCarousel() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
-    const fps = 25;
-    const durationPerImage = 1.5;
     const videoWidth = 1280;
     const videoHeight = 720;
+    const durationPerImage = 1.5;
 
     let fileIndex = 0;
     const inputs = [];
-    const audioInputs = [];
 
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
@@ -501,10 +499,8 @@ async function createVideoFromCarousel() {
             ffmpeg.FS('writeFile', imageFileName, imageFile);
             await ffmpeg.run(
                 '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
-                '-f', 'lavfi', '-t', durationPerImage.toString(), '-i', 'anullsrc=r=48000:cl=stereo',
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000',
-                '-preset', 'ultrafast',
+                '-c:v', 'libx264', '-preset', 'ultrafast',
                 `temp_image_${fileIndex}.mp4`
             );
             inputs.push(`temp_image_${fileIndex}.mp4`);
@@ -514,67 +510,43 @@ async function createVideoFromCarousel() {
             const videoFileName = `video${fileIndex}.mp4`;
 
             ffmpeg.FS('writeFile', videoFileName, videoFile);
-
-            // Extraire l'audio et la vidéo pour synchroniser plus précisément
             await ffmpeg.run(
                 '-i', videoFileName,
-                '-an', '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
                 '-c:v', 'libx264', '-preset', 'ultrafast',
+                '-c:a', 'aac', '-b:a', '128k', '-ar', '48000',
                 `temp_video_${fileIndex}.mp4`
             );
-            await ffmpeg.run(
-                '-i', videoFileName,
-                '-vn', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000',
-                `temp_audio_${fileIndex}.aac`
-            );
-
             inputs.push(`temp_video_${fileIndex}.mp4`);
-            audioInputs.push(`temp_audio_${fileIndex}.aac`);
         }
         fileIndex++;
     }
 
-    // Concaténer les vidéos en une seule
+    // Créer un fichier de concaténation pour fusionner les médias
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input_videos.txt', new TextEncoder().encode(inputFileList));
+
+    // Concaténation des vidéos en une seule sortie avec audio
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input_videos.txt',
-        '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-preset', 'ultrafast', 'merged_video.mp4'
+        '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000',
+        '-pix_fmt', 'yuv420p', '-preset', 'ultrafast',
+        'final_carousel_with_audio.mp4'
     );
 
-    // Concaténer les audios en un seul flux
-    if (audioInputs.length > 0) {
-        const inputAudioList = audioInputs.map(input => `file '${input}'`).join('\n');
-        ffmpeg.FS('writeFile', 'input_audios.txt', new TextEncoder().encode(inputAudioList));
-        await ffmpeg.run(
-            '-f', 'concat', '-safe', '0', '-i', 'input_audios.txt',
-            '-c:a', 'aac', '-b:a', '128k', '-ar', '48000', 'merged_audio.aac'
-        );
-    }
-
-    // Fusionner l’audio et la vidéo si audio existe, sinon garder uniquement la vidéo
-    if (audioInputs.length > 0) {
-        await ffmpeg.run(
-            '-i', 'merged_video.mp4',
-            '-i', 'merged_audio.aac',
-            '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-shortest', 'carousel_synchronized_output.mp4'
-        );
-    } else {
-        await ffmpeg.run('-i', 'merged_video.mp4', '-c', 'copy', 'carousel_synchronized_output.mp4');
-    }
-
-    // Télécharger la vidéo générée
-    const data = ffmpeg.FS('readFile', 'carousel_synchronized_output.mp4');
+    // Extraction et téléchargement du fichier final
+    const data = ffmpeg.FS('readFile', 'final_carousel_with_audio.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     const a = document.createElement('a');
     a.href = videoURL;
-    a.download = 'carousel_synchronized_output.mp4';
+    a.download = 'carousel_with_audio.mp4';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    alert('Vidéo avec audio synchronisé générée avec succès!');
+    alert('Vidéo générée avec audio synchronisé pour LinkedIn!');
 }
+
 
 
 
