@@ -476,14 +476,14 @@ addMediaButton.addEventListener('click', () => {
 });
 
 
-async function createVideoFromCarousel(){
+async function createVideoFromCarousel() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
     const fps = 30;
     const videoWidth = 1280;
     const videoHeight = 720;
-    const itemDuration = 1.0; // Durée par média réduite pour accélérer
+    const itemDuration = 1.5; // Durée par média réduite
 
     let fileIndex = 0;
     const inputs = [];
@@ -501,10 +501,10 @@ async function createVideoFromCarousel(){
             ffmpeg.FS('writeFile', imageFileName, imageFile);
             await ffmpeg.run(
                 '-loop', '1', '-t', itemDuration.toString(), '-i', imageFileName,
+                '-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo', // Flux audio silencieux pour les images
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-b:v', '2500k', '-r', fps.toString(),
-                '-c:v', 'libx264', '-preset', 'fast', '-crf', '28',
-                `scroll_image_${fileIndex}.mp4`
+                '-c:v', 'libx264', '-crf', '35', '-b:v', '1500k', '-r', fps.toString(),
+                '-preset', 'veryfast', '-shortest', `scroll_image_${fileIndex}.mp4`
             );
             inputs.push(`scroll_image_${fileIndex}.mp4`);
         } else if (mediaType === 'video') {
@@ -513,40 +513,45 @@ async function createVideoFromCarousel(){
             const videoFileName = `video${fileIndex}.mp4`;
 
             ffmpeg.FS('writeFile', videoFileName, videoFile);
+
+            // Conserver l'audio original de la vidéo
             await ffmpeg.run(
-                '-i', videoFileName, '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-b:v', '2500k', '-r', fps.toString(),
-                '-c:v', 'libx264', '-preset', 'fast', '-crf', '28',
-                '-c:a', 'aac', '-b:a', '128k', '-ac', '2', `scroll_video_${fileIndex}.mp4`
+                '-i', videoFileName,
+                '-map', '0:v', '-map', '0:a?', // Audio conditionnel : inclus si présent
+                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+                '-crf', '35', '-b:v', '1500k', '-r', fps.toString(),
+                '-c:v', 'libx264', '-preset', 'veryfast',
+                '-c:a', 'libmp3lame', '-b:a', '128k', '-ar', '44100', '-ac', '2',
+                `scroll_video_${fileIndex}.mp4`
             );
             inputs.push(`scroll_video_${fileIndex}.mp4`);
         }
         fileIndex++;
     }
 
+    // Créer le fichier concaténé final avec les segments
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
-    // Commande pour concaténer les vidéos avec audio
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-        '-c:v', 'libx264', '-b:v', '2500k', '-r', fps.toString(),
-        '-preset', 'fast', '-crf', '28', '-pix_fmt', 'yuv420p',
-        '-c:a', 'aac', '-b:a', '128k', '-ac', '2',
-        'carousel_scroll_optimized_with_audio.mp4'
+        '-c:v', 'libx264', '-b:v', '1500k', '-r', fps.toString(),
+        '-c:a', 'libmp3lame', '-b:a', '128k', '-ar', '44100', '-ac', '2',
+        '-preset', 'veryfast', 'carousel_scroll_optimized.mp4'
     );
 
-    const data = ffmpeg.FS('readFile', 'carousel_scroll_optimized_with_audio.mp4');
+    const data = ffmpeg.FS('readFile', 'carousel_scroll_optimized.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     const a = document.createElement('a');
     a.href = videoURL;
-    a.download = 'carousel-scroll-linkedin-with-audio.mp4';
+    a.download = 'carousel-scroll-linkedin.mp4';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    alert('Vidéo optimisée avec audio générée pour LinkedIn!');
+    alert('Vidéo générée avec audio pour LinkedIn!');
 }
+
 
 
 
