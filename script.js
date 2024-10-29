@@ -493,7 +493,7 @@ async function createVideoFromCarousel() {
         const mediaType = mediaElement.tagName.toLowerCase();
 
         if (mediaType === 'img') {
-            // Pour les images, ajoutons une piste audio silencieuse
+            // Pour les images, ajoutons une piste audio silencieuse avec une durée fixe
             const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
             const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
             const imageFileName = `image${fileIndex}.jpg`;
@@ -509,7 +509,7 @@ async function createVideoFromCarousel() {
             );
             inputs.push(`temp_image_${fileIndex}.mp4`);
         } else if (mediaType === 'video') {
-            // Pour les vidéos, conserver la piste audio d'origine
+            // Pour les vidéos, conserver la piste audio et ajuster la durée
             const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
             const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
             const videoFileName = `video${fileIndex}.mp4`;
@@ -531,25 +531,26 @@ async function createVideoFromCarousel() {
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
-    // Concaténer tous les fichiers temporaires avec leur audio
+    // Concaténer les fichiers avec l'option de synchronisation
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
         '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-pix_fmt', 'yuv420p',
-        '-preset', 'ultrafast', 'carousel_with_audio.mp4'
+        '-preset', 'ultrafast', '-vsync', 'vfr', '-async', '1', 'carousel_synchronized.mp4'
     );
 
     // Télécharger la vidéo générée
-    const data = ffmpeg.FS('readFile', 'carousel_with_audio.mp4');
+    const data = ffmpeg.FS('readFile', 'carousel_synchronized.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     const a = document.createElement('a');
     a.href = videoURL;
-    a.download = 'carousel_with_audio.mp4';
+    a.download = 'carousel_synchronized.mp4';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    alert('Vidéo avec audio générée avec succès!');
+    alert('Vidéo avec audio synchronisé générée avec succès!');
 }
+
 
 
 
