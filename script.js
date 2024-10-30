@@ -545,17 +545,24 @@ async function createVideoFromCarousel() {
         }
     }
 
+    // Vérification des fichiers temporaires
+    console.log('Fichiers temporaires créés :', inputs);
+
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
     console.log('Fichier de concaténation créé : input.txt');
 
-    await ffmpeg.run(
-        '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-        '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-pix_fmt', 'yuv420p',
-        '-preset', 'ultrafast', '-vsync', 'cfr', '-async', '1', 'ordered_carousel.mp4'
-    );
-
-    console.log('Vidéo finale générée : ordered_carousel.mp4');
+    // Lancer la concaténation
+    try {
+        await ffmpeg.run(
+            '-f', 'concat', '-safe', '0', '-i', 'input.txt',
+            '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-pix_fmt', 'yuv420p',
+            '-preset', 'ultrafast', '-vsync', 'cfr', '-async', '1', 'ordered_carousel.mp4'
+        );
+        console.log('Vidéo finale générée : ordered_carousel.mp4');
+    } catch (error) {
+        console.error(`Erreur lors de la concaténation : ${error.message}`);
+    }
 
     const data = ffmpeg.FS('readFile', 'ordered_carousel.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
@@ -572,6 +579,7 @@ async function createVideoFromCarousel() {
 
     alert('Vidéo générée dans l\'ordre du carrousel avec succès !');
 }
+
 
 
 
