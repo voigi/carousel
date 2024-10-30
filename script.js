@@ -484,82 +484,62 @@ addMediaButton.addEventListener('click', () => {
 let isProcessing = false;
 
 async function createVideoFromCarousel() {
-    // Vérifier si ffmpeg est chargé
     if (!ffmpeg.isLoaded()) {
         await ffmpeg.load();
     }
 
-    const items = document.querySelectorAll('.carousel-item'); // Sélectionne les éléments du carrousel
-    const fps = 25;
-    const videoWidth = 1280;
-    const videoHeight = 720;
-    const durationPerImage = 1.5; // Durée pour chaque image
+    const items = document.querySelectorAll('.carousel-item');
+    const videoWidth = 640; // Réduire la largeur pour un encodage plus rapide
+    const videoHeight = 360; // Réduire la hauteur pour un encodage plus rapide
+    const durationPerImage = 1.5;
 
-    let inputs = []; // Pour stocker les fichiers temporaires
+    let inputs = [];
 
-    // Traiter chaque élément du carrousel
     for (let fileIndex = 0; fileIndex < items.length; fileIndex++) {
         const mediaElement = items[fileIndex].querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
-        
+
         try {
             let fileName;
 
-            // Traiter les images
             if (mediaType === 'img') {
                 const imageBlob = await fetch(mediaElement.src).then(res => res.blob());
                 const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
                 fileName = `image${fileIndex}.jpg`;
-                
+
                 ffmpeg.FS('writeFile', fileName, imageFile);
-                await ffmpeg.run(
-                    '-loop', '1', '-t', durationPerImage.toString(), '-i', fileName,
-                    '-f', 'lavfi', '-t', durationPerImage.toString(), '-i', 'anullsrc=r=48000:cl=stereo',
-                    '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                    '-c:v', 'libx264', '-preset', 'ultrafast', 
-                    `temp_image_${fileIndex}.mp4`
-                );
+                inputs.push(`-loop 1 -t ${durationPerImage} -i ${fileName}`); // Directement ajouter à la liste
 
-                inputs.push(`temp_image_${fileIndex}.mp4`);
-
-            // Traiter les vidéos
             } else if (mediaType === 'video') {
                 const videoBlob = await fetch(mediaElement.src).then(res => res.blob());
                 const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
                 fileName = `video${fileIndex}.mp4`;
-                
+
                 ffmpeg.FS('writeFile', fileName, videoFile);
-                await ffmpeg.run(
-                    '-i', fileName,
-                    '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                    '-c:v', 'libx264', '-preset', 'ultrafast',
-                    `temp_video_${fileIndex}.mp4`
-                );
-
-                inputs.push(`temp_video_${fileIndex}.mp4`);
+                inputs.push(`-i ${fileName}`);
             }
-
         } catch (error) {
             console.error(`Erreur lors du traitement de l'élément ${fileIndex}: ${error.message}`);
-            continue; // Ignorer cet élément en cas d'erreur
+            continue; 
         }
     }
 
     // Créer le fichier de liste pour concaténer les vidéos
-    const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
+    const inputFileList = inputs.join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
     // Exécuter la concaténation
     try {
         await ffmpeg.run(
-            '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-            '-c:v', 'libx264', '-preset', 'ultrafast', 
+            ...inputs.flat(), // Utiliser les entrées optimisées
+            '-filter_complex', 
+            `concat=n=${inputs.length}:v=1:a=1`, // Concaténer tous les éléments
+            '-c:v', 'libx264', '-preset', 'superfast', // Utiliser 'superfast' pour réduire le temps d'encodage
             'ordered_carousel.mp4'
         );
 
         console.log('Vidéo finale générée : ordered_carousel.mp4');
 
-        // Télécharger la vidéo générée
         const data = ffmpeg.FS('readFile', 'ordered_carousel.mp4');
         const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
         const a = document.createElement('a');
@@ -568,7 +548,7 @@ async function createVideoFromCarousel() {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-
+        
     } catch (error) {
         console.error('Erreur lors de la concaténation :', error);
     } finally {
