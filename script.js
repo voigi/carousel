@@ -476,75 +476,54 @@ addMediaButton.addEventListener('click', () => {
 });
 
 
-async function createVideoFromCarousel() {
+//fais mois un script qui encode, on utilisera ffmpeg pour l'encodage , les images et vidéo de mon carousel dans une vidéo,cette vidéo une fois généré est enregistrée en local sur l'ordinateur
+async function createVideoFromCarousel(files) {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
-    const items = document.querySelectorAll('.carousel-item');
-    const fps = 25;
-    const durationPerImage = 1.5;
-    const videoWidth = 1280;
-    const videoHeight = 720;
-
-    let fileIndex = 0;
     const inputs = [];
 
-    for (const item of items) {
-        const mediaElement = item.querySelector('img, video');
-        const mediaType = mediaElement.tagName.toLowerCase();
-
-        if (mediaType === 'img') {
-            const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
-            const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
-            const imageFileName = `image${fileIndex}.jpg`;
-
-            ffmpeg.FS('writeFile', imageFileName, imageFile);
-            await ffmpeg.run(
-                '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
-                '-f', 'lavfi', '-t', durationPerImage.toString(), '-i', 'anullsrc=r=48000:cl=stereo',
-                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000',
-                '-preset', 'superfast', // Changer le preset pour un encodage plus rapide
-                `temp_image_${fileIndex}.mp4`
-            );
-            inputs.push(`temp_image_${fileIndex}.mp4`);
-        } else if (mediaType === 'video') {
-            const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
-            const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
-            const videoFileName = `video${fileIndex}.mp4`;
-
-            ffmpeg.FS('writeFile', videoFileName, videoFile);
-            await ffmpeg.run(
-                '-i', videoFileName,
-                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000',
-                '-preset', 'superfast',
-                `temp_video_${fileIndex}.mp4`
-            );
-            inputs.push(`temp_video_${fileIndex}.mp4`);
-        }
-        fileIndex++;
+    // Charger les fichiers dans le système de fichiers FFmpeg
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileName = `input_${i}.${file.type.split('/')[1]}`;
+        
+        // Lire et enregistrer chaque fichier dans FFmpeg
+        const fileData = new Uint8Array(await file.arrayBuffer());
+        ffmpeg.FS('writeFile', fileName, fileData);
+        inputs.push(fileName);
     }
 
+    // Concaténer les fichiers dans un fichier vidéo final
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
+    // Paramètres de concaténation
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-        '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-pix_fmt', 'yuv420p',
-        '-preset', 'superfast', '-vsync', '1', 'carousel_synchronized.mp4'
+        '-c:v', 'libx264', '-c:a', 'aac', '-b:v', '2999k', '-b:a', '160k', '-ar', '48000', '-r', '30',
+        'output.mp4'
     );
 
-    const data = ffmpeg.FS('readFile', 'carousel_synchronized.mp4');
-    const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-    const a = document.createElement('a');
-    a.href = videoURL;
-    a.download = 'carousel_synchronized.mp4';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    alert('Vidéo avec audio synchronisé générée avec succès!');
+    // Récupérer la vidéo encodée et la télécharger
+    const data = ffmpeg.FS('readFile', 'output.mp4');
+    downloadBlob(new Blob([data.buffer], { type: 'video/mp4' }), 'carousel-video.mp4');
 }
+
+// Fonction pour télécharger un Blob
+function downloadBlob(blob, filename) {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
+
+
+
+
 
 
 
