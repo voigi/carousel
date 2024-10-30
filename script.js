@@ -483,86 +483,50 @@ async function createVideoFromCarousel() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
-    const fps = 25;
     const durationPerImage = 1.5; // Durée pour les images
     const videoWidth = 1280;
     const videoHeight = 720;
 
-    let fileIndex = 0;
-    const inputs = [];
+    let inputs = [];
 
-    for (const item of items) {
-        const mediaElement = item.querySelector('img, video');
+    for (let fileIndex = 0; fileIndex < items.length; fileIndex++) {
+        const mediaElement = items[fileIndex].querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
 
-        try {
-            if (mediaType === 'img') {
-                console.log(`Traitement de l'image ${fileIndex}`);
+        const blob = await fetch(mediaElement.src).then(r => r.blob());
+        const file = new Uint8Array(await blob.arrayBuffer());
+        const fileName = mediaType === 'img' ? `image${fileIndex}.jpg` : `video${fileIndex}.mp4`;
 
-                const imageBlob = await fetch(mediaElement.src).then(r => {
-                    if (!r.ok) throw new Error('Échec de la récupération de l\'image');
-                    return r.blob();
-                });
-                const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
-                const imageFileName = `image${fileIndex}.jpg`;
+        ffmpeg.FS('writeFile', fileName, file);
 
-                ffmpeg.FS('writeFile', imageFileName, imageFile);
-                await ffmpeg.run(
-                    '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
-                    '-f', 'lavfi', '-t', durationPerImage.toString(), '-i', 'anullsrc=r=48000:cl=stereo',
-                    '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                    '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000',
-                    '-preset', 'ultrafast',
-                    `temp_image_${fileIndex}.mp4`
-                );
-                console.log(`Image ${fileIndex} encodée sous temp_image_${fileIndex}.mp4`);
-                inputs.push(`temp_image_${fileIndex}.mp4`);
-            } else if (mediaType === 'video') {
-                console.log(`Traitement de la vidéo ${fileIndex}`);
-
-                const videoBlob = await fetch(mediaElement.src).then(r => {
-                    if (!r.ok) throw new Error('Échec de la récupération de la vidéo');
-                    return r.blob();
-                });
-                const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
-                const videoFileName = `video${fileIndex}.mp4`;
-
-                ffmpeg.FS('writeFile', videoFileName, videoFile);
-                await ffmpeg.run(
-                    '-i', videoFileName,
-                    '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                    '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000',
-                    '-preset', 'ultrafast',
-                    `temp_video_${fileIndex}.mp4`
-                );
-                console.log(`Vidéo ${fileIndex} encodée sous temp_video_${fileIndex}.mp4`);
-                inputs.push(`temp_video_${fileIndex}.mp4`);
-            }
-            fileIndex++;
-        } catch (error) {
-            console.error(`Erreur lors du traitement de l'index ${fileIndex} : ${error.message}`);
-            continue; // Passer cet élément en cas d'erreur
+        if (mediaType === 'img') {
+            await ffmpeg.run(
+                '-loop', '1', '-t', durationPerImage.toString(), '-i', fileName,
+                '-f', 'lavfi', '-t', durationPerImage.toString(), '-i', 'anullsrc=r=48000:cl=stereo',
+                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k',
+                `temp_image_${fileIndex}.mp4`
+            );
+            inputs.push(`temp_image_${fileIndex}.mp4`);
+        } else {
+            await ffmpeg.run(
+                '-i', fileName,
+                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k',
+                `temp_video_${fileIndex}.mp4`
+            );
+            inputs.push(`temp_video_${fileIndex}.mp4`);
         }
     }
 
-    // Vérification des fichiers temporaires
-    console.log('Fichiers temporaires créés :', inputs);
-
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
-    console.log('Fichier de concaténation créé : input.txt');
 
-    // Lancer la concaténation
-    try {
-        await ffmpeg.run(
-            '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-            '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-pix_fmt', 'yuv420p',
-            '-preset', 'ultrafast', '-vsync', 'cfr', '-async', '1', 'ordered_carousel.mp4'
-        );
-        console.log('Vidéo finale générée : ordered_carousel.mp4');
-    } catch (error) {
-        console.error(`Erreur lors de la concaténation : ${error.message}`);
-    }
+    await ffmpeg.run(
+        '-f', 'concat', '-safe', '0', '-i', 'input.txt',
+        '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k',
+        '-pix_fmt', 'yuv420p', 'ordered_carousel.mp4'
+    );
 
     const data = ffmpeg.FS('readFile', 'ordered_carousel.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
@@ -576,9 +540,11 @@ async function createVideoFromCarousel() {
     // Nettoyage des fichiers temporaires
     inputs.forEach(input => ffmpeg.FS('unlink', input));
     ffmpeg.FS('unlink', 'input.txt');
-
-    alert('Vidéo générée dans l\'ordre du carrousel avec succès !');
 }
+
+// Appel de la fonction pour tester
+createVideoFromCarousel();
+
 
 
 
