@@ -487,12 +487,10 @@ async function createVideoFromCarousel() {
     const videoWidth = 1280;
     const videoHeight = 720;
 
-    let inputs = [];
+    const inputs = [];
 
-    for (let fileIndex = 0; fileIndex < items.length; fileIndex++) {
-        const mediaElement = items[fileIndex].querySelector('img, video');
+    const processMedia = async (mediaElement, fileIndex) => {
         const mediaType = mediaElement.tagName.toLowerCase();
-
         const blob = await fetch(mediaElement.src).then(r => r.blob());
         const file = new Uint8Array(await blob.arrayBuffer());
         const fileName = mediaType === 'img' ? `image${fileIndex}.jpg` : `video${fileIndex}.mp4`;
@@ -517,17 +515,23 @@ async function createVideoFromCarousel() {
             );
             inputs.push(`temp_video_${fileIndex}.mp4`);
         }
-    }
+    };
 
+    // Traitement des éléments du carrousel
+    await Promise.all(Array.from(items).map((item, index) => processMedia(item.querySelector('img, video'), index)));
+
+    // Création du fichier de concaténation
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
+    // Exécution de la concaténation
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
         '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k',
         '-pix_fmt', 'yuv420p', 'ordered_carousel.mp4'
     );
 
+    // Téléchargement de la vidéo finale
     const data = ffmpeg.FS('readFile', 'ordered_carousel.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     const a = document.createElement('a');
@@ -544,6 +548,7 @@ async function createVideoFromCarousel() {
 
 // Appel de la fonction pour tester
 createVideoFromCarousel();
+
 
 
 
