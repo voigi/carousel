@@ -509,7 +509,7 @@ async function createVideoFromCarousel() {
                 '-loop', '1', '-t', durationPerImage.toString(), '-i', fileName,
                 '-f', 'lavfi', '-t', durationPerImage.toString(), '-i', 'anullsrc=r=48000:cl=stereo',
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-preset', 'superfast', // Changement de preset
+                '-c:v', 'libx264', '-preset', 'ultrafast', // Changement de preset
                 '-b:v', '500k', // Réduction du débit binaire
                 'temp_image_${fileIndex}.mp4'
             );
@@ -518,7 +518,7 @@ async function createVideoFromCarousel() {
             await ffmpeg.run(
                 '-i', fileName,
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-preset', 'superfast', // Changement de preset
+                '-c:v', 'libx264', '-preset', 'ultrafast', // Changement de preset
                 '-b:v', '500k', // Réduction du débit binaire
                 'temp_video_${fileIndex}.mp4'
             );
@@ -538,7 +538,7 @@ async function createVideoFromCarousel() {
     try {
         await ffmpeg.run(
             '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-            '-c:v', 'libx264', '-preset', 'superfast', // Changement de preset
+            '-c:v', 'libx264', '-preset', 'ultrafast', // Changement de preset
             '-b:v', '500k', // Réduction du débit binaire
             'ordered_carousel.mp4'
         );
