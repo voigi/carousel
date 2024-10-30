@@ -479,7 +479,7 @@ addMediaButton.addEventListener('click', () => {
 //fais mois un script qui encode, on utilisera ffmpeg pour l'encodage , les images et vidéo de mon carousel dans une vidéo,cette vidéo une fois généré est enregistrée en local sur l'ordinateur
 // Fonction pour encoder et concaténer les fichiers avec FFmpeg
 
-async function createVideoFromCarousel() {
+async function createAdaptiveCarouselVideo() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
@@ -496,7 +496,8 @@ async function createVideoFromCarousel() {
         const mediaType = mediaElement.tagName.toLowerCase();
 
         if (mediaType === 'img') {
-            // Pour les images, ajoutons une piste audio silencieuse avec une durée fixe
+            console.log(`Traitement de l'image ${fileIndex}`);
+            
             const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
             const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
             const imageFileName = `image${fileIndex}.jpg`;
@@ -510,9 +511,11 @@ async function createVideoFromCarousel() {
                 '-preset', 'ultrafast',
                 `temp_image_${fileIndex}.mp4`
             );
+            console.log(`Image ${fileIndex} encodée avec succès en temp_image_${fileIndex}.mp4`);
             inputs.push(`temp_image_${fileIndex}.mp4`);
         } else if (mediaType === 'video') {
-            // Pour les vidéos, conserver la piste audio et ajuster la durée
+            console.log(`Traitement de la vidéo ${fileIndex}`);
+
             const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
             const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
             const videoFileName = `video${fileIndex}.mp4`;
@@ -525,21 +528,25 @@ async function createVideoFromCarousel() {
                 '-preset', 'ultrafast',
                 `temp_video_${fileIndex}.mp4`
             );
+            console.log(`Vidéo ${fileIndex} encodée avec succès en temp_video_${fileIndex}.mp4`);
             inputs.push(`temp_video_${fileIndex}.mp4`);
         }
         fileIndex++;
     }
 
-    // Créer une liste de fichiers pour la concaténation
+    // Création de la liste de concaténation
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
+    console.log('Fichier de concaténation créé: input.txt');
 
-    // Concaténer les fichiers avec une synchronisation stricte pour éviter les décalages
+    // Concaténer les fichiers avec synchronisation stricte
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
         '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-pix_fmt', 'yuv420p',
         '-preset', 'ultrafast', '-vsync', 'cfr', '-async', '1', 'adaptive_carousel.mp4'
     );
+
+    console.log('Vidéo finale générée : adaptive_carousel.mp4');
 
     // Télécharger la vidéo générée
     const data = ffmpeg.FS('readFile', 'adaptive_carousel.mp4');
@@ -553,6 +560,7 @@ async function createVideoFromCarousel() {
 
     alert('Vidéo générée avec succès, avec synchronisation audio!');
 }
+
 
 
 
