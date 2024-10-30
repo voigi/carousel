@@ -546,8 +546,7 @@ async function createVideoFromCarousel() {
     ffmpeg.FS('unlink', 'input.txt');
 }
 
-// Appel de la fonction pour tester
-createVideoFromCarousel();
+
 
 
 
