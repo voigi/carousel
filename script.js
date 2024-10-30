@@ -490,6 +490,7 @@ async function createVideoFromCarousel() {
     }
 
     const items = document.querySelectorAll('.carousel-item'); // Sélectionne les éléments du carrousel
+    const fps = 25;
     const videoWidth = 1280;
     const videoHeight = 720;
     const durationPerImage = 1.5; // Durée pour chaque image
