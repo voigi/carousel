@@ -481,22 +481,21 @@ addMediaButton.addEventListener('click', () => {
 
 
 
-let isProcessing = false;
-
 async function createVideoFromCarousel() {
     if (!ffmpeg.isLoaded()) {
         await ffmpeg.load();
     }
 
     const items = document.querySelectorAll('.carousel-item');
-    const videoWidth = 640; // Réduire la largeur pour un encodage plus rapide
-    const videoHeight = 360; // Réduire la hauteur pour un encodage plus rapide
-    const durationPerImage = 1.5;
+    const videoWidth = 640; // Largeur réduite
+    const videoHeight = 360; // Hauteur réduite
+    const durationPerImage = 1.5; // Durée par image
 
     let inputs = [];
+    let fileCount = 0;
 
-    for (let fileIndex = 0; fileIndex < items.length; fileIndex++) {
-        const mediaElement = items[fileIndex].querySelector('img, video');
+    for (const item of items) {
+        const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
 
         try {
@@ -505,21 +504,24 @@ async function createVideoFromCarousel() {
             if (mediaType === 'img') {
                 const imageBlob = await fetch(mediaElement.src).then(res => res.blob());
                 const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
-                fileName = `image${fileIndex}.jpg`;
+                fileName = `image${fileCount}.jpg`;
 
+                // Écrire le fichier image
                 ffmpeg.FS('writeFile', fileName, imageFile);
-                inputs.push(`-loop 1 -t ${durationPerImage} -i ${fileName}`); // Directement ajouter à la liste
-
+                inputs.push(`-loop 1 -t ${durationPerImage} -i ${fileName}`);
+                fileCount++;
             } else if (mediaType === 'video') {
                 const videoBlob = await fetch(mediaElement.src).then(res => res.blob());
                 const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
-                fileName = `video${fileIndex}.mp4`;
+                fileName = `video${fileCount}.mp4`;
 
+                // Écrire le fichier vidéo
                 ffmpeg.FS('writeFile', fileName, videoFile);
                 inputs.push(`-i ${fileName}`);
+                fileCount++;
             }
         } catch (error) {
-            console.error(`Erreur lors du traitement de l'élément ${fileIndex}: ${error.message}`);
+            console.error(`Erreur lors du traitement de l'élément ${fileCount}: ${error.message}`);
             continue; 
         }
     }
@@ -528,13 +530,15 @@ async function createVideoFromCarousel() {
     const inputFileList = inputs.join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
-    // Exécuter la concaténation
     try {
+        // Utilisation de filter_complex pour concaténer les vidéos et images
         await ffmpeg.run(
-            ...inputs.flat(), // Utiliser les entrées optimisées
-            '-filter_complex', 
-            `concat=n=${inputs.length}:v=1:a=1`, // Concaténer tous les éléments
-            '-c:v', 'libx264', '-preset', 'superfast', // Utiliser 'superfast' pour réduire le temps d'encodage
+            '-f', 'concat',
+            '-safe', '0',
+            '-i', 'input.txt',
+            '-c:v', 'libx264',
+            '-preset', 'superfast', // Utiliser superfast pour réduire le temps d'encodage
+            '-pix_fmt', 'yuv420p', 
             'ordered_carousel.mp4'
         );
 
@@ -557,6 +561,7 @@ async function createVideoFromCarousel() {
         ffmpeg.FS('unlink', 'input.txt');
     }
 }
+
 
 
 // N'appelez pas la fonction ici, laissez-la être appelée par votre code principal
