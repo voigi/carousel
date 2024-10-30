@@ -480,87 +480,91 @@ addMediaButton.addEventListener('click', () => {
 // Fonction pour encoder et concaténer les fichiers avec FFmpeg
 
 
-
 async function createVideoFromCarousel() {
-    if (!ffmpeg.isLoaded()) {
-        await ffmpeg.load();
-    }
+    if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
-    const videoWidth = 640; // Largeur réduite
-    const videoHeight = 360; // Hauteur réduite
-    const durationPerImage = 1.5; // Durée par image
+    const fps = 25;
+    const durationPerImage = 1.5; // Durée pour les images
+    const videoWidth = 1280;
+    const videoHeight = 720;
 
-    let inputs = [];
-    let fileCount = 0;
+    let fileIndex = 0;
+    const inputs = [];
 
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
 
-        try {
-            let fileName;
+        if (mediaType === 'img') {
+            console.log(`Traitement de l'image ${fileIndex} pour l'ajouter dans l'ordre`);
 
-            if (mediaType === 'img') {
-                const imageBlob = await fetch(mediaElement.src).then(res => res.blob());
-                const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
-                fileName = `image${fileCount}.jpg`;
+            // Processus pour les images, avec une piste audio silencieuse
+            const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
+            const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
+            const imageFileName = `image${fileIndex}.jpg`;
 
-                // Écrire le fichier image
-                ffmpeg.FS('writeFile', fileName, imageFile);
-                inputs.push(`-loop 1 -t ${durationPerImage} -i ${fileName}`);
-                fileCount++;
-            } else if (mediaType === 'video') {
-                const videoBlob = await fetch(mediaElement.src).then(res => res.blob());
-                const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
-                fileName = `video${fileCount}.mp4`;
+            ffmpeg.FS('writeFile', imageFileName, imageFile);
+            await ffmpeg.run(
+                '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
+                '-f', 'lavfi', '-t', durationPerImage.toString(), '-i', 'anullsrc=r=48000:cl=stereo',
+                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000',
+                '-preset', 'ultrafast',
+                `temp_image_${fileIndex}.mp4`
+            );
+            console.log(`Image ${fileIndex} encodée avec succès en temp_image_${fileIndex}.mp4`);
+            inputs.push(`temp_image_${fileIndex}.mp4`);
+        } else if (mediaType === 'video') {
+            console.log(`Traitement de la vidéo ${fileIndex} pour l'ajouter dans l'ordre`);
 
-                // Écrire le fichier vidéo
-                ffmpeg.FS('writeFile', fileName, videoFile);
-                inputs.push(`-i ${fileName}`);
-                fileCount++;
-            }
-        } catch (error) {
-            console.error(`Erreur lors du traitement de l'élément ${fileCount}: ${error.message}`);
-            continue; 
+            // Processus pour les vidéos, en préservant l'audio
+            const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
+            const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
+            const videoFileName = `video${fileIndex}.mp4`;
+
+            ffmpeg.FS('writeFile', videoFileName, videoFile);
+            await ffmpeg.run(
+                '-i', videoFileName,
+                '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000',
+                '-preset', 'ultrafast',
+                `temp_video_${fileIndex}.mp4`
+            );
+            console.log(`Vidéo ${fileIndex} encodée avec succès en temp_video_${fileIndex}.mp4`);
+            inputs.push(`temp_video_${fileIndex}.mp4`);
         }
+        fileIndex++;
     }
 
-    // Créer le fichier de liste pour concaténer les vidéos
-    const inputFileList = inputs.join('\n');
+    // Créer une liste de fichiers pour la concaténation dans l'ordre d'origine
+    const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
+    console.log('Fichier de concaténation créé: input.txt');
 
-    try {
-        // Utilisation de filter_complex pour concaténer les vidéos et images
-        await ffmpeg.run(
-            '-f', 'concat',
-            '-safe', '0',
-            '-i', 'input.txt',
-            '-c:v', 'libx264',
-            '-preset', 'superfast', // Utiliser superfast pour réduire le temps d'encodage
-            '-pix_fmt', 'yuv420p', 
-            'ordered_carousel.mp4'
-        );
+    // Concaténer les fichiers dans l'ordre avec synchronisation stricte
+    await ffmpeg.run(
+        '-f', 'concat', '-safe', '0', '-i', 'input.txt',
+        '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-pix_fmt', 'yuv420p',
+        '-preset', 'ultrafast', '-vsync', 'cfr', '-async', '1', 'ordered_carousel.mp4'
+    );
 
-        console.log('Vidéo finale générée : ordered_carousel.mp4');
+    console.log('Vidéo finale générée : ordered_carousel.mp4');
 
-        const data = ffmpeg.FS('readFile', 'ordered_carousel.mp4');
-        const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-        const a = document.createElement('a');
-        a.href = videoURL;
-        a.download = 'ordered_carousel.mp4';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        
-    } catch (error) {
-        console.error('Erreur lors de la concaténation :', error);
-    } finally {
-        // Nettoyage des fichiers temporaires
-        inputs.forEach(input => ffmpeg.FS('unlink', input));
-        ffmpeg.FS('unlink', 'input.txt');
-    }
+    // Télécharger la vidéo générée
+    const data = ffmpeg.FS('readFile', 'ordered_carousel.mp4');
+    const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+    const a = document.createElement('a');
+    a.href = videoURL;
+    a.download = 'ordered_carousel.mp4';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    alert('Vidéo générée dans l\'ordre du carrousel avec succès!');
 }
+
+
 
 
 
