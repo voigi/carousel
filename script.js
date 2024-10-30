@@ -479,7 +479,12 @@ addMediaButton.addEventListener('click', () => {
 //fais mois un script qui encode, on utilisera ffmpeg pour l'encodage , les images et vidéo de mon carousel dans une vidéo,cette vidéo une fois généré est enregistrée en local sur l'ordinateur
 // Fonction pour encoder et concaténer les fichiers avec FFmpeg
 
+let isProcessing = false;
+
 async function createVideoFromCarousel() {
+    if (isProcessing) return; // Sortir si la fonction est déjà en cours
+    isProcessing = true;
+
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
@@ -489,6 +494,7 @@ async function createVideoFromCarousel() {
 
     const inputs = [];
 
+    // Fonction pour traiter chaque élément multimédia
     const processMedia = async (mediaElement, fileIndex) => {
         const mediaType = mediaElement.tagName.toLowerCase();
         const blob = await fetch(mediaElement.src).then(r => r.blob());
@@ -517,34 +523,54 @@ async function createVideoFromCarousel() {
         }
     };
 
-    // Traitement des éléments du carrousel
-    await Promise.all(Array.from(items).map((item, index) => processMedia(item.querySelector('img, video'), index)));
+    // Traitement des éléments du carrousel de manière séquentielle
+    for (let index = 0; index < items.length; index++) {
+        await processMedia(items[index].querySelector('img, video'), index);
+    }
 
     // Création du fichier de concaténation
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
-    // Exécution de la concaténation
-    await ffmpeg.run(
-        '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-        '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k',
-        '-pix_fmt', 'yuv420p', 'ordered_carousel.mp4'
-    );
+    console.log('Fichier de concaténation créé : input.txt');
 
-    // Téléchargement de la vidéo finale
-    const data = ffmpeg.FS('readFile', 'ordered_carousel.mp4');
-    const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-    const a = document.createElement('a');
-    a.href = videoURL;
-    a.download = 'ordered_carousel.mp4';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    try {
+        // Exécution de la concaténation
+        await ffmpeg.run(
+            '-f', 'concat', '-safe', '0', '-i', 'input.txt',
+            '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k',
+            '-pix_fmt', 'yuv420p', 'ordered_carousel.mp4'
+        );
+        console.log('Concaténation réussie');
+    } catch (error) {
+        console.error('Erreur lors de la concaténation :', error);
+        isProcessing = false; // Réinitialiser l'état en cas d'erreur
+        return; // Sortir de la fonction en cas d'erreur
+    }
+
+    // Lecture du fichier final
+    try {
+        const data = ffmpeg.FS('readFile', 'ordered_carousel.mp4');
+        const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+        const a = document.createElement('a');
+        a.href = videoURL;
+        a.download = 'ordered_carousel.mp4';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    } catch (error) {
+        console.error('Erreur lors de la lecture de ordered_carousel.mp4 :', error);
+    }
 
     // Nettoyage des fichiers temporaires
     inputs.forEach(input => ffmpeg.FS('unlink', input));
     ffmpeg.FS('unlink', 'input.txt');
+
+    isProcessing = false; // Réinitialiser l'état à la fin
 }
+
+// N'appelez pas la fonction ici, laissez-la être appelée par votre code principal
+
 
 
 
