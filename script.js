@@ -479,6 +479,8 @@ addMediaButton.addEventListener('click', () => {
 //fais mois un script qui encode, on utilisera ffmpeg pour l'encodage , les images et vidéo de mon carousel dans une vidéo,cette vidéo une fois généré est enregistrée en local sur l'ordinateur
 // Fonction pour encoder et concaténer les fichiers avec FFmpeg
 
+
+
 let isProcessing = false;
 
 async function createVideoFromCarousel() {
@@ -489,12 +491,11 @@ async function createVideoFromCarousel() {
 
     const items = document.querySelectorAll('.carousel-item');
     const durationPerImage = 1.5; // Durée pour les images
-    const videoWidth = 1280;
-    const videoHeight = 720;
+    const videoWidth = 640; // Réduire la largeur
+    const videoHeight = 360; // Réduire la hauteur
 
     const inputs = [];
 
-    // Fonction pour traiter chaque élément multimédia
     const processMedia = async (mediaElement, fileIndex) => {
         const mediaType = mediaElement.tagName.toLowerCase();
         const blob = await fetch(mediaElement.src).then(r => r.blob());
@@ -508,47 +509,46 @@ async function createVideoFromCarousel() {
                 '-loop', '1', '-t', durationPerImage.toString(), '-i', fileName,
                 '-f', 'lavfi', '-t', durationPerImage.toString(), '-i', 'anullsrc=r=48000:cl=stereo',
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k',
-                `temp_image_${fileIndex}.mp4`
+                '-c:v', 'libx264', '-preset', 'superfast', // Changement de preset
+                '-b:v', '500k', // Réduction du débit binaire
+                'temp_image_${fileIndex}.mp4'
             );
             inputs.push(`temp_image_${fileIndex}.mp4`);
         } else {
             await ffmpeg.run(
                 '-i', fileName,
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k',
-                `temp_video_${fileIndex}.mp4`
+                '-c:v', 'libx264', '-preset', 'superfast', // Changement de preset
+                '-b:v', '500k', // Réduction du débit binaire
+                'temp_video_${fileIndex}.mp4'
             );
             inputs.push(`temp_video_${fileIndex}.mp4`);
         }
     };
 
-    // Traitement des éléments du carrousel de manière séquentielle
     for (let index = 0; index < items.length; index++) {
         await processMedia(items[index].querySelector('img, video'), index);
     }
 
-    // Création du fichier de concaténation
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
     console.log('Fichier de concaténation créé : input.txt');
 
     try {
-        // Exécution de la concaténation
         await ffmpeg.run(
             '-f', 'concat', '-safe', '0', '-i', 'input.txt',
-            '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k',
-            '-pix_fmt', 'yuv420p', 'ordered_carousel.mp4'
+            '-c:v', 'libx264', '-preset', 'superfast', // Changement de preset
+            '-b:v', '500k', // Réduction du débit binaire
+            'ordered_carousel.mp4'
         );
         console.log('Concaténation réussie');
     } catch (error) {
         console.error('Erreur lors de la concaténation :', error);
-        isProcessing = false; // Réinitialiser l'état en cas d'erreur
-        return; // Sortir de la fonction en cas d'erreur
+        isProcessing = false;
+        return;
     }
 
-    // Lecture du fichier final
     try {
         const data = ffmpeg.FS('readFile', 'ordered_carousel.mp4');
         const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
@@ -562,7 +562,6 @@ async function createVideoFromCarousel() {
         console.error('Erreur lors de la lecture de ordered_carousel.mp4 :', error);
     }
 
-    // Nettoyage des fichiers temporaires
     inputs.forEach(input => ffmpeg.FS('unlink', input));
     ffmpeg.FS('unlink', 'input.txt');
 
@@ -570,6 +569,7 @@ async function createVideoFromCarousel() {
 }
 
 // N'appelez pas la fonction ici, laissez-la être appelée par votre code principal
+
 
 
 
