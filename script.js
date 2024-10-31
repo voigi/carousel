@@ -480,7 +480,7 @@ addMediaButton.addEventListener('click', () => {
 // Fonction pour encoder et concaténer les fichiers avec FFmpeg
 
 
-async function createAdaptiveCarouselVideo() {
+async function createVideoFromCarousel() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
