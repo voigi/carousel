@@ -642,6 +642,9 @@ cancelFinishButton.addEventListener('click', () => {
 // Gestion du bouton de remplacement de médias
 replaceMediaButton.addEventListener('click', replaceMedia);
 
+     // Gestion des boutons de navigation
+document.querySelector('.carousel-button.prev').addEventListener('click', () => moveCarousel(-1));
+document.querySelector('.carousel-button.next').addEventListener('click', () => moveCarousel(1));
 
 
 // Initialisation de l'intitulé du sélecteur
