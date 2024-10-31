@@ -308,9 +308,7 @@ function updateCarousel() {
         
     }
     if(items.length>1){
-        // Gestion des boutons de navigation
-document.querySelector('.carousel-button.prev').addEventListener('click', () => moveCarousel(-1));
-document.querySelector('.carousel-button.next').addEventListener('click', () => moveCarousel(1));
+   
         finishButton.style.display = 'block';
         
     }
