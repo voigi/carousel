@@ -485,7 +485,7 @@ async function createVideoFromCarousel() {
 
     const items = document.querySelectorAll('.carousel-item');
     const fps = 25;
-    const durationPerImage = 1.5; // Durée pour les images
+    const durationPerImage = 1.5; // Durée fixe pour chaque image
     const videoWidth = 1280;
     const videoHeight = 720;
 
@@ -497,9 +497,9 @@ async function createVideoFromCarousel() {
         const mediaType = mediaElement.tagName.toLowerCase();
 
         if (mediaType === 'img') {
-            console.log(`Traitement de l'image ${fileIndex} pour l'ajouter dans l'ordre`);
+            console.log(`Traitement de l'image ${fileIndex}`);
 
-            // Processus pour les images, avec une piste audio silencieuse
+            // Encodage de l'image sans piste audio silencieuse
             const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
             const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
             const imageFileName = `image${fileIndex}.jpg`;
@@ -507,18 +507,17 @@ async function createVideoFromCarousel() {
             ffmpeg.FS('writeFile', imageFileName, imageFile);
             await ffmpeg.run(
                 '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
-                '-f', 'lavfi', '-t', durationPerImage.toString(), '-i', 'anullsrc=r=48000:cl=stereo',
                 '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000',
+                '-c:v', 'libx264',
                 '-preset', 'ultrafast',
                 `temp_image_${fileIndex}.mp4`
             );
-            console.log(`Image ${fileIndex} encodée avec succès en temp_image_${fileIndex}.mp4`);
+            console.log(`Image ${fileIndex} encodée en temp_image_${fileIndex}.mp4`);
             inputs.push(`temp_image_${fileIndex}.mp4`);
         } else if (mediaType === 'video') {
-            console.log(`Traitement de la vidéo ${fileIndex} pour l'ajouter dans l'ordre`);
+            console.log(`Traitement de la vidéo ${fileIndex}`);
 
-            // Processus pour les vidéos, en préservant l'audio
+            // Encodage de la vidéo avec la piste audio
             const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
             const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
             const videoFileName = `video${fileIndex}.mp4`;
@@ -531,37 +530,34 @@ async function createVideoFromCarousel() {
                 '-preset', 'ultrafast',
                 `temp_video_${fileIndex}.mp4`
             );
-            console.log(`Vidéo ${fileIndex} encodée avec succès en temp_video_${fileIndex}.mp4`);
+            console.log(`Vidéo ${fileIndex} encodée en temp_video_${fileIndex}.mp4`);
             inputs.push(`temp_video_${fileIndex}.mp4`);
         }
         fileIndex++;
     }
 
-    // Créer une liste de fichiers pour la concaténation dans l'ordre d'origine
+    // Créer la liste des fichiers dans l'ordre pour la concaténation
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
-    console.log('Fichier de concaténation créé: input.txt');
 
-    // Concaténer les fichiers dans l'ordre avec synchronisation stricte
+    // Concaténer les fichiers en respectant l'ordre sans décalage audio
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
         '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-pix_fmt', 'yuv420p',
-        '-preset', 'ultrafast', '-vsync', 'cfr', '-async', '1', 'ordered_carousel.mp4'
+        '-preset', 'ultrafast', '-vsync', 'cfr', 'ordered_carousel_no_silence.mp4'
     );
 
-    console.log('Vidéo finale générée : ordered_carousel.mp4');
-
     // Télécharger la vidéo générée
-    const data = ffmpeg.FS('readFile', 'ordered_carousel.mp4');
+    const data = ffmpeg.FS('readFile', 'ordered_carousel_no_silence.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     const a = document.createElement('a');
     a.href = videoURL;
-    a.download = 'ordered_carousel.mp4';
+    a.download = 'ordered_carousel_no_silence.mp4';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    alert('Vidéo générée dans l\'ordre du carrousel avec succès!');
+    alert('Vidéo générée sans piste audio silencieuse!');
 }
 
 
