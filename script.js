@@ -484,7 +484,6 @@ async function createVideoFromCarousel() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
-    const fps = 25;
     const durationPerImage = 1.5;
     const videoWidth = 1280;
     const videoHeight = 720;
@@ -497,7 +496,7 @@ async function createVideoFromCarousel() {
         const mediaType = mediaElement.tagName.toLowerCase();
 
         if (mediaType === 'img') {
-            // Traitement de l'image
+            // Traitement de l'image sans piste audio
             const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
             const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
             const imageFileName = `image${fileIndex}.jpg`;
@@ -511,7 +510,7 @@ async function createVideoFromCarousel() {
             );
             inputs.push(`temp_image_${fileIndex}.mp4`);
         } else if (mediaType === 'video') {
-            // Traitement de la vidéo
+            // Traitement de la vidéo avec piste audio
             const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
             const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
             const videoFileName = `video${fileIndex}.mp4`;
@@ -533,21 +532,11 @@ async function createVideoFromCarousel() {
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'input.txt', new TextEncoder().encode(inputFileList));
 
-    // Télécharger input.txt pour vérification
-    const fileData = ffmpeg.FS('readFile', 'input.txt');
-    const fileBlob = new Blob([fileData.buffer], { type: 'text/plain' });
-    const downloadLink = document.createElement('a');
-    downloadLink.href = URL.createObjectURL(fileBlob);
-    downloadLink.download = 'input.txt';
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-
-    // Concaténation des fichiers
+    // Concaténation stricte des fichiers pour synchroniser correctement audio et vidéo
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'input.txt',
         '-c:v', 'libx264', '-c:a', 'aac', '-b:a', '128k', '-pix_fmt', 'yuv420p',
-        '-preset', 'ultrafast', '-vsync', 'cfr', '-async', '1', 'adaptive_carousel.mp4'
+        '-preset', 'ultrafast', '-vsync', 'passthrough', 'adaptive_carousel.mp4'
     );
 
     // Téléchargement de la vidéo générée
@@ -562,7 +551,6 @@ async function createVideoFromCarousel() {
 
     alert('Vidéo générée avec succès!');
 }
-
 
 
 
