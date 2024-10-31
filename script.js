@@ -626,6 +626,7 @@ document.getElementById('finishButton').addEventListener('click', function() {
 confirmFinishButton.addEventListener('click', () => {
   
     finishModal.style.display = 'none'; // Fermer la modale
+     finishButton.style.display = 'none';
     createVideoFromCarousel(); // Appel de la fonction pour créer la vidéo
    
       
