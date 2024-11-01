@@ -551,15 +551,7 @@ async function generatePreview() {
 
     document.getElementById('previewModal').style.display = 'block';
 
-    // Gestion des boutons du modal d'aperçu
-document.getElementById('confirmPreview').addEventListener('click', () => {
-    document.getElementById('previewModal').style.display = 'none';
-    document.getElementById('finishModal').style.display = 'block';
-});
-
-document.getElementById('cancelPreview').addEventListener('click', () => {
-    document.getElementById('previewModal').style.display = 'none';
-});
+    
 }
 
 
