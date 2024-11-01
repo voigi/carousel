@@ -643,11 +643,9 @@ cancelFinishButton.addEventListener('click', () => {
 replaceMediaButton.addEventListener('click', replaceMedia);
 
 // Gestion des boutons de navigation
-if(items.length>1){
-     // Gestion des boutons de navigation
 document.querySelector('.carousel-button.prev').addEventListener('click', () => moveCarousel(-1));
 document.querySelector('.carousel-button.next').addEventListener('click', () => moveCarousel(1));
-}
+
 // Initialisation de l'intitulé du sélecteur
 function updateSelectPlaceholder() {
     mediaFormatSelect.selectedIndex = 0;
