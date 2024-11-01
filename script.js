@@ -478,7 +478,80 @@ addMediaButton.addEventListener('click', () => {
 
 //fais mois un script qui encode, on utilisera ffmpeg pour l'encodage , les images et vidéo de mon carousel dans une vidéo,cette vidéo une fois généré est enregistrée en local sur l'ordinateur
 // Fonction pour encoder et concaténer les fichiers avec FFmpeg
+async function generatePreview() {
+    if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
+    const items = document.querySelectorAll('.carousel-item');
+    const fps = 15; // Moins d'images pour l'aperçu
+    const videoWidth = 640;
+    const videoHeight = 360;
+    const durationPerImage = 1; // Durée plus courte pour l'aperçu
+
+    let fileIndex = 0;
+    const inputs = [];
+
+    for (const item of items) {
+        const mediaElement = item.querySelector('img, video');
+        const mediaType = mediaElement.tagName.toLowerCase();
+
+        if (mediaType === 'img') {
+            const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
+            const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
+            const imageFileName = `preview_image${fileIndex}.jpg`;
+
+            ffmpeg.FS('writeFile', imageFileName, imageFile);
+            await ffmpeg.run(
+                '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
+                '-vf', `scale=${videoWidth}:${videoHeight}`,
+                '-c:v', 'libx264', '-crf', '40', '-preset', 'ultrafast',
+                `temp_preview_image_${fileIndex}.mp4`
+            );
+            inputs.push(`temp_preview_image_${fileIndex}.mp4`);
+        } else if (mediaType === 'video') {
+            const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
+            const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
+            const videoFileName = `preview_video${fileIndex}.mp4`;
+
+            ffmpeg.FS('writeFile', videoFileName, videoFile);
+            await ffmpeg.run(
+                '-i', videoFileName,
+                '-vf', `scale=${videoWidth}:${videoHeight}`,
+                '-c:v', 'libx264', '-crf', '40', '-preset', 'ultrafast',
+                `temp_preview_video_${fileIndex}.mp4`
+            );
+            inputs.push(`temp_preview_video_${fileIndex}.mp4`);
+        }
+        fileIndex++;
+    }
+
+    // Créer la liste concaténée pour la preview
+    const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
+    ffmpeg.FS('writeFile', 'preview_input.txt', new TextEncoder().encode(inputFileList));
+
+    await ffmpeg.run(
+        '-f', 'concat', '-safe', '0', '-i', 'preview_input.txt',
+        '-c:v', 'libx264', '-preset', 'ultrafast', 'carousel_preview.mp4'
+    );
+
+    const previewData = ffmpeg.FS('readFile', 'carousel_preview.mp4');
+    const previewURL = URL.createObjectURL(new Blob([previewData.buffer], { type: 'video/mp4' }));
+
+    // Affiche la modale avec la preview
+    document.getElementById('previewVideo').src = previewURL;
+    document.getElementById('previewModal').style.display = 'block';
+}
+
+// Gestion de la confirmation de la preview
+document.getElementById('confirmPreview').addEventListener('click', () => {
+    document.getElementById('previewModal').style.display = 'none';
+    document.getElementById('finishModal').style.display = 'block'; // Ouvre finishModal pour confirmation
+    // Vous pouvez lancer l'encodage final ici si nécessaire
+});
+
+// Gestion de l'annulation de la preview
+document.getElementById('cancelPreview').addEventListener('click', () => {
+    document.getElementById('previewModal').style.display = 'none';
+});
 
 async function createVideoFromCarousel() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
