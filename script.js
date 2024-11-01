@@ -498,6 +498,8 @@ async function generatePreview() {
     let fileIndex = 0;
     const inputs = [];
 
+    console.log("Début de la génération de l'aperçu.");
+
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
@@ -513,10 +515,11 @@ async function generatePreview() {
                     '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
                     '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
                     '-c:v', 'libx264', '-preset', 'ultrafast',
-                    '-profile:v', 'baseline', // Profil de compatibilité
+                    '-profile:v', 'baseline',
                     `temp_preview_${fileIndex}.mp4`
                 );
                 inputs.push(`temp_preview_${fileIndex}.mp4`);
+                console.log(`Image ${fileIndex} traitée : ${imageFileName}`);
             } else if (mediaType === 'video') {
                 const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
                 const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
@@ -527,38 +530,38 @@ async function generatePreview() {
                     '-i', videoFileName,
                     '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
                     '-c:v', 'libx264', '-preset', 'ultrafast',
-                    '-profile:v', 'baseline', // Profil de compatibilité
+                    '-profile:v', 'baseline',
                     `temp_preview_${fileIndex}.mp4`
                 );
                 inputs.push(`temp_preview_${fileIndex}.mp4`);
+                console.log(`Vidéo ${fileIndex} traitée : ${videoFileName}`);
             }
         } catch (error) {
-            console.error(`Erreur lors du traitement de ${mediaType} :`, error);
+            console.error(`Erreur lors du traitement de ${mediaType} (index: ${fileIndex}):`, error);
         }
         fileIndex++;
     }
 
-    // Créer une liste de fichiers pour la concaténation
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'preview_input.txt', new TextEncoder().encode(inputFileList));
 
-    // Concaténer les fichiers pour créer une vidéo d'aperçu
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'preview_input.txt',
         '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
-        '-preset', 'ultrafast', '-profile:v', 'baseline', // Profil de compatibilité
+        '-preset', 'ultrafast', '-profile:v', 'baseline',
         'preview_video.mp4'
     );
 
-    // Lire la vidéo générée et la passer à l'élément <video> d'aperçu
     const data = ffmpeg.FS('readFile', 'preview_video.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     const previewVideoElement = document.getElementById('previewVideo');
     previewVideoElement.src = videoURL;
 
-    // Afficher le modal d'aperçu
+    console.log("Aperçu vidéo généré et assigné.");
+
     document.getElementById('previewModal').style.display = 'block';
 }
+
 
 
 
