@@ -392,16 +392,27 @@ input:disabled, select:disabled, button:disabled {
     background-color: #45a049; /* Couleur au survol */
 }
 #previewModal {
-    width: 80%; /* Ajustez la largeur selon vos besoins */
-    max-width: 600px; /* Limitez la largeur maximale */
-    margin: auto; /* Centre le modal sur la page */
-    padding: 20px; /* Ajoutez un peu de padding */
-    background-color: white; /* Assurez-vous que le fond est visible */
+    width: 80%; /* Largeur du modal */
+    max-width: 600px; /* Largeur maximale */
+    margin: auto; /* Centre le modal */
+    padding: 20px; /* Padding pour le contenu */
+    background-color: white; /* Fond blanc */
     border-radius: 8px; /* Coins arrondis */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre autour du modal */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre */
 }
 
 #previewVideo {
-    width: 100%; /* Fait en sorte que la vidéo prenne la largeur du conteneur */
-    height: auto; /* Maintient le rapport hauteur/largeur */
+    width: 100%; /* La vidéo prend toute la largeur du modal */
+    height: 0; /* Initialiser la hauteur à 0 */
+    padding-bottom: 56.25%; /* Maintenir le rapport d'aspect 16:9 (9/16 = 0.5625) */
+    position: relative; /* Positionner la vidéo */
 }
+
+#previewVideo > video {
+    position: absolute; /* Positionner la vidéo à l'intérieur du conteneur */
+    top: 0; /* Alignement en haut */
+    left: 0; /* Alignement à gauche */
+    width: 100%; /* La vidéo prend toute la largeur */
+    height: 100%; /* La vidéo prend toute la hauteur */
+}
+
