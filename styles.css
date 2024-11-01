@@ -391,3 +391,17 @@ input:disabled, select:disabled, button:disabled {
 .finish-btn:hover {
     background-color: #45a049; /* Couleur au survol */
 }
+#previewModal {
+    width: 80%; /* Ajustez la largeur selon vos besoins */
+    max-width: 600px; /* Limitez la largeur maximale */
+    margin: auto; /* Centre le modal sur la page */
+    padding: 20px; /* Ajoutez un peu de padding */
+    background-color: white; /* Assurez-vous que le fond est visible */
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre autour du modal */
+}
+
+#previewVideo {
+    width: 100%; /* Fait en sorte que la vidéo prenne la largeur du conteneur */
+    height: auto; /* Maintient le rapport hauteur/largeur */
+}
