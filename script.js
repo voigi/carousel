@@ -479,9 +479,7 @@ addMediaButton.addEventListener('click', () => {
 //fais mois un script qui encode, on utilisera ffmpeg pour l'encodage , les images et vidéo de mon carousel dans une vidéo,cette vidéo une fois généré est enregistrée en local sur l'ordinateur
 // Fonction pour encoder et concaténer les fichiers avec FFmpeg
 
-document.getElementById('previewButton').addEventListener('click', () => {
-    generatePreview(); // Appelle la fonction de preview
-});
+
 
 document.getElementById('previewButton').addEventListener('click', () => {
     generatePreview(); // Appelle la fonction de preview
@@ -511,8 +509,6 @@ async function generatePreview() {
                 const imageFileName = `preview_image${fileIndex}.jpg`;
 
                 ffmpeg.FS('writeFile', imageFileName, imageFile);
-                
-                // Attendre que la commande se termine avant de passer à la suivante
                 await ffmpeg.run(
                     '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
                     '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
@@ -528,8 +524,6 @@ async function generatePreview() {
                 const videoFileName = `preview_video${fileIndex}.mp4`;
 
                 ffmpeg.FS('writeFile', videoFileName, videoFile);
-                
-                // Attendre que la commande se termine avant de passer à la suivante
                 await ffmpeg.run(
                     '-i', videoFileName,
                     '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
@@ -549,7 +543,6 @@ async function generatePreview() {
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'preview_input.txt', new TextEncoder().encode(inputFileList));
 
-    // Attendre que la concaténation soit terminée
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'preview_input.txt',
         '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
@@ -560,10 +553,19 @@ async function generatePreview() {
     const data = ffmpeg.FS('readFile', 'preview_video.mp4');
     const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     const previewVideoElement = document.getElementById('previewVideo');
+
+    // Ajouter des gestionnaires d'événements
+    previewVideoElement.addEventListener('loadeddata', () => {
+        console.log('Vidéo chargée avec succès.');
+    }, false);
+
+    previewVideoElement.addEventListener('error', (e) => {
+        console.error('Erreur lors du chargement de la vidéo :', e);
+    }, false);
+
     previewVideoElement.src = videoURL;
 
-    console.log("Aperçu vidéo généré et assigné.");
-
+    // Afficher le modal d'aperçu
     document.getElementById('previewModal').style.display = 'block';
 }
 
