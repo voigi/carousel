@@ -478,6 +478,11 @@ addMediaButton.addEventListener('click', () => {
 
 //fais mois un script qui encode, on utilisera ffmpeg pour l'encodage , les images et vidéo de mon carousel dans une vidéo,cette vidéo une fois généré est enregistrée en local sur l'ordinateur
 // Fonction pour encoder et concaténer les fichiers avec FFmpeg
+
+document.getElementById('previewButton').addEventListener('click', () => {
+    generatePreview(); // Appelle la fonction de preview
+});
+
 async function generatePreview() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
