@@ -511,6 +511,8 @@ async function generatePreview() {
                 const imageFileName = `preview_image${fileIndex}.jpg`;
 
                 ffmpeg.FS('writeFile', imageFileName, imageFile);
+                
+                // Attendre que la commande se termine avant de passer à la suivante
                 await ffmpeg.run(
                     '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
                     '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
@@ -526,6 +528,8 @@ async function generatePreview() {
                 const videoFileName = `preview_video${fileIndex}.mp4`;
 
                 ffmpeg.FS('writeFile', videoFileName, videoFile);
+                
+                // Attendre que la commande se termine avant de passer à la suivante
                 await ffmpeg.run(
                     '-i', videoFileName,
                     '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
@@ -545,6 +549,7 @@ async function generatePreview() {
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'preview_input.txt', new TextEncoder().encode(inputFileList));
 
+    // Attendre que la concaténation soit terminée
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'preview_input.txt',
         '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
