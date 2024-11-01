@@ -308,9 +308,7 @@ function updateCarousel() {
         
     }
     if(items.length>1){
-   
         finishButton.style.display = 'block';
-        
     }
 }
 
@@ -482,7 +480,7 @@ addMediaButton.addEventListener('click', () => {
 // Fonction pour encoder et concaténer les fichiers avec FFmpeg
 
 
-async function createVideoFromCarousel() {
+async function createAdaptiveCarouselVideo() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
@@ -628,7 +626,6 @@ document.getElementById('finishButton').addEventListener('click', function() {
 confirmFinishButton.addEventListener('click', () => {
   
     finishModal.style.display = 'none'; // Fermer la modale
-     finishButton.style.display = 'none';
     createVideoFromCarousel(); // Appel de la fonction pour créer la vidéo
    
       
