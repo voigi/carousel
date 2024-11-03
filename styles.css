@@ -404,5 +404,18 @@ input:disabled, select:disabled, button:disabled {
     }
 }    
 
+#previewVideo {
+    width: 100%; /* La vidéo prend toute la largeur du modal */
+    height: 0; /* Initialiser la hauteur à 0 */
+    padding-bottom: 56.25%; /* Maintenir le rapport d'aspect 16:9 (9/16 = 0.5625) */
+    position: relative; /* Positionner la vidéo */
+}
 
+#previewVideo > video {
+    position: absolute; /* Positionner la vidéo à l'intérieur du conteneur */
+    top: 0; /* Alignement en haut */
+    left: 0; /* Alignement à gauche */
+    width: 100%; /* La vidéo prend toute la largeur */
+    height: 100%; /* La vidéo prend toute la hauteur */
+}
 
