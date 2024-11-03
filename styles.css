@@ -521,3 +521,88 @@ input:disabled, select:disabled, button:disabled {
     }
 }
 
+/* Adaptation pour les tablettes (jusqu'à 768px) */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .carousel-container,
+    .carousel-item img,
+    .carousel-item video {
+        width: 100%;
+        height: auto;
+    }
+
+    .carousel-button {
+        font-size: 20px;
+        width: 40px;
+        height: 40px;
+    }
+
+    #replaceFileInput.active {
+        left: 5vw;
+        top: 5vh;
+    }
+
+    #replaceMediaButton.active {
+        left: 25vw;
+    }
+
+    #replaceMediaButton {
+        top: 2vh;
+        left: 25vw;
+    }
+
+    .replace-container {
+        left: 0;
+        bottom: 2vh;
+    }
+}
+
+/* Adaptation pour les smartphones (jusqu'à 480px) */
+@media (max-width: 480px) {
+    .container {
+        padding: 5px;
+    }
+
+    .carousel-container,
+    .carousel-item img,
+    .carousel-item video {
+        width: 100%;
+        height: auto;
+    }
+
+    .carousel-button {
+        font-size: 18px;
+        width: 35px;
+        height: 35px;
+    }
+
+    .format-select,
+    #uploadFile,
+    .auto-scroll-select {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #replaceFileInput.active {
+        left: 3vw;
+        top: 3vh;
+    }
+
+    #replaceMediaButton.active {
+        left: 20vw;
+    }
+
+    #replaceMediaButton {
+        top: 1vh;
+        left: 20vw;
+    }
+
+    .replace-container {
+        left: 0;
+        bottom: 1vh;
+    }
+}
+
