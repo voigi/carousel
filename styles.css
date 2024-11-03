@@ -521,44 +521,95 @@ input:disabled, select:disabled, button:disabled {
     }
 }
 
-/* Adaptation pour les tablettes (jusqu'à 768px) */
+/* Media Queries pour tablettes */
 @media (max-width: 768px) {
-    .carousel-container {
-        width: 100%;
-        height: 60vh; /* Ajustement de la hauteur pour les tablettes */
+    body {
+        padding: 10px; /* Réduction de l'espacement */
+    }
+
+    .container {
+        padding: 15px; /* Ajustement de l'espacement interne */
     }
 
     .carousel-item img,
     .carousel-item video {
-        width: 100%;
-        height: 100%; /* Remplit le conteneur */
-        object-fit: cover; /* Remplit le conteneur en conservant le ratio d'aspect */
+        width: 100%; /* Rendre les images et vidéos responsive */
+        height: auto; /* Garder le ratio d'aspect */
+    }
+
+    .format-select,
+    #uploadFile,
+    .add-btn,
+    #replaceMediaButton,
+    #replaceCancelButton {
+        max-width: 100%; /* Ajuster les boutons et inputs pour prendre toute la largeur */
+        width: 100%; /* S'assurer qu'ils s'adaptent à l'écran */
     }
 
     .carousel-button {
-        font-size: 22px;
-        width: 50px; /* Augmentation de la taille des boutons pour plus de confort */
-        height: 50px;
+        width: 40px; /* Réduction de la taille des boutons */
+        height: 40px;
+        font-size: 20px; /* Réduction de la taille de la police */
+    }
+
+    .delete-btn {
+        width: 25px; /* Réduction de la taille du bouton de suppression */
+        height: 25px;
+        font-size: 16px; /* Réduction de la taille de l'icône */
+    }
+
+    #replaceMediaButton {
+        left: 15vw; /* Ajuster la position du bouton d'édition */
+    }
+
+    .auto-scroll-select {
+        width: 90%; /* Ajuster la largeur du sélecteur */
+    }
+
+    .modal-content {
+        width: 90%; /* Ajustement de la largeur du modal */
     }
 }
 
-/* Adaptation pour les smartphones (jusqu'à 480px) */
+/* Media Queries pour smartphones */
 @media (max-width: 480px) {
-    .carousel-container {
-        width: 100%;
-        height: 50vh; /* Ajustement de la hauteur pour les smartphones */
+    h1 {
+        font-size: 24px; /* Réduction de la taille de la police pour les titres */
     }
 
     .carousel-item img,
     .carousel-item video {
-        width: 100%;
-        height: 100%; /* Remplit le conteneur */
-        object-fit: cover; /* Remplit le conteneur en conservant le ratio d'aspect */
+        width: 100%; /* Rendre les images et vidéos responsive */
+        height: auto; /* Garder le ratio d'aspect */
     }
 
     .carousel-button {
-        font-size: 20px;
-        width: 40px; /* Ajustement de la taille des boutons pour les petits écrans */
-        height: 40px;
+        width: 35px; /* Réduction de la taille des boutons */
+        height: 35px;
+        font-size: 18px; /* Réduction de la taille de la police */
+    }
+
+    .format-select,
+    #uploadFile,
+    .add-btn,
+    #replaceMediaButton,
+    #replaceCancelButton {
+        max-width: 100%; /* Ajuster les boutons et inputs pour prendre toute la largeur */
+        width: 100%; /* S'assurer qu'ils s'adaptent à l'écran */
+    }
+
+    .input-group {
+        flex-direction: column; /* Empiler les éléments au lieu de les aligner */
+        align-items: stretch; /* Étirer les éléments pour prendre toute la largeur */
+    }
+
+    .delete-btn {
+        width: 20px; /* Réduction de la taille du bouton de suppression */
+        height: 20px;
+        font-size: 14px; /* Réduction de la taille de l'icône */
+    }
+
+    .modal-content {
+        width: 95%; /* Ajustement de la largeur du modal */
     }
 }
