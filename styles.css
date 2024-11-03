@@ -531,6 +531,10 @@ input:disabled, select:disabled, button:disabled {
         padding: 15px; /* Ajustement de l'espacement interne */
     }
 
+.carousel-container{
+ min-height:250px;
+} 
+
     .carousel-item img,
     .carousel-item video {
         width: 100%; /* Rendre les images et vidéos responsive */
@@ -576,7 +580,9 @@ input:disabled, select:disabled, button:disabled {
     h1 {
         font-size: 24px; /* Réduction de la taille de la police pour les titres */
     }
-
+.carousel-container{
+ min-height:200px;
+} 
     .carousel-item img,
     .carousel-item video {
         width: 100%; /* Rendre les images et vidéos responsive */
