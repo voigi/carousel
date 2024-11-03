@@ -392,14 +392,17 @@ input:disabled, select:disabled, button:disabled {
     background-color: #45a049; /* Couleur au survol */
 }
 #previewModal {
-    width: 80%; /* Largeur du modal */
-    max-width: 600px; /* Largeur maximale */
-    margin: auto; /* Centre le modal */
-    padding: 20px; /* Padding pour le contenu */
-    background-color: white; /* Fond blanc */
-    border-radius: 8px; /* Coins arrondis */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre */
-}
+    #previewModal {
+        display: none; /* initialement caché */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
+        padding: 20px;
+        z-index: 1000; /* Assurez-vous qu'il est au-dessus des autres éléments */
+    }
+}    
 
 #previewVideo {
     width: 100%; /* La vidéo prend toute la largeur du modal */
