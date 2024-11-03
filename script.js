@@ -611,6 +611,9 @@ async function generatePreview() {
     const previewBlob = new Blob([previewData.buffer], { type: 'video/mp4' });
     const previewURL = URL.createObjectURL(previewBlob);
 
+    console.log(previewBlob);
+    console.log(previewBlob.type); // Doit être 'video/mp4'
+
     // Ajouter un lien pour télécharger la vidéo pour vérification
     const downloadLink = document.createElement('a');
     downloadLink.href = previewURL;
@@ -621,7 +624,7 @@ async function generatePreview() {
     const previewVideoElement = document.getElementById('previewVideo');
 
     // Configurez la source de la vidéo
-    previewVideoElement.src = previewURL;
+    previewVideoElement.src = 'https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4' //previewURL;
 
     previewVideoElement.addEventListener('loadeddata', () => {
         console.log('La vidéo est chargée avec succès.');
