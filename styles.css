@@ -392,6 +392,7 @@ input:disabled, select:disabled, button:disabled {
     background-color: #45a049; /* Couleur au survol */
 }
 #previewModal {
+    display: none;
     width: 80%; /* Largeur du modal */
     max-width: 600px; /* Largeur maximale */
     margin: auto; /* Centre le modal */
