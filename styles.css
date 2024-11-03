@@ -523,20 +523,17 @@ input:disabled, select:disabled, button:disabled {
 
 /* Adaptation pour les tablettes (jusqu'à 768px) */
 @media (max-width: 768px) {
-    .container {
-        padding: 10px;
-    }
-
     .carousel-container {
         width: 100%;
-        height: 70vh; /* Assure une hauteur confortable sur les tablettes */
+        height: 50vh; /* Ajustement de la hauteur pour les tablettes */
     }
 
     .carousel-item img,
     .carousel-item video {
         width: 100%;
-        height: 100%;
-        object-fit: cover; /* Remplit le conteneur tout en gardant le ratio */
+        height: auto; /* Hauteur automatique pour maintenir le ratio d'aspect */
+        max-height: 100%; /* Limite la hauteur maximale à celle du conteneur */
+        object-fit: contain; /* Contient le média dans le conteneur sans couper */
     }
 
     .carousel-button {
@@ -544,74 +541,26 @@ input:disabled, select:disabled, button:disabled {
         width: 40px;
         height: 40px;
     }
-
-    #replaceFileInput.active {
-        left: 5vw;
-        top: 5vh;
-    }
-
-    #replaceMediaButton.active {
-        left: 25vw;
-    }
-
-    #replaceMediaButton {
-        top: 2vh;
-        left: 25vw;
-    }
-
-    .replace-container {
-        left: 0;
-        bottom: 2vh;
-    }
 }
 
 /* Adaptation pour les smartphones (jusqu'à 480px) */
 @media (max-width: 480px) {
-    .container {
-        padding: 5px;
-    }
-
     .carousel-container {
         width: 100%;
-        height: 60vh; /* Assure une bonne hauteur pour les petits écrans */
+        height: 40vh; /* Hauteur ajustée pour les smartphones */
     }
 
     .carousel-item img,
     .carousel-item video {
         width: 100%;
-        height: 100%;
-        object-fit: cover; /* Remplit le conteneur tout en gardant le ratio */
+        height: auto; /* Hauteur automatique pour maintenir le ratio d'aspect */
+        max-height: 100%; /* Limite la hauteur maximale à celle du conteneur */
+        object-fit: contain; /* Contient le média dans le conteneur sans couper */
     }
 
     .carousel-button {
         font-size: 18px;
         width: 35px;
         height: 35px;
-    }
-
-    .format-select,
-    #uploadFile,
-    .auto-scroll-select {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    #replaceFileInput.active {
-        left: 3vw;
-        top: 3vh;
-    }
-
-    #replaceMediaButton.active {
-        left: 20vw;
-    }
-
-    #replaceMediaButton {
-        top: 1vh;
-        left: 20vw;
-    }
-
-    .replace-container {
-        left: 0;
-        bottom: 1vh;
     }
 }
