@@ -614,28 +614,25 @@ async function generatePreview() {
     console.log(previewBlob);
     console.log(previewBlob.type); // Doit être 'video/mp4'
 
-    // Ajouter un lien pour télécharger la vidéo pour vérification
-    const downloadLink = document.createElement('a');
-    downloadLink.href = previewURL;
-    downloadLink.download = 'carousel_preview.mp4';
-    downloadLink.innerText = 'Télécharger la vidéo';
-    document.body.appendChild(downloadLink);
 
-    const previewVideoElement = document.getElementById('previewVideo');
 
-    // Configurez la source de la vidéo
-    previewVideoElement.src = 'https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4' //previewURL;
 
-    previewVideoElement.addEventListener('loadeddata', () => {
-        console.log('La vidéo est chargée avec succès.');
-        const player = videojs('previewVideo');
-        player.src({ type: 'video/mp4', src: previewURL });
-        player.ready(() => {
-            player.play(); // Démarrer la lecture si nécessaire
-        });
-    }, false);
 
-    document.getElementById('previewModal').style.display = 'block';
+ // Configurez la source du lecteur vidéo
+ const previewVideoElement = document.getElementById('previewVideo');
+ const player = videojs(previewVideoElement); // Initialisez Video.js
+
+ // Assignez la source
+ player.src({ type: 'video/mp4', src: previewURL });
+ 
+ // Écoutez l'événement 'loadeddata'
+ previewVideoElement.addEventListener('loadeddata', () => {
+     console.log('La vidéo est chargée avec succès.');
+     player.play(); // Démarrez la lecture automatiquement
+ });
+
+ // Affichez la modale
+ document.getElementById('previewModal').style.display = 'block';
 }
 
 
