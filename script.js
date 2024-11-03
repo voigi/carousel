@@ -510,7 +510,7 @@ async function generatePreview() {
             ffmpeg.FS('writeFile', imageFileName, imageFile);
             await ffmpeg.run(
                 '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
-                '-vf', `scale=${videoWidth}:${videoHeight}`,
+                '-vf', `scale=${videoWidth}:${videoHeight}`, '-pix_fmt', 'yuv420p',
                 '-c:v', 'libx264', '-crf', '40', '-preset', 'ultrafast',
                 `temp_preview_image_${fileIndex}.mp4`
             );
@@ -523,7 +523,7 @@ async function generatePreview() {
             ffmpeg.FS('writeFile', videoFileName, videoFile);
             await ffmpeg.run(
                 '-i', videoFileName,
-                '-vf', `scale=${videoWidth}:${videoHeight}`,
+                '-vf', `scale=${videoWidth}:${videoHeight}`, '-pix_fmt', 'yuv420p',
                 '-c:v', 'libx264', '-crf', '40', '-preset', 'ultrafast',
                 `temp_preview_video_${fileIndex}.mp4`
             );
@@ -537,7 +537,8 @@ async function generatePreview() {
 
     await ffmpeg.run(
         '-f', 'concat', '-safe', '0', '-i', 'preview_input.txt',
-        '-c:v', 'libx264', '-preset', 'ultrafast', 'carousel_preview.mp4'
+        '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-preset', 'ultrafast',
+        'carousel_preview.mp4'
     );
 
     const previewData = ffmpeg.FS('readFile', 'carousel_preview.mp4');
