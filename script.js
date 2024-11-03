@@ -479,7 +479,9 @@ addMediaButton.addEventListener('click', () => {
 //fais mois un script qui encode, on utilisera ffmpeg pour l'encodage , les images et vidéo de mon carousel dans une vidéo,cette vidéo une fois généré est enregistrée en local sur l'ordinateur
 // Fonction pour encoder et concaténer les fichiers avec FFmpeg
 
-
+document.getElementById('previewButton').addEventListener('click', () => {
+    generatePreview(); // Appelle la fonction de preview
+});
 
 document.getElementById('previewButton').addEventListener('click', () => {
     generatePreview(); // Appelle la fonction de preview
@@ -489,97 +491,63 @@ async function generatePreview() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
-    const durationPerImage = 1.5; // Durée pour chaque image en secondes
-    const videoWidth = 1280;
-    const videoHeight = 720;
+    const fps = 15;
+    const videoWidth = 640;
+    const videoHeight = 360;
+    const durationPerImage = 1;
 
     let fileIndex = 0;
     const inputs = [];
-
-    console.log("Début de la génération de l'aperçu.");
 
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
 
-        try {
-            if (mediaType === 'img') {
-                // Traiter l'image
-                const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
-                const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
-                const imageFileName = `preview_image${fileIndex}.jpg`;
+        // Traitement des images et vidéos pour l'aperçu
+        if (mediaType === 'img') {
+            const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
+            const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
+            const imageFileName = `preview_image${fileIndex}.jpg`;
 
-                ffmpeg.FS('writeFile', imageFileName, imageFile);
-                await ffmpeg.run(
-                    '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
-                    '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                    '-c:v', 'libx264', '-preset', 'ultrafast',
-                    '-profile:v', 'baseline',
-                    `temp_preview_${fileIndex}.mp4`
-                );
-                inputs.push(`temp_preview_${fileIndex}.mp4`);
-                console.log(`Image ${fileIndex} traitée : ${imageFileName}`);
-            } else if (mediaType === 'video') {
-                // Traiter la vidéo
-                const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
-                const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
-                const videoFileName = `preview_video${fileIndex}.mp4`;
+            ffmpeg.FS('writeFile', imageFileName, imageFile);
+            await ffmpeg.run(
+                '-loop', '1', '-t', durationPerImage.toString(), '-i', imageFileName,
+                '-vf', `scale=${videoWidth}:${videoHeight}`,
+                '-c:v', 'libx264', '-crf', '40', '-preset', 'ultrafast',
+                `temp_preview_image_${fileIndex}.mp4`
+            );
+            inputs.push(`temp_preview_image_${fileIndex}.mp4`);
+        } else if (mediaType === 'video') {
+            const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
+            const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
+            const videoFileName = `preview_video${fileIndex}.mp4`;
 
-                ffmpeg.FS('writeFile', videoFileName, videoFile);
-                await ffmpeg.run(
-                    '-i', videoFileName,
-                    '-vf', `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-                    '-c:v', 'libx264', '-preset', 'ultrafast',
-                    '-profile:v', 'baseline',
-                    `temp_preview_${fileIndex}.mp4`
-                );
-                inputs.push(`temp_preview_${fileIndex}.mp4`);
-                console.log(`Vidéo ${fileIndex} traitée : ${videoFileName}`);
-            }
-        } catch (error) {
-            console.error(`Erreur lors du traitement de ${mediaType} (index: ${fileIndex}):`, error);
+            ffmpeg.FS('writeFile', videoFileName, videoFile);
+            await ffmpeg.run(
+                '-i', videoFileName,
+                '-vf', `scale=${videoWidth}:${videoHeight}`,
+                '-c:v', 'libx264', '-crf', '40', '-preset', 'ultrafast',
+                `temp_preview_video_${fileIndex}.mp4`
+            );
+            inputs.push(`temp_preview_video_${fileIndex}.mp4`);
         }
         fileIndex++;
     }
 
-    // Créer une liste de fichiers pour la concaténation
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'preview_input.txt', new TextEncoder().encode(inputFileList));
 
-    try {
-        // Créer le fichier vidéo final pour l'aperçu
-        await ffmpeg.run(
-            '-f', 'concat', '-safe', '0', '-i', 'preview_input.txt',
-            '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
-            '-preset', 'ultrafast', '-profile:v', 'baseline',
-            'preview_video.mp4'
-        );
+    await ffmpeg.run(
+        '-f', 'concat', '-safe', '0', '-i', 'preview_input.txt',
+        '-c:v', 'libx264', '-preset', 'ultrafast', 'carousel_preview.mp4'
+    );
 
-        // Lire le fichier et créer une URL pour la vidéo
-        const data = ffmpeg.FS('readFile', 'preview_video.mp4');
-        const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-        const previewVideoElement = document.getElementById('previewVideo');
+    const previewData = ffmpeg.FS('readFile', 'carousel_preview.mp4');
+    const previewURL = URL.createObjectURL(new Blob([previewData.buffer], { type: 'video/mp4' }));
 
-        // Ajouter des gestionnaires d'événements de chargement
-        previewVideoElement.addEventListener('loadeddata', () => {
-            console.log('Vidéo chargée avec succès.');
-        }, false);
-
-        previewVideoElement.addEventListener('error', (e) => {
-            console.error('Erreur lors du chargement de la vidéo :', e);
-        }, false);
-
-        // Assigner la source de la vidéo
-        previewVideoElement.src = videoURL;
-
-        // Afficher le modal d'aperçu
-        document.getElementById('previewModal').style.display = 'block';
-    } catch (error) {
-        console.error("Erreur lors de la génération de la vidéo d'aperçu :", error);
-        alert("Une erreur s'est produite lors de la création de l'aperçu.");
-    }
+    document.getElementById('previewVideo').src = previewURL;
+    document.getElementById('previewModal').style.display = 'block';
 }
-
 
 
 
