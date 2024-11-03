@@ -619,3 +619,20 @@ input:disabled, select:disabled, button:disabled {
         width: 95%; /* Ajustement de la largeur du modal */
     }
 }
+
+.carousel-container {
+    width: 100%; /* Largeur du conteneur */
+    height: 300px; /* Hauteur fixe du conteneur */
+    overflow: hidden; /* Masquer le débordement */
+    display: flex; /* Utiliser Flexbox pour centrer le contenu */
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+}
+
+.carousel-image {
+    max-height: 100%; /* Ne pas dépasser la hauteur du conteneur */
+    max-width: 100%; /* Ne pas dépasser la largeur du conteneur */
+    height: auto; /* Ajuster la hauteur automatiquement */
+    width: auto; /* Ajuster la largeur automatiquement */
+    object-fit: cover; /* S'assurer que l'image couvre le conteneur tout en préservant son ratio */
+}
