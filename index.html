@@ -24,13 +24,12 @@
             <div class="upload-section">
                 <h1 id="mediaTitle">Ajouter des Médias</h1>
                 
-                <!-- Container pour le sélecteur de format -->
+                <!-- Sélecteur de format -->
                 <div class="select-container">
                     <label for="mediaFormat" class="format-label">Choisir un format :</label>
                     <select id="mediaFormat" class="format-select" aria-labelledby="mediaTitle">
                         <option value="" selected disabled>Veuillez choisir un format</option>
                         <option value="image">Image (1200 x 627 px) - JPG, PNG, GIF</option>
-                       <!---<option value="video">Vidéo (1200 x 675 px) - MP4, MOV</option>--->
                         <option value="square">Carré (1200 x 1200 px) - JPG, PNG</option>
                     </select>
                 </div>
@@ -38,29 +37,22 @@
                 <!-- Champ d'upload de fichiers -->
                 <input type="file" id="uploadFile" accept="image/*,video/*" multiple aria-label="Ajouter des fichiers">
                 
-                <!-- Bouton d'ajout de média -->
+                <!-- Boutons d'ajout et d'annulation -->
                 <button id="addMediaButton" class="add-btn" type="button">Ajouter Médias</button>
-                <button id="addCancelButton" type="button">Annuler</button>
+                <button id="addCancelButton" class="cancel-btn" type="button">Annuler</button>
                 
-              
-                <!-- Champ et bouton de remplacement (par défaut masqué) -->
-                
-
-                  <div class="replace-container">
-                    <input type="file" id="replaceFileInput" style="display:none;" accept="image/*,video/*" multiple aria-label="Ajouter des fichiers">
-                    <button id="replaceMediaButton" style="display:none;">Remplacer Média</button>
+                <!-- Remplacement de média -->
+                <div class="replace-container">
+                    <input type="file" id="replaceFileInput" style="display: none;" accept="image/*,video/*" multiple aria-label="Ajouter des fichiers">
+                    <button id="replaceMediaButton" style="display: none;">Remplacer Média</button>
                     <button id="replaceCancelButton" style="display: none;" type="button">Annuler</button>
-                  </div>
-                    
-
-
+                </div>
 
                 <!-- Message d'erreur -->
                 <p id="errorMessage" class="error-message" role="alert"></p>
-        
+
                 <!-- Sélecteur pour activer ou non le défilement automatique -->
-               
-                    <div id="defil-container">
+                <div id="defil-container">
                     <label for="autoScrollSelect" class="scroll-label">Activer le défilement :</label>
                     <select id="autoScrollSelect" class="auto-scroll-select">
                         <option value="" selected disabled>Activer le défilement ?</option>
@@ -69,15 +61,23 @@
                     </select>
                 </div>
 
-                 
+                <!-- Bouton pour prévisualiser -->
                 <button id="previewButton" class="preview-btn" type="button">Aperçu</button>
-    
-             
                 
-                
+                <!-- Modal de prévisualisation -->
+                <div id="previewModal" class="modal" style="display: none;" aria-hidden="true">
+                    <div class="modal-content">
+                        <h2>Aperçu de la vidéo</h2>
+                        <video id="previewVideo" controls width="640" height="360"></video>
+                        <div>
+                            <button id="confirmPreview" type="button">Confirmer</button>
+                            <button id="cancelPreview" type="button">Annuler</button>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Modal de confirmation de suppression -->
-                <div id="deleteModal" class="modal" aria-hidden="true">
+                <div id="deleteModal" class="modal" aria-hidden="true" style="display: none;">
                     <div class="modal-content">
                         <p>Voulez-vous vraiment supprimer ce média ?</p>
                         <button id="confirmDelete" type="button">Oui</button>
@@ -85,30 +85,23 @@
                     </div>
                 </div>
 
-                <div id="previewModal" style="display: block;">
-                    <h2>Aperçu de la vidéo</h2>
-                    <video id="previewVideo" controls></video>
-                    <div>
-                        <button id="confirmPreview">Confirmer</button>
-                        <button id="cancelPreview">Annuler</button>
-                    </div>
-                </div>
-
-                <div id="finishModal" class="modal" aria-hidden="true">
+                <!-- Modal de confirmation de fin -->
+                <div id="finishModal" class="modal" aria-hidden="true" style="display: none;">
                     <div class="modal-content">
-                        <p>Avez vous vraiment fini ?</p>
+                        <p>Avez-vous vraiment fini ?</p>
                         <button id="confirmFinish" type="button">Oui</button>
                         <button id="cancelFinish" type="button">Non</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Bouton "J'ai fini" -->
         <button id="finishButton" class="finish-btn" style="display: none;" type="button">J'ai fini</button>
-    </div>                                <!-- Boutons pour démarrer et arrêter l'enregistrement -->
+    </div>
 
+    <!-- Inclusion des scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js"></script>
-
-
     <script src="script.js"></script>
 </body>
 </html>
