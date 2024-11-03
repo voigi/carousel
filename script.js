@@ -483,11 +483,13 @@ document.getElementById('previewButton').addEventListener('click', () => {
     generatePreview(); // Appelle la fonction de preview
 });
 
+let previewTimeout; // Pour stocker le timeout de l'aperçu
+
+// Fonction de génération d'aperçu
 async function generatePreview() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
     const items = document.querySelectorAll('.carousel-item');
-    const fps = 15;
     const videoWidth = 640;
     const videoHeight = 360;
     const durationPerImage = 1;
@@ -499,7 +501,6 @@ async function generatePreview() {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
 
-        // Traitement des images et vidéos pour l'aperçu
         if (mediaType === 'img') {
             const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
             const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
@@ -540,32 +541,33 @@ async function generatePreview() {
     );
 
     const previewData = ffmpeg.FS('readFile', 'carousel_preview.mp4');
-    const previewBlob = new Blob([previewData.buffer], { type: 'video/mp4' });
-    const previewURL = URL.createObjectURL(previewBlob);
+    const previewURL = URL.createObjectURL(new Blob([previewData.buffer], { type: 'video/mp4' }));
 
-    console.log(previewBlob);
-    console.log(previewBlob.type); // Doit être 'video/mp4'
+    const previewVideoElement = document.getElementById('previewVideo');
+    previewVideoElement.src = previewURL;
+    previewVideoElement.load();
 
-
-
-
-
- // Configurez la source du lecteur vidéo
- const previewVideoElement = document.getElementById('previewVideo');
- const player = videojs(previewVideoElement); // Initialisez Video.js
-
- // Assignez la source
- player.src({ type: 'video/mp4', src: previewURL });
- 
- // Écoutez l'événement 'loadeddata'
- previewVideoElement.addEventListener('loadeddata', () => {
-     console.log('La vidéo est chargée avec succès.');
-     player.play(); // Démarrez la lecture automatiquement
- });
-
- // Affichez la modale
- document.getElementById('previewModal').style.display = 'block';
+    console.log("Aperçu généré automatiquement :", previewURL);
 }
+
+// Fonction de gestion des modifications du carrousel
+function handleCarouselChange() {
+    clearTimeout(previewTimeout); // Réinitialise le délai si une autre modification intervient
+
+    // Délai avant génération de l'aperçu (ex. 2 secondes)
+    previewTimeout = setTimeout(() => {
+        generatePreview();
+    }, 2000); // 2000 ms = 2 secondes
+}
+
+// Écouteurs d’événements pour détecter les modifications du carrousel
+document.querySelectorAll('.carousel-item').forEach(item => {
+    // Détecte les ajouts, suppressions ou déplacements d'éléments
+    item.addEventListener('change', handleCarouselChange);
+    item.addEventListener('input', handleCarouselChange);
+    item.addEventListener('DOMSubtreeModified', handleCarouselChange);
+});
+
 
 
 
