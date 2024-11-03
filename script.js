@@ -137,6 +137,7 @@ function setupMediaClickListener() {
 const allowedFormats = {
     image: ['jpg', 'jpeg', 'png', 'gif'],
     video: ['mp4', 'mov'],
+    audio: ['mp3', 'wav'],
     square: ['jpg', 'jpeg', 'png']
 };
 
