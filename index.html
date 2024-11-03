@@ -89,7 +89,12 @@
 
                 <div id="previewModal" style="display: none;">
                     <h2>Aperçu de la vidéo</h2>
-                    <video id="previewVideo" controls id="my-video" class="video-js" data-setup="{}"></video>
+                    <video id="previewVideo" class="video-js" controls preload="auto" width="640" height="360" data-setup="{}">
+                        <source id="videoSource" type="video/mp4">
+                        <p class="vjs-no-js">
+                            Pour visionner cette vidéo, veuillez activer JavaScript et envisager de passer à un navigateur web qui prend en charge HTML5.
+                        </p>
+                    </video>
                     <div>
                         <button id="confirmPreview">Confirmer</button>
                         <button id="cancelPreview">Annuler</button>

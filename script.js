@@ -614,17 +614,21 @@ async function generatePreview() {
     const previewVideoElement = document.getElementById('previewVideo');
     previewVideoElement.src = previewURL;
 
-    previewVideoElement.style.display = 'block';
+    // Initialiser Video.js
+    const player = videojs('previewVideo');
+    player.ready(function() {
+        this.load(); // Charger la vidéo dans Video.js
+        this.play(); // Lancer la lecture si nécessaire
+    });
 
+    // Gestion des événements pour la vidéo
     previewVideoElement.addEventListener('loadeddata', () => {
         console.log('La vidéo est chargée avec succès.');
-    },false);
-
-   
-    previewVideoElement.load();
+    }, false);
 
     document.getElementById('previewModal').style.display = 'block';
 }
+
 
 
 
