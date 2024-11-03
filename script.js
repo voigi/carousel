@@ -146,17 +146,14 @@ function isValidFile(file, format) {
 
 // Fonction pour ajouter des médias au carrousel
 function addMediaToCarousel(files, format) {
-
     let mediaAdded = false;
-  
-
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const fileURL = URL.createObjectURL(file);
 
         if (!isValidFile(file, format)) {
-            displayError(`Veuillez sélectionner un fichier au format ${format === 'video' ? 'vidéo' : format === 'square' ? 'image carrée' : 'image'}.`);
+            displayError(`Veuillez sélectionner un fichier au format ${format === 'video' ? 'vidéo' : format === 'audio' ? 'audio' : format === 'square' ? 'image carrée' : 'image'}.`);
             continue;
         }
 
@@ -169,6 +166,10 @@ function addMediaToCarousel(files, format) {
             mediaElement = document.createElement('video');
             mediaElement.src = fileURL;
             mediaElement.controls = true;
+        } else if (format === 'audio') { // Ajout pour le format audio
+            mediaElement = document.createElement('audio');
+            mediaElement.src = fileURL;
+            mediaElement.controls = true; // Pour permettre le contrôle audio
         }
 
         const newItem = document.createElement('div');
@@ -183,7 +184,6 @@ function addMediaToCarousel(files, format) {
             event.stopPropagation();
             mediaToDelete = newItem;
             showModal();
-            
         });
 
         const editIcon = document.createElement('i');
@@ -194,7 +194,7 @@ function addMediaToCarousel(files, format) {
             avance.style.display = 'none';
             editIcon.style.display = 'none';
             deleteIcon.style.display = 'none';
-           
+            
             const Container = document.querySelector('.container');
             Container.style.marginTop = '14vh';
 
@@ -202,14 +202,8 @@ function addMediaToCarousel(files, format) {
             defilContainer.style.position = 'relative';
             defilContainer.style.bottom = '12.2vh';
 
-
-
-           
-
             document.getElementById('replaceFileInput').classList.add('active');
             document.getElementById('replaceMediaButton').classList.add('active');
-
-       
 
             const allInputs = document.querySelectorAll('input, select, button');
             allInputs.forEach(input => {
@@ -218,7 +212,6 @@ function addMediaToCarousel(files, format) {
                     cancelButton.style.cursor = 'pointer';    
                 }
             });
-            
         });
 
         newItem.appendChild(mediaElement);
@@ -246,7 +239,7 @@ function addMediaToCarousel(files, format) {
                 icon.style.display = 'none';
             });
         }
-      //finishButton.style.display = 'block';
+        // finishButton.style.display = 'block';
     }
 }
 
