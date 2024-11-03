@@ -479,9 +479,10 @@ addMediaButton.addEventListener('click', () => {
 //fais mois un script qui encode, on utilisera ffmpeg pour l'encodage , les images et vidéo de mon carousel dans une vidéo,cette vidéo une fois généré est enregistrée en local sur l'ordinateur
 // Fonction pour encoder et concaténer les fichiers avec FFmpeg
 
-document.getElementById('previewButton').addEventListener('click', () => {
-    generatePreview(); // Appelle la fonction de preview
-});
+// document.getElementById('previewButton').addEventListener('click', () => {
+//     generatePreview(); // Appelle la fonction de preview
+// });
+let previewTimeout;
 
 async function generatePreview() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
@@ -567,7 +568,20 @@ async function generatePreview() {
  document.getElementById('previewModal').style.display = 'block';
 }
 
+function handleCarouselChange() {
+    clearTimeout(previewTimeout); // Réinitialise le délai si une autre modification intervient
 
+    // Délai avant génération de l'aperçu (ex. 2 secondes)
+    previewTimeout = setTimeout(() => {
+        generatePreview();
+    }, 2000); // 2000 ms = 2 secondes
+}
+document.querySelectorAll('.carousel-item').forEach(item => {
+    // Détecte les ajouts, suppressions ou déplacements d'éléments
+    item.addEventListener('change', handleCarouselChange);
+    item.addEventListener('input', handleCarouselChange);
+    item.addEventListener('DOMSubtreeModified', handleCarouselChange);
+});
 
 
 
