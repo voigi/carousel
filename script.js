@@ -495,6 +495,17 @@ async function generatePreview() {
     let fileIndex = 0;
     const inputs = [];
 
+    let audioFileName = null; // Variable pour le nom du fichier audio
+
+    // Récupérer le fichier audio sélectionné
+    const audioInput = document.getElementById('audioInput');
+    if (audioInput.files.length > 0) {
+        const audioBlob = audioInput.files[0];
+        const audioArrayBuffer = await audioBlob.arrayBuffer();
+        audioFileName = `background_audio.mp3`;
+        ffmpeg.FS('writeFile', audioFileName, new Uint8Array(audioArrayBuffer));
+    }
+
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
@@ -538,6 +549,16 @@ async function generatePreview() {
         '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-profile:v', 'baseline', '-preset', 'ultrafast',
         'carousel_preview.mp4'
     );
+
+    if (audioFileName) {
+        await ffmpeg.run(
+            '-i', 'carousel_preview.mp4',
+            '-i', audioFileName,
+            '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', // Encoder audio
+            '-shortest', // Prendre la durée la plus courte entre la vidéo et l'audio
+            'carousel_preview_with_audio.mp4'
+        );
+    }
 
     const previewData = ffmpeg.FS('readFile', 'carousel_preview.mp4');
     const previewBlob = new Blob([previewData.buffer], { type: 'video/mp4' });
