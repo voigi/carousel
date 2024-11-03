@@ -13,6 +13,8 @@ const replaceMediaButton = document.getElementById('replaceMediaButton');
 const cancelButton = document.querySelector('#replaceCancelButton');
 const addCancelButton = document.querySelector('#addCancelButton');
 const finishButton=document.getElementById('finishButton');
+const addAudioButton = document.getElementById('audio-btn');
+const audioFileInput = document.getElementById('audioInput');
 
  const { createFFmpeg, fetchFile } = FFmpeg;
  const ffmpeg = createFFmpeg({ log: true,
@@ -465,6 +467,16 @@ addMediaButton.addEventListener('click', () => {
     if (files.length > 0) {
         displayError('');
         addMediaToCarousel(files, format);
+    }
+});
+//gestion du bouton d'ajout de son
+addAudioButton.addEventListener('click', () => {
+    const soundFiles = audioFileInput.files; // Assurez-vous d'avoir un input pour le son
+    const format = 'audio'; // Spécifiez que le format est audio
+
+    if (soundFiles.length > 0) {
+        displayError('');
+        addMediaToCarousel(soundFiles, format);
     }
 });
 
