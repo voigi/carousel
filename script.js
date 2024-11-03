@@ -504,6 +504,7 @@ async function generatePreview() {
 
         try {
             if (mediaType === 'img') {
+                // Traiter l'image
                 const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
                 const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
                 const imageFileName = `preview_image${fileIndex}.jpg`;
@@ -519,6 +520,7 @@ async function generatePreview() {
                 inputs.push(`temp_preview_${fileIndex}.mp4`);
                 console.log(`Image ${fileIndex} traitée : ${imageFileName}`);
             } else if (mediaType === 'video') {
+                // Traiter la vidéo
                 const videoBlob = await fetch(mediaElement.src).then(r => r.blob());
                 const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
                 const videoFileName = `preview_video${fileIndex}.mp4`;
@@ -540,35 +542,43 @@ async function generatePreview() {
         fileIndex++;
     }
 
+    // Créer une liste de fichiers pour la concaténation
     const inputFileList = inputs.map(input => `file '${input}'`).join('\n');
     ffmpeg.FS('writeFile', 'preview_input.txt', new TextEncoder().encode(inputFileList));
 
-    await ffmpeg.run(
-        '-f', 'concat', '-safe', '0', '-i', 'preview_input.txt',
-        '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
-        '-preset', 'ultrafast', '-profile:v', 'baseline',
-        'preview_video.mp4'
-    );
+    try {
+        // Créer le fichier vidéo final pour l'aperçu
+        await ffmpeg.run(
+            '-f', 'concat', '-safe', '0', '-i', 'preview_input.txt',
+            '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
+            '-preset', 'ultrafast', '-profile:v', 'baseline',
+            'preview_video.mp4'
+        );
 
-    const data = ffmpeg.FS('readFile', 'preview_video.mp4');
-    const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-    const previewVideoElement = document.getElementById('previewVideo');
+        // Lire le fichier et créer une URL pour la vidéo
+        const data = ffmpeg.FS('readFile', 'preview_video.mp4');
+        const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+        const previewVideoElement = document.getElementById('previewVideo');
 
-    // Ajouter des gestionnaires d'événements
-    previewVideoElement.addEventListener('loadeddata', () => {
-        console.log('Vidéo chargée avec succès.');
-    }, false);
+        // Ajouter des gestionnaires d'événements de chargement
+        previewVideoElement.addEventListener('loadeddata', () => {
+            console.log('Vidéo chargée avec succès.');
+        }, false);
 
-    previewVideoElement.addEventListener('error', (e) => {
-        console.error('Erreur lors du chargement de la vidéo :', e);
-    }, false);
+        previewVideoElement.addEventListener('error', (e) => {
+            console.error('Erreur lors du chargement de la vidéo :', e);
+        }, false);
 
-    previewVideoElement.src = videoURL;
+        // Assigner la source de la vidéo
+        previewVideoElement.src = videoURL;
 
-    // Afficher le modal d'aperçu
-    document.getElementById('previewModal').style.display = 'block';
+        // Afficher le modal d'aperçu
+        document.getElementById('previewModal').style.display = 'block';
+    } catch (error) {
+        console.error("Erreur lors de la génération de la vidéo d'aperçu :", error);
+        alert("Une erreur s'est produite lors de la création de l'aperçu.");
+    }
 }
-
 
 
 

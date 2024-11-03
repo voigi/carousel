@@ -391,28 +391,31 @@ input:disabled, select:disabled, button:disabled {
 .finish-btn:hover {
     background-color: #45a049; /* Couleur au survol */
 }
-#previewModal {
-    width: 80%; /* Largeur du modal */
-    max-width: 600px; /* Largeur maximale */
-    margin: auto; /* Centre le modal */
-    padding: 20px; /* Padding pour le contenu */
-    background-color: white; /* Fond blanc */
-    border-radius: 8px; /* Coins arrondis */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#previewVideo {
-    width: 100%; /* La vidéo prend toute la largeur du modal */
-    height: 0; /* Initialiser la hauteur à 0 */
-    padding-bottom: 56.25%; /* Maintenir le rapport d'aspect 16:9 (9/16 = 0.5625) */
-    position: relative; /* Positionner la vidéo */
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
 }
 
-#previewVideo > video {
-    position: absolute; /* Positionner la vidéo à l'intérieur du conteneur */
-    top: 0; /* Alignement en haut */
-    left: 0; /* Alignement à gauche */
-    width: 100%; /* La vidéo prend toute la largeur */
-    height: 100%; /* La vidéo prend toute la hauteur */
+#mediaPreviewContainer img, 
+#mediaPreviewContainer video {
+    max-width: 100%;
+    max-height: 200px;
+    margin: 10px 0;
 }
 
