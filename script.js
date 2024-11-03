@@ -483,9 +483,7 @@ document.getElementById('previewButton').addEventListener('click', () => {
     generatePreview(); // Appelle la fonction de preview
 });
 
-document.getElementById('previewButton').addEventListener('click', () => {
-    generatePreview(); // Appelle la fonction de preview
-});
+
 
 async function generatePreview() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
@@ -548,7 +546,7 @@ async function generatePreview() {
 
    const previewVideo = document.getElementById('previewVideo').src = previewURL;
    previewVideo.load();
-   
+
     document.getElementById('previewModal').style.display = 'block';
 }
 
