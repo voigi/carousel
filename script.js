@@ -613,6 +613,12 @@ async function generatePreview() {
 
     const previewVideoElement = document.getElementById('previewVideo');
     previewVideoElement.src = previewURL;
+
+    previewVideoElement.addEventListener('loadeddata', () => {
+        console.log('La vidéo est chargée avec succès.');
+    });
+
+    previewVideoElement.style.display = 'block';
     previewVideoElement.load();
 
     document.getElementById('previewModal').style.display = 'block';
