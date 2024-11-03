@@ -525,21 +525,20 @@ input:disabled, select:disabled, button:disabled {
 @media (max-width: 768px) {
     .carousel-container {
         width: 100%;
-        height: 50vh; /* Ajustement de la hauteur pour les tablettes */
+        height: 60vh; /* Ajustement de la hauteur pour les tablettes */
     }
 
     .carousel-item img,
     .carousel-item video {
         width: 100%;
-        height: auto; /* Hauteur automatique pour maintenir le ratio d'aspect */
-        max-height: 100%; /* Limite la hauteur maximale à celle du conteneur */
-        object-fit: contain; /* Contient le média dans le conteneur sans couper */
+        height: 100%; /* Remplit le conteneur */
+        object-fit: cover; /* Remplit le conteneur en conservant le ratio d'aspect */
     }
 
     .carousel-button {
-        font-size: 20px;
-        width: 40px;
-        height: 40px;
+        font-size: 22px;
+        width: 50px; /* Augmentation de la taille des boutons pour plus de confort */
+        height: 50px;
     }
 }
 
@@ -547,20 +546,19 @@ input:disabled, select:disabled, button:disabled {
 @media (max-width: 480px) {
     .carousel-container {
         width: 100%;
-        height: 40vh; /* Hauteur ajustée pour les smartphones */
+        height: 50vh; /* Ajustement de la hauteur pour les smartphones */
     }
 
     .carousel-item img,
     .carousel-item video {
         width: 100%;
-        height: auto; /* Hauteur automatique pour maintenir le ratio d'aspect */
-        max-height: 100%; /* Limite la hauteur maximale à celle du conteneur */
-        object-fit: contain; /* Contient le média dans le conteneur sans couper */
+        height: 100%; /* Remplit le conteneur */
+        object-fit: cover; /* Remplit le conteneur en conservant le ratio d'aspect */
     }
 
     .carousel-button {
-        font-size: 18px;
-        width: 35px;
-        height: 35px;
+        font-size: 20px;
+        width: 40px; /* Ajustement de la taille des boutons pour les petits écrans */
+        height: 40px;
     }
 }
