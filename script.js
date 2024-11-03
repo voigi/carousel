@@ -544,8 +544,11 @@ async function generatePreview() {
 
     const previewData = ffmpeg.FS('readFile', 'carousel_preview.mp4');
     const previewURL = URL.createObjectURL(new Blob([previewData.buffer], { type: 'video/mp4' }));
+    console.log("URL de la vidéo générée :", previewURL);
 
-    document.getElementById('previewVideo').src = previewURL;
+   const previewVideo = document.getElementById('previewVideo').src = previewURL;
+   previewVideo.load();
+   
     document.getElementById('previewModal').style.display = 'block';
 }
 
