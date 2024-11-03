@@ -544,11 +544,13 @@ async function generatePreview() {
     const previewURL = URL.createObjectURL(new Blob([previewData.buffer], { type: 'video/mp4' }));
     console.log("URL de la vidéo générée :", previewURL);
 
-   const previewVideo = document.getElementById('previewVideo').src = previewURL;
-   previewVideo.load();
+    const previewVideoElement = document.getElementById('previewVideo');
+    previewVideoElement.src = previewURL;
+    previewVideoElement.load();
 
     document.getElementById('previewModal').style.display = 'block';
 }
+
 
 
 
