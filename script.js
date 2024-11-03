@@ -612,18 +612,17 @@ async function generatePreview() {
     console.log("URL de la vidéo générée :", previewURL);
 
     const previewVideoElement = document.getElementById('previewVideo');
+
+    // Configurez la source de la vidéo
     previewVideoElement.src = previewURL;
 
-    // Initialiser Video.js
-    const player = videojs('previewVideo');
-    player.ready(function() {
-        this.load(); // Charger la vidéo dans Video.js
-        this.play(); // Lancer la lecture si nécessaire
-    });
-
-    // Gestion des événements pour la vidéo
-    previewVideoElement.addEventListener('loadeddata', () => {
+    previewVideoElement.addEventListener('loadedmetadata', () => {
         console.log('La vidéo est chargée avec succès.');
+
+        // Initialiser Video.js
+        const player = videojs('previewVideo');
+        player.src({ type: 'video/mp4', src: previewURL });
+        player.play(); // Démarrer la lecture si nécessaire
     }, false);
 
     document.getElementById('previewModal').style.display = 'block';
