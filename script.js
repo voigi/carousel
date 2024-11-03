@@ -608,21 +608,28 @@ async function generatePreview() {
     );
 
     const previewData = ffmpeg.FS('readFile', 'carousel_preview.mp4');
-    const previewURL = URL.createObjectURL(new Blob([previewData.buffer], { type: 'video/mp4' }));
-    console.log("URL de la vidéo générée :", previewURL);
+    const previewBlob = new Blob([previewData.buffer], { type: 'video/mp4' });
+    const previewURL = URL.createObjectURL(previewBlob);
+
+    // Ajouter un lien pour télécharger la vidéo pour vérification
+    const downloadLink = document.createElement('a');
+    downloadLink.href = previewURL;
+    downloadLink.download = 'carousel_preview.mp4';
+    downloadLink.innerText = 'Télécharger la vidéo';
+    document.body.appendChild(downloadLink);
 
     const previewVideoElement = document.getElementById('previewVideo');
 
     // Configurez la source de la vidéo
     previewVideoElement.src = previewURL;
 
-    previewVideoElement.addEventListener('loadedmetadata', () => {
+    previewVideoElement.addEventListener('loadeddata', () => {
         console.log('La vidéo est chargée avec succès.');
-
-        // Initialiser Video.js
         const player = videojs('previewVideo');
         player.src({ type: 'video/mp4', src: previewURL });
-        player.play(); // Démarrer la lecture si nécessaire
+        player.ready(() => {
+            player.play(); // Démarrer la lecture si nécessaire
+        });
     }, false);
 
     document.getElementById('previewModal').style.display = 'block';
