@@ -527,11 +527,17 @@ input:disabled, select:disabled, button:disabled {
         padding: 10px;
     }
 
-    .carousel-container,
+    .carousel-container {
+        width: 100%;
+        height: auto;
+        max-height: 60vh;
+    }
+
     .carousel-item img,
     .carousel-item video {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: cover;
     }
 
     .carousel-button {
@@ -566,11 +572,17 @@ input:disabled, select:disabled, button:disabled {
         padding: 5px;
     }
 
-    .carousel-container,
+    .carousel-container {
+        width: 100%;
+        height: auto;
+        max-height: 50vh;
+    }
+
     .carousel-item img,
     .carousel-item video {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: cover;
     }
 
     .carousel-button {
@@ -605,4 +617,3 @@ input:disabled, select:disabled, button:disabled {
         bottom: 1vh;
     }
 }
-
