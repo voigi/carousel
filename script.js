@@ -471,15 +471,15 @@ addMediaButton.addEventListener('click', () => {
     }
 });
 //gestion du bouton d'ajout de son
-addAudioButton.addEventListener('click', () => {
-    const soundFiles = audioFileInput.files; // Assurez-vous d'avoir un input pour le son
-    const format = 'audio'; // Spécifiez que le format est audio
+// addAudioButton.addEventListener('click', () => {
+//     const soundFiles = audioFileInput.files; // Assurez-vous d'avoir un input pour le son
+//     const format = 'audio'; // Spécifiez que le format est audio
 
-    if (soundFiles.length > 0) {
-        displayError('');
-        addMediaToCarousel(soundFiles, format);
-    }
-});
+//     if (soundFiles.length > 0) {
+//         displayError('');
+//         addMediaToCarousel(soundFiles, format);
+//     }
+// });
 
 
 //fais mois un script qui encode, on utilisera ffmpeg pour l'encodage , les images et vidéo de mon carousel dans une vidéo,cette vidéo une fois généré est enregistrée en local sur l'ordinateur
