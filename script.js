@@ -504,13 +504,13 @@ async function generatePreview() {
     let audioFileName = null; // Variable pour le nom du fichier audio
 
     // Récupérer le fichier audio sélectionné
-    const audioInput = document.getElementById('audioInput');
-    if (audioInput.files.length > 0) {
-        const audioBlob = audioInput.files[0];
-        const audioArrayBuffer = await audioBlob.arrayBuffer();
-        audioFileName = `background_audio.mp3`;
-        ffmpeg.FS('writeFile', audioFileName, new Uint8Array(audioArrayBuffer));
-    }
+    // const audioInput = document.getElementById('audioInput');
+    // if (audioInput.files.length > 0) {
+    //     const audioBlob = audioInput.files[0];
+    //     const audioArrayBuffer = await audioBlob.arrayBuffer();
+    //     audioFileName = `background_audio.mp3`;
+    //     ffmpeg.FS('writeFile', audioFileName, new Uint8Array(audioArrayBuffer));
+    // }
 
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
