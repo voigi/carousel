@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrousel Intuitif</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -87,18 +89,28 @@
 
                 <div id="previewModal" style="display: none;">
                     <h2>Aperçu de la vidéo</h2>
-                    <video id="previewVideo" controls></video>
+                    <video id="previewVideo"  id="my-video"
+                    class="video-js"controls ></video>
                     <div>
                         <button id="confirmPreview">Confirmer</button>
                         <button id="cancelPreview">Annuler</button>
                     </div>
                 </div>
                 
-                <video controls width="640" height="360">
-                    <source src="https://videos.pexels.com/video-files/5198164/5198164-uhd_2560_1440_25fps.mp4" type="video/mp4">
-                    <source src="URL_DE_VOTRE_VIDEO.webm" type="video/webm">
-                    Votre navigateur ne supporte pas la balise vidéo.
-                </video>
+                <!-- <video
+                id="my-video"
+                class="video-js"
+                controls
+                preload="auto"
+                width="640"
+                height="360"
+                data-setup="{}">
+                <source src="https://videos.pexels.com/video-files/5198164/5198164-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+                <p class="vjs-no-js">
+                    Pour visionner cette vidéo, veuillez activer JavaScript et envisager de passer à un navigateur web qui prend en charge HTML5.
+                </p>
+            </video> -->
+            
 
                 <div id="finishModal" class="modal" aria-hidden="true">
                     <div class="modal-content">
