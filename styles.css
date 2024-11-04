@@ -49,6 +49,7 @@ h1 {
 }
 
 .carousel-item {
+    margin-top: 36%;
     margin: 0;
     min-width: 100%;
     text-align: center;
