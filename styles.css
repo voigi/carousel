@@ -414,7 +414,7 @@ input:disabled, select:disabled, button:disabled {
     top: 0; /* Alignement en haut */
     left: 0; /* Alignement à gauche */
     width: 100%; /* La vidéo prend toute la largeur */
-    height: 100%; /* La vidéo prend toute la hauteur */
+    height: 100%;/* La vidéo prend toute la hauteur */
 }
 
 /* Pour petits ordinateurs portables (diagonale ~11-13 pouces) */
