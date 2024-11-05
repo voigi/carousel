@@ -420,6 +420,7 @@ input:disabled, select:disabled, button:disabled {
 
 
 /* Styles pour le modal */
+/* Styles pour le modal */
 .modal {
     display: none; /* Masqué par défaut */
     position: fixed;
@@ -431,12 +432,12 @@ input:disabled, select:disabled, button:disabled {
     border: 1px solid #ddd;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
     z-index: 1000; /* Assurez-vous que c'est au-dessus des autres éléments */
+    transition: height 0.3s ease; /* Animation de hauteur */
 }
 
 /* Conteneur d'aperçu */
 .preview-container {
     overflow: hidden; /* Cache le contenu débordant */
-    transition: height 0.3s ease; /* Animation de hauteur */
 }
 
 .preview-header {
@@ -456,12 +457,22 @@ input:disabled, select:disabled, button:disabled {
 /* Contenu de l'aperçu */
 .preview-content {
     transition: max-height 0.3s ease; /* Animation de max-height */
-    max-height: 0; /* Par défaut, masqué */
-    overflow: hidden; /* Cache le contenu débordant */
 }
 
 /* État rétracté */
+.preview-container.collapsed {
+    height: 50px; /* Hauteur lorsque réduit (juste pour le header) */
+}
+
 .preview-container.collapsed .preview-content {
-    max-height: 100px; /* Hauteur maximum lorsque réduit */
+    max-height: 0; /* Masque le contenu */
+    opacity: 0; /* Rendre le contenu invisible */
+    transition: max-height 0.3s ease, opacity 0.3s ease; /* Animation pour max-height et opacité */
+}
+
+.preview-container:not(.collapsed) .preview-content {
+    max-height: 500px; /* Hauteur maximale lorsque ouvert */
+    opacity: 1; /* Rendre le contenu visible */
+    transition: max-height 0.3s ease, opacity 0.3s ease; /* Animation pour max-height et opacité */
 }
 
