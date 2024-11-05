@@ -34,7 +34,9 @@ togglePreviewButton.addEventListener('click', () => {
     apercutitle.style.display="none";
     togglePreviewButton.textContent = isCollapsed ? 'Étendre' : 'Réduire';
 });
-
+if (isCollapsed) {
+    apercutitle.style.display="block";
+}
 
 
 
