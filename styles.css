@@ -420,11 +420,23 @@ input:disabled, select:disabled, button:disabled {
 
 
 /* Styles pour le modal */
-
+.modal {
+    display: none; /* Masqué par défaut */
+    position: fixed;
+    top: 50%; /* Centré verticalement */
+    right: 10px; /* Positionné à droite */
+    transform: translateY(-50%); /* Ajuste le centrage vertical */
+    width: 300px; /* Largeur par défaut */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Assurez-vous que c'est au-dessus des autres éléments */
+}
 
 /* Conteneur d'aperçu */
 .preview-container {
-    padding: 1rem;
+    overflow: hidden; /* Cache le contenu débordant */
+    transition: height 0.3s ease; /* Animation de hauteur */
 }
 
 .preview-header {
@@ -441,17 +453,15 @@ input:disabled, select:disabled, button:disabled {
     color: #333;
 }
 
+/* Contenu de l'aperçu */
+.preview-content {
+    transition: max-height 0.3s ease; /* Animation de max-height */
+    max-height: 0; /* Par défaut, masqué */
+    overflow: hidden; /* Cache le contenu débordant */
+}
+
 /* État rétracté */
-.preview-container.collapsed {
-    width: 40px; /* Largeur rétractée */
-    padding: 0.5rem;
-}
-
-.preview-container.collapsed video {
-    display: none; /* Masquer la vidéo en mode rétracté */
-}
-
-.preview-container.collapsed .preview-header h2 {
-    display: none; /* Masquer le titre en mode rétracté */
+.preview-container.collapsed .preview-content {
+    max-height: 100px; /* Hauteur maximum lorsque réduit */
 }
 
