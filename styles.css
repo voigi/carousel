@@ -431,7 +431,7 @@ input:disabled, select:disabled, button:disabled {
     border: 1px solid #ddd;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
     z-index: 1000; /* Assurez-vous que c'est au-dessus des autres éléments */
-    transition: height 0.3s ease; /* Animation de hauteur */
+    transition: width 0.3s ease; /* Animation de largeur */
 }
 
 /* Header du modal */
@@ -444,8 +444,7 @@ input:disabled, select:disabled, button:disabled {
 
 /* État rétracté */
 .modal.collapsed {
-    height: 50px; /* Hauteur lorsque réduit (juste pour le header) */
-    overflow: hidden; /* Cache le contenu débordant */
+    width: 50px; /* Largeur lorsque réduit (juste pour le header) */
 }
 
 /* Contenu de l'aperçu */
