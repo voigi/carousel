@@ -23,6 +23,17 @@ const audioFileInput = document.getElementById('audioInput');
     useWorker: false, // Empêche l'utilisation de SharedArrayBuffer});
 });
 
+// Récupérer les éléments
+const previewContainer = document.querySelector('.preview-container');
+const togglePreviewButton = document.getElementById('togglePreview');
+
+// Fonction pour basculer entre les états étendu et rétracté
+togglePreviewButton.addEventListener('click', () => {
+    previewContainer.classList.toggle('collapsed');
+    togglePreviewButton.textContent = previewContainer.classList.contains('collapsed') ? 'Étendre' : 'Réduire';
+});
+
+
 
 
 
