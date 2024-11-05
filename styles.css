@@ -419,4 +419,52 @@ input:disabled, select:disabled, button:disabled {
 }
 
 
+/* Styles pour le modal */
+.modal {
+    display: none; /* Masqué par défaut */
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px; /* Largeur par défaut */
+    max-width: 90%; /* Largeur maximale */
+    height: auto; /* Ajuste la hauteur automatiquement */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Assurez-vous que c'est au-dessus des autres éléments */
+    transition: width 0.3s ease-in-out;
+}
+
+/* Conteneur d'aperçu */
+.preview-container {
+    padding: 1rem;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* État rétracté */
+.preview-container.collapsed {
+    width: 40px; /* Largeur rétractée */
+    padding: 0.5rem;
+}
+
+.preview-container.collapsed video {
+    display: none; /* Masquer la vidéo en mode rétracté */
+}
+
+.preview-container.collapsed .preview-header h2 {
+    display: none; /* Masquer le titre en mode rétracté */
+}
 
