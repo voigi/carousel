@@ -1,24 +1,28 @@
 {
-    "headers": [
-      {
-        "source": "/",
-        "headers": [
-          {
-            "key": "Cross-Origin-Embedder-Policy",
-            "value": "require-corp"
-          },
-          {
-            "key": "Cross-Origin-Opener-Policy",
-            "value": "same-origin"
-          }
-        ]
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/maintenance.html",
-        "status": 307
-      }
-    ]
-  }
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "src": "^/maintenance.html",
+      "dest": "/maintenance.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/maintenance.html",
+      "status": 307
+    }
+  ]
+}
