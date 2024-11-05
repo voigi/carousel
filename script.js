@@ -15,6 +15,7 @@ const addCancelButton = document.querySelector('#addCancelButton');
 const finishButton=document.getElementById('finishButton');
 const addAudioButton = document.getElementById('audio-btn');
 const audioFileInput = document.getElementById('audioInput');
+const apercutitle=document.getElementById('apercu');
 
  const { createFFmpeg, fetchFile } = FFmpeg;
  const ffmpeg = createFFmpeg({ log: true,
@@ -30,6 +31,7 @@ const togglePreviewButton = document.getElementById('togglePreview');
 // Fonction pour basculer entre les états étendu et rétracté
 togglePreviewButton.addEventListener('click', () => {
     const isCollapsed= previewModal.classList.toggle('collapsed');
+    apercutitle.style.display="none";
     togglePreviewButton.textContent = isCollapsed ? 'Étendre' : 'Réduire';
 });
 
