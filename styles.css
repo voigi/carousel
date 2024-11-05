@@ -459,7 +459,7 @@ input:disabled, select:disabled, button:disabled {
     align-items: center;
     padding: 10px; /* Ajout de padding pour le header */
 }
-.fa-angle-double-right::before, .fa-angles-right::before {
+#togglepreview::before {
     content: "\f101";
   }
 
