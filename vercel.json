@@ -20,9 +20,15 @@
       "dest": "/maintenance.html"
     },
     {
+      "src": "^/$",
+      "dest": "/maintenance.html",
+      "status": 307
+    },
+    {
       "src": "/(.*)",
       "dest": "/maintenance.html",
       "status": 307
     }
   ]
 }
+
