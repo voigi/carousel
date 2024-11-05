@@ -16,6 +16,7 @@ const finishButton=document.getElementById('finishButton');
 const addAudioButton = document.getElementById('audio-btn');
 const audioFileInput = document.getElementById('audioInput');
 const apercutitle=document.getElementById('apercu');
+const leftIcon=document.getElementById('left-icon');
 
  const { createFFmpeg, fetchFile } = FFmpeg;
  const ffmpeg = createFFmpeg({ log: true,
@@ -39,10 +40,12 @@ togglePreviewButton.addEventListener('click', () => {
     // Appliquer les classes en fonction de l'état
     if (isCollapsed) {
         previewModal.classList.add('collapsed'); // Ajouter la classe pour réduire le modal 
+        leftIcon.style.display = 'none';
         togglePreviewButton.classList.add('fa-solid', 'fa-angles-right'); // Ajouter l'icône pour l'état rétracté
         
     } else {
         previewModal.classList.remove('collapsed'); // Enlever la classe pour étendre le modal
+        leftIcon.style.display = 'none';
         togglePreviewButton.classList.add('fa-solid', 'fa-angles-left'); // Ajouter l'icône pour l'état étendu
         
     }
