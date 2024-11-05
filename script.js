@@ -24,7 +24,7 @@ const audioFileInput = document.getElementById('audioInput');
 });
 
 // Récupérer les éléments
-const previewContainer = document.querySelector('.preview-container');
+const previewModal = document.getElementById('previewModal');
 const togglePreviewButton = document.getElementById('togglePreview');
 
 // Fonction pour basculer entre les états étendu et rétracté
