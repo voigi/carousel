@@ -435,7 +435,7 @@ input:disabled, select:disabled, button:disabled {
 }
 
 /* État rétracté */
-.modal.collapsed {
+#previewModal.collapsed {
     max-width: 300px; /* Largeur lorsque réduit (juste pour le header) */
 }
 
