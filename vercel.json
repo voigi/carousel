@@ -13,5 +13,12 @@
           }
         ]
       }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/maintenance.html",
+        "status": 307
+      }
     ]
   }
