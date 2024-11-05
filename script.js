@@ -32,7 +32,7 @@ const togglePreviewButton = document.getElementById('togglePreview');
 togglePreviewButton.addEventListener('click', () => {
     const isCollapsed= previewModal.classList.toggle('collapsed');
     apercutitle.style.display="none";
-    togglePreviewButton.classList.add = isCollapsed ? ('fa-solid','fa-angles-right') : ('fa-solid','fa-angles-left');
+    isCollapsed ? togglePreviewButton.classList.add('fa-solid','fa-angles-right') : togglePreviewButton.classList.add('fa-solid','fa-angles-left');
     
     if (!isCollapsed) {
     apercutitle.style.display="block";
