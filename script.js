@@ -29,8 +29,8 @@ const togglePreviewButton = document.getElementById('togglePreview');
 
 // Fonction pour basculer entre les états étendu et rétracté
 togglePreviewButton.addEventListener('click', () => {
-    previewContainer.classList.toggle('collapsed');
-    togglePreviewButton.textContent = previewContainer.classList.contains('collapsed') ? 'Étendre' : 'Réduire';
+    const isCollapsed= previewModal.classList.toggle('collapsed');
+    togglePreviewButton.textContent = isCollapsed ? 'Étendre' : 'Réduire';
 });
 
 
