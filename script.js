@@ -29,16 +29,26 @@ const previewModal = document.getElementById('previewModal');
 const togglePreviewButton = document.getElementById('togglePreview');
 
 // Fonction pour basculer entre les états étendu et rétracté
-togglePreviewButton.addEventListener('click', () => {
-    const isCollapsed= previewModal.classList.toggle('collapsed');
-    apercutitle.style.display="none";
-    isCollapsed ? togglePreviewButton.classList.add('fa-solid','fa-angles-right') : togglePreviewButton.classList.add('fa-solid','fa-angles-left');
-    
-    if (!isCollapsed) {
-    apercutitle.style.display="block";
-}
-});
+let isCollapsed = false;
 
+// Fonction pour basculer entre les états étendu et rétracté
+togglePreviewButton.addEventListener('click', () => {
+    // Changer l'état de rétractation
+    isCollapsed = !isCollapsed;
+
+    // Appliquer les classes en fonction de l'état
+    if (isCollapsed) {
+        previewModal.classList.add('collapsed'); // Ajouter la classe pour réduire le modal
+        togglePreviewButton.classList.remove('fa-angles-left'); // Enlever l'icône pour l'état étendu
+        togglePreviewButton.classList.add('fa-solid', 'fa-angles-right'); // Ajouter l'icône pour l'état rétracté
+        togglePreviewButton.textContent = 'Étendre'; // Modifier le texte du bouton
+    } else {
+        previewModal.classList.remove('collapsed'); // Enlever la classe pour étendre le modal
+        togglePreviewButton.classList.remove('fa-angles-right'); // Enlever l'icône pour l'état rétracté
+        togglePreviewButton.classList.add('fa-solid', 'fa-angles-left'); // Ajouter l'icône pour l'état étendu
+        togglePreviewButton.textContent = 'Réduire'; // Modifier le texte du bouton
+    }
+});
 
 
 
