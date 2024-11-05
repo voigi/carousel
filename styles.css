@@ -420,7 +420,7 @@ input:disabled, select:disabled, button:disabled {
 
 
 /* Styles pour le modal */
-/* Styles pour le modal */
+/* Styles pour le modal *//* Styles pour le modal */
 .modal {
     display: none; /* Masqué par défaut */
     position: fixed;
@@ -434,14 +434,6 @@ input:disabled, select:disabled, button:disabled {
     transition: width 0.3s ease; /* Animation de largeur */
 }
 
-/* Header du modal */
-.preview-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px; /* Ajout de padding pour le header */
-}
-
 /* État rétracté */
 .modal.collapsed {
     width: 50px; /* Largeur lorsque réduit (juste pour le header) */
@@ -449,16 +441,23 @@ input:disabled, select:disabled, button:disabled {
 
 /* Contenu de l'aperçu */
 .preview-content {
-    transition: opacity 0.3s ease; /* Animation pour opacité */
-}
-
-/* État visible du contenu */
-.modal:not(.collapsed) .preview-content {
     opacity: 1; /* Rendre le contenu visible */
+    transition: opacity 0.3s ease; /* Animation pour opacité */
 }
 
 /* État caché du contenu */
 .modal.collapsed .preview-content {
     opacity: 0; /* Rendre le contenu invisible */
+    height: 0; /* Optionnel : réduire la hauteur */
+    overflow: hidden; /* Empêche le contenu de déborder */
 }
+
+/* Styles pour le header du modal */
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px; /* Ajout de padding pour le header */
+}
+
 
