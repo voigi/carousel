@@ -142,8 +142,18 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js"></script>
     <script>
-        // Forcer la redirection vers la page de maintenance
-        window.location.href = "/maintenance.html";
+        // Vérifier si le site est en maintenance
+        const isMaintenanceMode = true;
+      
+        // Extraire les paramètres de l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDevAccess = urlParams.get('dev') === 'true';
+      
+        // Rediriger vers la page de maintenance si le mode maintenance est activé
+        // et que l'utilisateur n'a pas l'accès de développement
+        if (isMaintenanceMode && !isDevAccess) {
+          window.location.href = "/maintenance.html";
+        }
       </script>
     <script src="script.js"></script>
 </body>
