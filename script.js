@@ -23,6 +23,13 @@ const audioFileInput = document.getElementById('audioInput');
     useWorker: false, // Empêche l'utilisation de SharedArrayBuffer});
 });
 
+// Variable indiquant l'état de maintenance
+const isMaintenanceMode = true;
+
+// Vérification pour rediriger les utilisateurs
+if (isMaintenanceMode && !window.location.pathname.includes("maintenance.html")) {
+  window.location.href = "/maintenance.html";
+}
 
 
 //Variable auto-scroll
