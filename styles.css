@@ -420,20 +420,7 @@ input:disabled, select:disabled, button:disabled {
 
 
 /* Styles pour le modal */
-.modal {
-    display: none; /* Masqué par défaut */
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 300px; /* Largeur par défaut */
-    max-width: 90%; /* Largeur maximale */
-    height: auto; /* Ajuste la hauteur automatiquement */
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000; /* Assurez-vous que c'est au-dessus des autres éléments */
-    transition: width 0.3s ease-in-out;
-}
+
 
 /* Conteneur d'aperçu */
 .preview-container {
