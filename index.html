@@ -6,155 +6,97 @@
     <title>Carrousel Intuitif</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/video.js/dist/video-js.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/video.js/dist/video.min.js"></script>
-    
-    
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <!-- Section du carrousel -->
-        <div class="carousel-container">
-            <div class="carousel">
-                <!-- Les éléments du carrousel seront ajoutés ici dynamiquement -->
+        <!-- Carrousel -->
+        <section class="carousel-section">
+            <div class="carousel-container">
+                <div class="carousel">
+                    <!-- Éléments dynamiques du carrousel -->
+                </div>
+                <button class="carousel-button prev" aria-label="Précédent">&#10094;</button>
+                <button class="carousel-button next" aria-label="Suivant">&#10095;</button>
             </div>
-            <button class="carousel-button prev" type="button" aria-label="Précédent">&#10094;</button>
-            <button class="carousel-button next" type="button" aria-label="Suivant">&#10095;</button>
-        </div>
+        </section>
 
-        <!-- Section pour l'ajout de fichiers avec une bordure -->
-        <div class="upload-container">
-            <div class="upload-section">
-                <h1 id="mediaTitle">Ajouter des Médias</h1>
-                
-                <!-- Container pour le sélecteur de format -->
-                <div class="select-container">
-                    <label for="mediaFormat" class="format-label">Choisir un format :</label>
-                    <select id="mediaFormat" class="format-select" aria-labelledby="mediaTitle">
-                        <option value="" selected disabled>Veuillez choisir un format</option>
-                        <option value="image">Image (1200 x 627 px) - JPG, PNG, GIF</option>
-                       <!---<option value="video">Vidéo (1200 x 675 px) - MP4, MOV</option>--->
-                        <option value="square">Carré (1200 x 1200 px) - JPG, PNG</option>
-                    </select>
-                </div>
-                 
-                <!-- Champ d'upload de fichiers -->
-                <input type="file" id="uploadFile" accept="image/*,video/*" multiple aria-label="Ajouter des fichiers">
-                
-                <!-- Bouton d'ajout de média -->
-                <button id="addMediaButton" class="add-btn" type="button">Ajouter Médias</button>
-                <button id="addCancelButton" type="button">Annuler</button>
-                
-              
-                <!-- Champ et bouton de remplacement (par défaut masqué) -->
-                
+        <!-- Section pour l'ajout de médias -->
+        <section class="upload-section">
+            <h1 id="mediaTitle">Ajouter des Médias</h1>
+            <div class="select-container">
+                <label for="mediaFormat">Choisir un format :</label>
+                <select id="mediaFormat">
+                    <option value="" disabled selected>Choisir un format</option>
+                    <option value="image">Image (1200 x 627 px)</option>
+                    <option value="square">Carré (1200 x 1200 px)</option>
+                </select>
+            </div>
+            <input type="file" id="uploadFile" accept="image/*,video/*" multiple aria-label="Ajouter des fichiers">
+            <button id="addMediaButton">Ajouter Médias</button>
+            <button id="addCancelButton">Annuler</button>
+            <p id="errorMessage" role="alert"></p>
 
-                  <div class="replace-container">
-                    <input type="file" id="replaceFileInput" style="display:none;" accept="image/*,video/*" multiple aria-label="Ajouter des fichiers">
-                    <button id="replaceMediaButton" style="display:none;">Remplacer Média</button>
-                    <button id="replaceCancelButton" style="display: none;" type="button">Annuler</button>
-                  </div>
-                    
+            <div class="replace-container">
+                <input type="file" id="replaceFileInput" style="display: none;" accept="image/*,video/*" multiple>
+                <button id="replaceMediaButton" style="display: none;">Remplacer Média</button>
+                <button id="replaceCancelButton" style="display: none;">Annuler</button>
+            </div>
 
+            <div class="auto-scroll-container">
+                <label for="autoScrollSelect">Activer le défilement :</label>
+                <select id="autoScrollSelect">
+                    <option value="" disabled selected>Activer le défilement ?</option>
+                    <option value="yes">Oui</option>
+                    <option value="no">Non</option>
+                </select>
+            </div>
+        </section>
 
-
-                <!-- Message d'erreur -->
-                <p id="errorMessage" class="error-message" role="alert"></p>
-        
-                <!-- Sélecteur pour activer ou non le défilement automatique -->
-               
-                    <div id="defil-container">
-                    <label for="autoScrollSelect" class="scroll-label">Activer le défilement :</label>
-                    <select id="autoScrollSelect" class="auto-scroll-select">
-                        <option value="" selected disabled>Activer le défilement ?</option>
-                        <option value="yes">Oui</option>
-                        <option value="no">Non</option>
-                    </select>
-                </div>
-
-                 
-                <!-- <input type="file" id="audioInput" accept="audio/*">
-                <button  id="audio-btn" type="button">Ajouter Son</button> -->
-    
-             
-                
-                
-
-                <!-- Modal de confirmation de suppression -->
-                <div id="deleteModal" class="modal" aria-hidden="true">
-                    <div class="modal-content">
-                        <p>Voulez-vous vraiment supprimer ce média ?</p>
-                        <button id="confirmDelete" type="button">Oui</button>
-                        <button id="cancelDelete" type="button">Non</button>
-                    </div>
-                </div>
-
-                <div id="previewModal" style="display: none;">
-                    <h2>Aperçu de la vidéo</h2>
-<!-- Ajoutez le conteneur Video.js dans votre HTML -->
-
-<video
-  id="previewVideo"
-  class="video-js vjs-default-skin"
-  controls
-  preload="auto"
-  width="640"
-  height="360"
-  data-setup="{}">
-  <source src="" type="video/mp4" />
-  Votre navigateur ne supporte pas la lecture de vidéos.
-</video>
-
-                    <div>
-                        <button id="confirmPreview">Confirmer</button>
-                        <button id="cancelPreview">Annuler</button>
-                    </div>
-                </div>
-                
-            <!-- <video
-    id="my-video"
-    class="video-js"
-    controls
-    preload="auto"
-    width="640"
-    height="360"
-    data-setup="{}">
-    <source src="https://videos.pexels.com/video-files/5198164/5198164-uhd_2560_1440_25fps.mp4" type="video/mp4" />
-    <p class="vjs-no-js">
-        Pour visionner cette vidéo, veuillez activer JavaScript et envisager de passer à un navigateur web qui prend en charge HTML5.
-    </p>
-</video> -->
-
-
-                <div id="finishModal" class="modal" aria-hidden="true">
-                    <div class="modal-content">
-                        <p>Avez vous vraiment fini ?</p>
-                        <button id="confirmFinish" type="button">Oui</button>
-                        <button id="cancelFinish" type="button">Non</button>
-                    </div>
-                </div>
+        <!-- Modaux de confirmation -->
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <p>Voulez-vous vraiment supprimer ce média ?</p>
+                <button id="confirmDelete">Oui</button>
+                <button id="cancelDelete">Non</button>
             </div>
         </div>
-        <button id="finishButton" class="finish-btn" style="display: none;" type="button">J'ai fini</button>
-    </div>                                <!-- Boutons pour démarrer et arrêter l'enregistrement -->
 
-    
+        <div id="previewModal" class="modal">
+            <h2>Aperçu de la vidéo</h2>
+            <video id="previewVideo" class="video-js" controls preload="auto" width="640" height="360" data-setup="{}">
+                <source src="" type="video/mp4" />
+                Votre navigateur ne supporte pas la lecture de vidéos.
+            </video>
+            <div>
+                <button id="confirmPreview">Confirmer</button>
+                <button id="cancelPreview">Annuler</button>
+            </div>
+        </div>
+
+        <div id="finishModal" class="modal">
+            <div class="modal-content">
+                <p>Avez-vous vraiment fini ?</p>
+                <button id="confirmFinish">Oui</button>
+                <button id="cancelFinish">Non</button>
+            </div>
+        </div>
+
+        <button id="finishButton" class="finish-btn" style="display: none;">J'ai fini</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/video.js/dist/video.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js"></script>
     <script>
-        // Vérifier si le site est en maintenance
         const isMaintenanceMode = true;
-      
-        // Extraire les paramètres de l'URL
         const urlParams = new URLSearchParams(window.location.search);
         const isDevAccess = urlParams.get('dev') === 'true';
-      
-        // Rediriger vers la page de maintenance si le mode maintenance est activé
-        // et que l'utilisateur n'a pas l'accès de développement
         if (isMaintenanceMode && !isDevAccess) {
-          window.location.href = "/maintenance.html";
+            window.location.href = "/maintenance.html";
         }
-      </script>
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
+
