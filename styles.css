@@ -425,7 +425,6 @@ input:disabled, select:disabled, button:disabled {
     display: none; /* Masqué par défaut */
     position: fixed;
     top: 50%; /* Centré verticalement */
-    right: 10px; /* Positionné à droite */
     transform: translateY(-50%); /* Ajuste le centrage vertical */
     width: 300px; /* Largeur par défaut */
     background-color: #f9f9f9;
