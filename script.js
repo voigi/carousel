@@ -41,8 +41,8 @@ togglePreviewButton.addEventListener('click', () => {
     if (isCollapsed) {
         previewModal.classList.add('collapsed'); // Ajouter la classe pour réduire le modal 
         leftIcon.style.display = 'none';
-        togglePreviewButton.classList.remove('fa-solid', 'fa-angles-right'); // Ajouter l'icône pour l'état rétracté
-        togglePreviewButton.classList.add('fa-solid','fa-angles-left');   
+        togglePreviewButton.classList.add('fa-solid', 'fa-angles-right'); // Ajouter l'icône pour l'état rétracté
+        togglePreviewButton.classList.remove('fa-solid','fa-angles-left');   
         
     } else {
         previewModal.classList.remove('collapsed'); // Enlever la classe pour étendre le modal
