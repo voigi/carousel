@@ -535,6 +535,7 @@ document.getElementById('addAudioAndPreview').addEventListener('click', async ()
     await generatePreview();
 });
 
+
 async function generatePreview() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
@@ -627,16 +628,17 @@ async function generatePreview() {
     previewVideoElement.addEventListener('loadeddata', () => {
         console.log('La vidéo est chargée avec succès.');
     });
+    previewVideoElement.addEventListener('ended', () => {
+    
+        previewVideoElement.currentTime = 0;  // Remet la vidéo au début
+    });
 
     // Affichez la modale de prévisualisation
     document.getElementById('previewModal').style.display = 'block';
 }
 
 
-previewVideoElement.addEventListener('ended', () => {
-    
-    previewVideoElement.currentTime = 0;  // Remet la vidéo au début
-});
+
 
 
 
@@ -804,7 +806,7 @@ cancelFinishButton.addEventListener('click', () => {
 replaceMediaButton.addEventListener('click', replaceMedia);
 
 
-
+//envoi audio preview
 
 
 
