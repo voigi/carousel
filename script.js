@@ -623,16 +623,15 @@ async function generatePreview() {
         console.log('La vidéo est chargée avec succès.');
     });
 
-    previewVideoElement.addEventListener('ended', () => {
-    
-        previewVideoElement.currentTime = 0;  // Remet la vidéo au début
-    });
     // Affichez la modale de prévisualisation
     document.getElementById('previewModal').style.display = 'block';
 }
 
 
-
+previewVideoElement.addEventListener('ended', () => {
+    
+    previewVideoElement.currentTime = 0;  // Remet la vidéo au début
+});
 
 
 
@@ -801,16 +800,9 @@ replaceMediaButton.addEventListener('click', replaceMedia);
 
 
 //envoi audio preview
-document.addEventListener("DOMContentLoaded", () => {
-    const addAudioButton = document.getElementById('addAudio');
-    if (addAudioButton) {
-        addAudioButton.addEventListener('click', async () => {
-            console.log("Le bouton 'Ajouter l'audio' a été cliqué.");
-            await generatePreview();
-        });
-    } else {
-        console.log("Le bouton 'Ajouter l'audio' n'a pas été trouvé.");
-    }
+document.getElementById('addAudioAndPreview').addEventListener('click', async () => {
+    // Appel de la fonction pour générer l'aperçu avec l'audio
+    await generatePreview();
 });
 
 
