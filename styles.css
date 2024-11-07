@@ -519,7 +519,7 @@ input:disabled, select:disabled, button:disabled {
 }
 
 /* Bouton 'Confirmer' */
-#confirmPreview {
+#confirmPreview,#addMediaButton {
     background-color: #007bff;
     color: #fff;
 }
