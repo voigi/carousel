@@ -530,6 +530,11 @@ addMediaButton.addEventListener('click', () => {
     previewVideoElement.load();
 });
 
+document.getElementById('addAudioAndPreview').addEventListener('click', async () => {
+    // Appel de la fonction pour générer l'aperçu avec l'audio
+    await generatePreview();
+});
+
 async function generatePreview() {
     if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
@@ -799,11 +804,8 @@ cancelFinishButton.addEventListener('click', () => {
 replaceMediaButton.addEventListener('click', replaceMedia);
 
 
-//envoi audio preview
-document.getElementById('addAudioAndPreview').addEventListener('click', async () => {
-    // Appel de la fonction pour générer l'aperçu avec l'audio
-    await generatePreview();
-});
+
+
 
 
 
