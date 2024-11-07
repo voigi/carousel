@@ -113,7 +113,7 @@ h1 {
 }
 
 #uploadFile,#audioFile {
-    margin-right: 10px; /* Espacement entre l'input et le bouton */
+    margin-right: 15px; /* Espacement entre l'input et le bouton */
     padding: 10px;
     border: 2px solid #ddd;
     border-radius: 8px;
@@ -573,22 +573,22 @@ input:disabled, select:disabled, button:disabled {
 .step {
     display: flex;
     align-items: center;
+    gap: 15px;
     margin-bottom: 15px;
 }
 
 /* Icône de l'étape */
 .step-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: #007bff; /* Couleur de fond de l'icône */
-    color: white;
-    display: flex;
-    align-items: center;
+    display: inline-flex;
     justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    background-color: #4CAF50; /* Couleur de fond des icônes */
+    color: #fff; /* Couleur du texte des icônes */
+    border-radius: 50%; /* Forme circulaire */
     font-weight: bold;
-    margin-right: 10px;
-    font-size: 14px;
+    font-size: 1rem;
 }
 
 /* Style pour les éléments de formulaire */
@@ -605,4 +605,7 @@ input:disabled, select:disabled, button:disabled {
 .step button {
     padding: 5px 10px;
     margin-left: 10px;
+}
+#mediaFormat{
+    padding-right: 15px;
 }
