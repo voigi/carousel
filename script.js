@@ -520,6 +520,9 @@ addMediaButton.addEventListener('click', () => {
 
 addMediaButton.addEventListener('click', () => {
     generatePreview(); // Appelle la fonction de preview
+    const previewVideoElement = document.getElementById('previewVideo');
+    previewVideoElement.currentTime=0;
+    previewVideoElement.load();
 });
 
 async function generatePreview() {
