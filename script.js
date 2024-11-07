@@ -801,10 +801,16 @@ replaceMediaButton.addEventListener('click', replaceMedia);
 
 
 //envoi audio preview
-document.getElementById('addAudio').addEventListener('click', async () => {
-    // Appel de la fonction pour générer l'aperçu avec l'audio
-    console.log('Audio Preview Added Success ');
-    await generatePreview();
+document.addEventListener("DOMContentLoaded", () => {
+    const addAudioButton = document.getElementById('addAudio');
+    if (addAudioButton) {
+        addAudioButton.addEventListener('click', async () => {
+            console.log("Le bouton 'Ajouter l'audio' a été cliqué.");
+            await generatePreview();
+        });
+    } else {
+        console.log("Le bouton 'Ajouter l'audio' n'a pas été trouvé.");
+    }
 });
 
 
