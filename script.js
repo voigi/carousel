@@ -803,6 +803,7 @@ replaceMediaButton.addEventListener('click', replaceMedia);
 //envoi audio preview
 document.getElementById('addAudio').addEventListener('click', async () => {
     // Appel de la fonction pour générer l'aperçu avec l'audio
+    console.log('Audio Preview Added Success ');
     await generatePreview();
 });
 
