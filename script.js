@@ -14,9 +14,12 @@ const cancelButton = document.querySelector('#replaceCancelButton');
 const addCancelButton = document.querySelector('#addCancelButton');
 const finishButton=document.getElementById('finishButton');
 const addAudioButton = document.getElementById('audio-btn');
-const audioFileInput = document.getElementById('audioInput');
+//const audioFileInput = document.getElementById('audioInput');
 const apercutitle=document.getElementById('apercu');
 const leftIcon=document.getElementById('left-icon');
+const audioFileInput = document.getElementById('audioFile');
+const backgroundAudio = document.getElementById('backgroundAudio');
+
 
 
  const { createFFmpeg, fetchFile } = FFmpeg;
@@ -536,23 +539,21 @@ async function generatePreview() {
 
     let fileIndex = 0;
     const inputs = [];
+    let audioFileName = null;
 
-    let audioFileName = null; // Variable pour le nom du fichier audio
-
-    // Récupérer le fichier audio sélectionné
-    // const audioInput = document.getElementById('audioInput');
-    // if (audioInput.files.length > 0) {
-    //     const audioBlob = audioInput.files[0];
-    //     const audioArrayBuffer = await audioBlob.arrayBuffer();
-    //     audioFileName = `background_audio.mp3`;
-    //     ffmpeg.FS('writeFile', audioFileName, new Uint8Array(audioArrayBuffer));
-    // }
+    // Vérifiez si l'utilisateur a sélectionné un fichier audio
+    const audioInput = document.getElementById('audioFile'); // Sélecteur du fichier audio
+    if (audioInput && audioInput.files.length > 0) {
+        const audioBlob = audioInput.files[0];
+        const audioArrayBuffer = await audioBlob.arrayBuffer();
+        audioFileName = `background_audio.mp3`;
+        ffmpeg.FS('writeFile', audioFileName, new Uint8Array(audioArrayBuffer));
+    }
 
     for (const item of items) {
         const mediaElement = item.querySelector('img, video');
         const mediaType = mediaElement.tagName.toLowerCase();
 
-        // Traitement des images et vidéos pour l'aperçu
         if (mediaType === 'img') {
             const imageBlob = await fetch(mediaElement.src).then(r => r.blob());
             const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
@@ -593,41 +594,35 @@ async function generatePreview() {
     );
 
     if (audioFileName) {
+        // Combinez le fichier vidéo et l'audio de fond sélectionné
         await ffmpeg.run(
             '-i', 'carousel_preview.mp4',
             '-i', audioFileName,
-            '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', // Encoder audio
-            '-shortest', // Prendre la durée la plus courte entre la vidéo et l'audio
+            '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k',
+            '-shortest', // Limite la durée de la vidéo pour qu'elle corresponde à l'audio ou à la vidéo la plus courte
             'carousel_preview_with_audio.mp4'
         );
     }
 
-    const previewData = ffmpeg.FS('readFile', 'carousel_preview.mp4');
+    // Lecture du fichier de prévisualisation final
+    const previewData = ffmpeg.FS('readFile', audioFileName ? 'carousel_preview_with_audio.mp4' : 'carousel_preview.mp4');
     const previewBlob = new Blob([previewData.buffer], { type: 'video/mp4' });
     const previewURL = URL.createObjectURL(previewBlob);
 
-    console.log(previewBlob);
-    console.log(previewBlob.type); // Doit être 'video/mp4'
+    // Configuration de la source dans l'élément vidéo
+    const previewVideoElement = document.getElementById('previewVideo');
+    const player = videojs(previewVideoElement); // Initialise Video.js
 
+    // Assignez la source
+    player.src({ type: 'video/mp4', src: previewURL });
+    
+    // Écoutez l'événement 'loadeddata'
+    previewVideoElement.addEventListener('loadeddata', () => {
+        console.log('La vidéo est chargée avec succès.');
+    });
 
-
-
-
- // Configurez la source du lecteur vidéo
- const previewVideoElement = document.getElementById('previewVideo');
- const player = videojs(previewVideoElement); // Initialisez Video.js
-
- // Assignez la source
- player.src({ type: 'video/mp4', src: previewURL });
- 
- // Écoutez l'événement 'loadeddata'
- previewVideoElement.addEventListener('loadeddata', () => {
-     console.log('La vidéo est chargée avec succès.');
-    // player.play(); // Démarrez la lecture automatiquement
- });
-
- // Affichez la modale
- document.getElementById('previewModal').style.display = 'block';
+    // Affichez la modale de prévisualisation
+    document.getElementById('previewModal').style.display = 'block';
 }
 
 
