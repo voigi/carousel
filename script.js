@@ -19,6 +19,8 @@ const apercutitle=document.getElementById('apercu');
 const leftIcon=document.getElementById('left-icon');
 const audioFileInput = document.getElementById('audioFile');
 const backgroundAudio = document.getElementById('backgroundAudio');
+const fileNameDisplay = document.getElementById('fileNameDisplay');
+
 
 
 
@@ -797,6 +799,12 @@ replaceMediaButton.addEventListener('click', replaceMedia);
 document.getElementById('addAudioAndPreview').addEventListener('click', async () => {
     // Appel de la fonction pour générer l'aperçu avec l'audio
     await generatePreview();
+});
+
+//gestion du fichier audio selectionné
+audioFileInput.addEventListener('change', (event) => {
+    const fileName = event.target.files[0]?.name || 'Aucun fichier sélectionné';
+    fileNameDisplay.textContent = fileName;
 });
 
 // Gestion des boutons de navigation

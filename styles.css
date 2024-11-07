@@ -488,25 +488,6 @@ input:disabled, select:disabled, button:disabled {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Conteneur de l'upload audio */
-.audio-upload {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-/* Label pour le choix de l'audio */
-.audio-upload label {
-    font-size: 1em;
-    color: #555;
-}
-
-/* Input pour le fichier audio */
-#audioFile {
-    font-size: 1em;
-}
-
 /* Style du bouton 'Ajouter l'audio et lancer la prévisualisation' */
 #addAudioAndPreview {
     display: block;
@@ -557,4 +538,35 @@ input:disabled, select:disabled, button:disabled {
     background-color: #d32f2f;
 }
 
+/* Conteneur de l'upload audio */
+.audio-upload {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    overflow: hidden; /* Empêche le débordement du contenu */
+}
+
+/* Label pour le choix de l'audio */
+.audio-upload label {
+    font-size: 1em;
+    color: #555;
+    white-space: nowrap;
+}
+
+/* Input pour le fichier audio */
+#audioFile {
+    font-size: 1em;
+    flex-shrink: 0; /* Garde la taille de l'input fixe */
+}
+
+/* Style pour le nom de fichier sélectionné */
+.file-name {
+    max-width: 200px; /* Limite la largeur */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #333;
+    font-size: 0.9em;
+}
 
