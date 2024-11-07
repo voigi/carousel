@@ -79,6 +79,16 @@
             <source src="" type="video/mp4" />
             Votre navigateur ne supporte pas la lecture de vidéos.
         </video>
+
+     <!-- Options d'Audio -->
+     <h3>Options</h3>
+     <div class="audio-upload">
+         <label for="audioFile">Choisir un fond sonore :</label>
+         <input type="file" id="audioFile" accept="audio/*" aria-label="Ajouter un fichier audio">
+     </div>
+     <audio id="backgroundAudio" preload="auto"></audio>
+
+
         <div>
             <button id="confirmPreview">Confirmer</button>
             <button id="cancelPreview">Annuler</button>
