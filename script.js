@@ -792,6 +792,13 @@ cancelFinishButton.addEventListener('click', () => {
 // Gestion du bouton de remplacement de médias
 replaceMediaButton.addEventListener('click', replaceMedia);
 
+
+//envoi audio preview
+document.getElementById('addAudioAndPreview').addEventListener('click', async () => {
+    // Appel de la fonction pour générer l'aperçu avec l'audio
+    await generatePreview();
+});
+
 // Gestion des boutons de navigation
 document.querySelector('.carousel-button.prev').addEventListener('click', () => moveCarousel(-1));
 document.querySelector('.carousel-button.next').addEventListener('click', () => moveCarousel(1));
