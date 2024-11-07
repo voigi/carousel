@@ -623,7 +623,7 @@ async function generatePreview() {
  // Écoutez l'événement 'loadeddata'
  previewVideoElement.addEventListener('loadeddata', () => {
      console.log('La vidéo est chargée avec succès.');
-     player.play(); // Démarrez la lecture automatiquement
+    // player.play(); // Démarrez la lecture automatiquement
  });
 
  // Affichez la modale
