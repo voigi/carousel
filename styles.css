@@ -49,7 +49,7 @@ h1 {
 }
 
 .carousel-item {
-    margin-top: 36%;
+    margin-top: 10%;
     min-width: 100%;
     text-align: center;
     position: relative;
@@ -569,4 +569,16 @@ input:disabled, select:disabled, button:disabled {
     color: #333;
     font-size: 0.9em;
 }
-
+.step-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #007bff; /* Couleur de fond de l'icône */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 10px;
+    font-size: 14px;
+}

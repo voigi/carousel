@@ -24,6 +24,7 @@
 
         <!-- Section pour l'ajout de médias -->
         <section class="upload-section">
+            <span class="step-icon">1</span>
             <h1 id="mediaTitle">Ajouter des Médias</h1>
             <div class="select-container">
                 <label for="mediaFormat">Choisir un format :</label>
@@ -91,8 +92,8 @@
 
 
         <div>
-            <button id="confirmPreview">Confirmer</button>
-            <button id="cancelPreview">Annuler</button>
+            <button id="confirmPreview"disabled>Confirmer</button>
+            <button id="cancelPreview" disabled >Annuler</button>
         </div>
     </div>
 </div>
@@ -108,7 +109,7 @@
             </div>
         </div>
 
-        <button id="finishButton" class="finish-btn" style="display: none;">J'ai fini</button>
+        <!-- <button id="finishButton" class="finish-btn" style="display: none;">J'ai fini</button> -->
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/video.js/dist/video.min.js"></script>
