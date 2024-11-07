@@ -569,6 +569,14 @@ input:disabled, select:disabled, button:disabled {
     color: #333;
     font-size: 0.9em;
 }
+/* Conteneur pour chaque étape */
+.step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Icône de l'étape */
 .step-icon {
     width: 24px;
     height: 24px;
@@ -581,4 +589,20 @@ input:disabled, select:disabled, button:disabled {
     font-weight: bold;
     margin-right: 10px;
     font-size: 14px;
+}
+
+/* Style pour les éléments de formulaire */
+.step select, .step input[type="file"], .step button {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 150px;
+    flex-grow: 1;
+}
+
+/* Ajustement du bouton */
+.step button {
+    padding: 5px 10px;
+    margin-left: 10px;
 }
