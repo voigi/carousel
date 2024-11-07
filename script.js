@@ -801,7 +801,7 @@ replaceMediaButton.addEventListener('click', replaceMedia);
 
 
 //envoi audio preview
-document.getElementById('addAudioAndPreview').addEventListener('click', async () => {
+document.getElementById('addAudio').addEventListener('click', async () => {
     // Appel de la fonction pour générer l'aperçu avec l'audio
     await generatePreview();
 });
