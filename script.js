@@ -18,6 +18,7 @@ const audioFileInput = document.getElementById('audioInput');
 const apercutitle=document.getElementById('apercu');
 const leftIcon=document.getElementById('left-icon');
 
+
  const { createFFmpeg, fetchFile } = FFmpeg;
  const ffmpeg = createFFmpeg({ log: true,
     corePath: 'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js', 
@@ -43,6 +44,7 @@ togglePreviewButton.addEventListener('click', () => {
         leftIcon.style.display = 'none';
         togglePreviewButton.classList.remove('fa-solid','fa-angles-left');   
         togglePreviewButton.classList.add('fa-solid', 'fa-angles-right'); // Ajouter l'icône pour l'état rétracté
+        apercutitle.textContent='Voir l\'aperçu';
         
         
     } else {
