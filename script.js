@@ -801,11 +801,8 @@ document.getElementById('addAudioAndPreview').addEventListener('click', async ()
     await generatePreview();
 });
 
-//gestion du fichier audio selectionné
-audioFileInput.addEventListener('change', (event) => {
-    const fileName = event.target.files[0]?.name || 'Aucun fichier sélectionné';
-    fileNameDisplay.textContent = fileName;
-});
+
+
 
 // Gestion des boutons de navigation
 document.querySelector('.carousel-button.prev').addEventListener('click', () => moveCarousel(-1));
