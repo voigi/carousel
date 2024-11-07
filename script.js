@@ -627,7 +627,11 @@ async function generatePreview() {
     document.getElementById('previewModal').style.display = 'block';
 }
 
-
+const previewVideoElement = document.getElementById('previewVideo');
+previewVideoElement.addEventListener('ended', () => {
+    
+    previewVideoElement.currentTime = 0;  // Remet la vidéo au début
+});
 
 
 
