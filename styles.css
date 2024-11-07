@@ -459,5 +459,102 @@ input:disabled, select:disabled, button:disabled {
     align-items: center;
     padding: 10px; /* Ajout de padding pour le header */
 }
+/* Style de la modal */
+#previewContent {
+    width: 700px;
+    max-width: 90%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+    position: relative;
+}
+
+/* Centrage du titre */
+#previewContent h3 {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
+}
+
+/* Style de la vidéo */
+#previewVideo {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Conteneur de l'upload audio */
+.audio-upload {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Label pour le choix de l'audio */
+.audio-upload label {
+    font-size: 1em;
+    color: #555;
+}
+
+/* Input pour le fichier audio */
+#audioFile {
+    font-size: 1em;
+}
+
+/* Style du bouton 'Ajouter l'audio et lancer la prévisualisation' */
+#addAudioAndPreview {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background-color 0.3s;
+}
+
+#addAudioAndPreview:hover {
+    background-color: #45a049;
+}
+
+/* Style des boutons 'Confirmer' et 'Annuler' */
+#previewContent div button {
+    padding: 10px 15px;
+    font-size: 1em;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+/* Bouton 'Confirmer' */
+#confirmPreview {
+    background-color: #007bff;
+    color: #fff;
+}
+
+#confirmPreview:hover {
+    background-color: #0056b3;
+}
+
+/* Bouton 'Annuler' */
+#cancelPreview {
+    background-color: #f44336;
+    color: #fff;
+}
+
+#cancelPreview:hover {
+    background-color: #d32f2f;
+}
 
 
