@@ -521,7 +521,13 @@ input:disabled, select:disabled, button:disabled {
 /* Bouton 'Confirmer' */
 #confirmPreview,#addMediaButton {
     background-color: #007bff;
-    color: #fff;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    /* cursor: pointer; */
+    transition: background-color 0.3s ease;
 }
 
 #confirmPreview:hover {
