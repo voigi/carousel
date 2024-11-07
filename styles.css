@@ -112,7 +112,7 @@ h1 {
     right: 15px;
 }
 
-#uploadFile {
+#uploadFile,#audioFile {
     margin-right: 10px; /* Espacement entre l'input et le bouton */
     padding: 10px;
     border: 2px solid #ddd;
@@ -555,10 +555,10 @@ input:disabled, select:disabled, button:disabled {
 }
 
 /* Input pour le fichier audio */
-#audioFile {
+/* #audioFile {
     font-size: 1em;
-    flex-shrink: 0; /* Garde la taille de l'input fixe */
-}
+    flex-shrink: 0; /* Garde la taille de l'input fixe 
+} */
 
 /* Style pour le nom de fichier sélectionné */
 .file-name {
