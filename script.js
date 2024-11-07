@@ -623,15 +623,16 @@ async function generatePreview() {
         console.log('La vidéo est chargée avec succès.');
     });
 
+    previewVideoElement.addEventListener('ended', () => {
+    
+        previewVideoElement.currentTime = 0;  // Remet la vidéo au début
+    });
     // Affichez la modale de prévisualisation
     document.getElementById('previewModal').style.display = 'block';
 }
 
-const previewVideoElement = document.getElementById('previewVideo');
-previewVideoElement.addEventListener('ended', () => {
-    
-    previewVideoElement.currentTime = 0;  // Remet la vidéo au début
-});
+
+
 
 
 
