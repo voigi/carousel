@@ -51,7 +51,7 @@ togglePreviewButton.addEventListener('click', () => {
         previewModal.classList.remove('collapsed'); // Enlever la classe pour étendre le modal
         leftIcon.style.display = 'none';
         togglePreviewButton.classList.add('fa-solid', 'fa-angles-left'); // Ajouter l'icône pour l'état étendu
-        
+        apercutitle.textContent='Aperçu de la vidéo';
     }
 });
 
