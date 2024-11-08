@@ -37,8 +37,8 @@ const togglePreviewButton = document.getElementById("togglePreview");
 // Fonction pour basculer entre les états étendu et rétracté
 let isCollapsed = false;
 
-// Définir la media query pour les écrans de moins de 768px de large
-const mediaQuery = window.matchMedia("(max-width: 768px)");
+// Définir la media query pour les écrans de moins de 1280px de large
+const mediaQuery = window.matchMedia("(max-width: 1280px)");
 
 // Fonction pour basculer entre les états étendu et rétracté
 togglePreviewButton.addEventListener("click", () => {
