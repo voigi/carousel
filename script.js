@@ -61,6 +61,13 @@ togglePreviewButton.addEventListener("click", () => {
     container.style.left = "16%";
   }
 });
+//si previewModal est chargé alors le container a une position relative et un left de 16%
+previewModal.addEventListener("load", () => {
+  container.style.position = "relative";
+  container.style.left = "16%";
+});
+
+
 
 //Variable auto-scroll
 let autoScrollInterval = null;
@@ -507,8 +514,6 @@ addMediaButton.addEventListener("click", () => {
 
 addMediaButton.addEventListener("click", () => {
   generatePreview(); // Appelle la fonction de preview
-  container.style.position = "relative";
-  container.style.left = "15%";
   const previewVideoElement = document.getElementById("previewVideo");
   previewVideoElement.currentTime = 0;
   previewVideoElement.load();
