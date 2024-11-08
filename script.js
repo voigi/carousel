@@ -50,7 +50,7 @@ togglePreviewButton.addEventListener("click", () => {
     togglePreviewButton.classList.add("fa-solid", "fa-angles-right"); // Ajouter l'icône pour l'état rétracté
     apercutitle.textContent = "Voir l'aperçu";
     container.style.position = "relative";
-    container.style.left = "0%";
+    container.style.left = "8.5%";
 
   } else {
     previewModal.classList.remove("collapsed"); // Enlever la classe pour étendre le modal
@@ -58,7 +58,7 @@ togglePreviewButton.addEventListener("click", () => {
     togglePreviewButton.classList.add("fa-solid", "fa-angles-left"); // Ajouter l'icône pour l'état étendu
     apercutitle.textContent = "Aperçu du carrousel";
     container.style.position = "relative";
-    container.style.left = "15%";
+    container.style.left = "16%";
   }
 });
 
