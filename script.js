@@ -20,6 +20,7 @@ const leftIcon=document.getElementById('left-icon');
 const audioFileInput = document.getElementById('audioFile');
 const backgroundAudio = document.getElementById('backgroundAudio');
 const fileNameDisplay = document.getElementById('fileNameDisplay');
+const onOffDefil = document.getElementById('onOff');
 
 
 
@@ -386,6 +387,7 @@ function startAutoScroll() {
             icon.style.display = 'none';
         });
     }
+    onOffDefil.style.backgroundColor ='#4CAF50';
 }
 
 // Fonction pour arrêter le défilement automatique
@@ -414,7 +416,7 @@ function stopAutoScroll() {
             video.currentTime = 0;
         });
     }
-
+    onOffDefil.style.backgroundColor ='red';
 }
 
 

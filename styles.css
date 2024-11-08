@@ -616,3 +616,9 @@ input:disabled, select:disabled, button:disabled {
 #mediaFormat{
     padding-right: 15px;
 }
+#onOff
+{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
