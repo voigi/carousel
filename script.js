@@ -507,6 +507,8 @@ addMediaButton.addEventListener("click", () => {
 
 addMediaButton.addEventListener("click", () => {
   generatePreview(); // Appelle la fonction de preview
+  container.style.position = "relative";
+  container.style.left = "15%";
   const previewVideoElement = document.getElementById("previewVideo");
   previewVideoElement.currentTime = 0;
   previewVideoElement.load();
@@ -774,9 +776,8 @@ async function createVideoFromCarousel() {
   document.body.removeChild(a);
 
   alert("Vidéo générée avec succès!");
+
   
-  container.style.position = "relative";
-  container.style.left = "15%";
 }
 
 // N'appelez pas la fonction ici, laissez-la être appelée par votre code principal
