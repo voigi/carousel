@@ -581,6 +581,8 @@ input:disabled, select:disabled, button:disabled {
     align-items: center;
     gap: 15px;
     margin-bottom: 15px;
+    width: fit-content;
+    min-width: 24vw;
 }
 
 /* Icône de l'étape */
