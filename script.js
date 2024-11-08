@@ -37,30 +37,44 @@ const togglePreviewButton = document.getElementById("togglePreview");
 // Fonction pour basculer entre les états étendu et rétracté
 let isCollapsed = false;
 
+// Définir la media query pour les écrans de moins de 768px de large
+const mediaQuery = window.matchMedia("(max-width: 768px)");
+
 // Fonction pour basculer entre les états étendu et rétracté
 togglePreviewButton.addEventListener("click", () => {
   // Changer l'état de rétractation
   isCollapsed = !isCollapsed;
 
-  // Appliquer les classes en fonction de l'état
+  // Appliquer les classes et styles en fonction de l'état et de la media query
   if (isCollapsed) {
     previewModal.classList.add("collapsed"); // Ajouter la classe pour réduire le modal
     leftIcon.style.display = "none";
     togglePreviewButton.classList.remove("fa-solid", "fa-angles-left");
     togglePreviewButton.classList.add("fa-solid", "fa-angles-right"); // Ajouter l'icône pour l'état rétracté
     apercutitle.textContent = "Voir l'aperçu";
-    container.style.position = "relative";
-    container.style.left = "8.5%";
+
+    // Ajuster `left` pour les petits et grands écrans
+    if (mediaQuery.matches) {
+      container.style.left = "16%"; // Valeur pour petits écrans
+    } else {
+      container.style.left = "8.5%"; // Valeur pour écrans plus grands
+    }
 
   } else {
     previewModal.classList.remove("collapsed"); // Enlever la classe pour étendre le modal
     leftIcon.style.display = "none";
     togglePreviewButton.classList.add("fa-solid", "fa-angles-left"); // Ajouter l'icône pour l'état étendu
     apercutitle.textContent = "Aperçu du carrousel";
-    container.style.position = "relative";
-    container.style.left = "16%";
+
+    // Ajuster `left` pour les petits et grands écrans
+    if (mediaQuery.matches) {
+      container.style.left = "20%"; // Valeur pour petits écrans
+    } else {
+      container.style.left = "16%"; // Valeur pour écrans plus grands
+    }
   }
 });
+
 //si previewModal est chargé alors le container a une position relative et un left de 16%
 
 
