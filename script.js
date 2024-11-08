@@ -20,6 +20,7 @@ const audioFileInput = document.getElementById("audioFile");
 const backgroundAudio = document.getElementById("backgroundAudio");
 const fileNameDisplay = document.getElementById("fileNameDisplay");
 const onOffDefil = document.getElementById("onOff");
+const container = document.getElementById("container");
 
 const { createFFmpeg, fetchFile } = FFmpeg;
 const ffmpeg = createFFmpeg({
@@ -48,11 +49,15 @@ togglePreviewButton.addEventListener("click", () => {
     togglePreviewButton.classList.remove("fa-solid", "fa-angles-left");
     togglePreviewButton.classList.add("fa-solid", "fa-angles-right"); // Ajouter l'icône pour l'état rétracté
     apercutitle.textContent = "Voir l'aperçu";
+    
+
   } else {
     previewModal.classList.remove("collapsed"); // Enlever la classe pour étendre le modal
     leftIcon.style.display = "none";
     togglePreviewButton.classList.add("fa-solid", "fa-angles-left"); // Ajouter l'icône pour l'état étendu
     apercutitle.textContent = "Aperçu du carrousel";
+    container.style.position = "relative";
+    container.style.left = "15%";
   }
 });
 
