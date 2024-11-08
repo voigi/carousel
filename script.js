@@ -49,7 +49,8 @@ togglePreviewButton.addEventListener("click", () => {
     togglePreviewButton.classList.remove("fa-solid", "fa-angles-left");
     togglePreviewButton.classList.add("fa-solid", "fa-angles-right"); // Ajouter l'icône pour l'état rétracté
     apercutitle.textContent = "Voir l'aperçu";
-    
+    container.style.position = "relative";
+    container.style.left = "0%";
 
   } else {
     previewModal.classList.remove("collapsed"); // Enlever la classe pour étendre le modal
@@ -773,6 +774,9 @@ async function createVideoFromCarousel() {
   document.body.removeChild(a);
 
   alert("Vidéo générée avec succès!");
+  
+  container.style.position = "relative";
+  container.style.left = "15%";
 }
 
 // N'appelez pas la fonction ici, laissez-la être appelée par votre code principal
