@@ -62,10 +62,6 @@ togglePreviewButton.addEventListener("click", () => {
   }
 });
 //si previewModal est chargé alors le container a une position relative et un left de 16%
-previewModal.addEventListener("load", () => {
-  container.style.position = "relative";
-  container.style.left = "16%";
-});
 
 
 
@@ -672,6 +668,9 @@ async function generatePreview() {
 
   // Affichez la modale de prévisualisation
   document.getElementById("previewModal").style.display = "block";
+
+  container.style.position = "relative";
+  container.style.left = "16%";
 }
 
 async function createVideoFromCarousel() {
