@@ -1,564 +1,561 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f9fafb;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 20px;
-   
+  font-family: "Poppins", sans-serif;
+  background-color: #f9fafb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
 }
 
 h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    background-color: white;
+  text-align: center;
+  margin-bottom: 30px;
+  background-color: white;
 }
 
 .container {
-    max-width: 1200px;
-    
-    width: 100%;
-    height: 48%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+  max-width: 1200px;
+  position: relative;
+  left: 15%;
+  width: 100%;
+  height: 48%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
 .carousel-container {
-    
-    position: relative;
-    width: 100%;
-    margin-top: 3vh;
-    max-width: 1200px;
-    overflow: hidden;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    margin-bottom: 50px;
-   bottom: 5vh;
+  position: relative;
+  width: 100%;
+  margin-top: 3vh;
+  max-width: 1200px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 50px;
+  bottom: 5vh;
 }
 
 .carousel-item {
-    margin-top: 10%;
-    min-width: 100%;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
+  margin-top: 10%;
+  min-width: 100%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .carousel-item img {
-    width: 1200px;
-    height: 627px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 1200px;
+  height: 627px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .carousel-item video {
-    width: 1200px;
-    height: 625px;
-    display: block;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 1200px;
+  height: 625px;
+  display: block;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .format-select {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    outline: none;
-    font-size: 16px;
-    width: 100%;
-    max-width: 300px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  font-size: 16px;
+  width: 100%;
+  max-width: 300px;
 }
 
 .carousel-button {
-    position: absolute;
-    top: 58%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    font-size: 24px;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border-radius: 50%;
-    z-index: 100;
-    transition: background-color 0.3s ease;
+  position: absolute;
+  top: 58%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 24px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 100;
+  transition: background-color 0.3s ease;
 }
 
 .carousel-button.prev {
-    left: 15px;
+  left: 15px;
 }
 
 .carousel-button.next {
-    right: 15px;
+  right: 15px;
 }
 
-#uploadFile,#audioFile {
-    margin-right: 15px; /* Espacement entre l'input et le bouton */
-    padding: 10px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    outline: none;
-    font-size: 16px;
-    width: 100%;
-    max-width: 300px; /* Limiter la largeur de l'input */
+#uploadFile,
+#audioFile {
+  margin-right: 15px; /* Espacement entre l'input et le bouton */
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  font-size: 16px;
+  width: 100%;
+  max-width: 300px; /* Limiter la largeur de l'input */
 }
 
-.add-btn{
-    background-color: #0073b1;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.add-btn {
+  background-color: #0073b1;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .add-btn:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 .cancel-btn:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
-#replaceCancelButton,#addCancelButton {
-    background-color: red;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    /* cursor: pointer; */
-    transition: background-color 0.3s ease;
+#replaceCancelButton,
+#addCancelButton {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  /* cursor: pointer; */
+  transition: background-color 0.3s ease;
 }
-#addCancelButton{
- cursor: pointer;
+#addCancelButton {
+  cursor: pointer;
 }
 
-#replaceCancelButton{
+#replaceCancelButton {
   position: relative;
   left: 43vw;
-
 }
 
 .add-btn:hover {
-    background-color: #005f8b;
+  background-color: #005f8b;
 }
 
 .auto-scroll-select {
-    position: relative;
-    padding: 10px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 86%;
+  position: relative;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 86%;
 }
 
-.select-container,#defil-container {
-    
-    display: inline-block;
-    max-width: 350px;
-    margin-bottom: 20px;
-  
+.select-container,
+#defil-container {
+  display: inline-block;
+  max-width: 350px;
+  margin-bottom: 20px;
 }
-
 
 select {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    background-color: #ffffff;
-    font-size: 16px;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-    transition: border 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: #ffffff;
+  font-size: 16px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
 select:focus {
-    outline: none;
-    border-color: #0073b1;
-    box-shadow: 0 0 5px rgba(0, 115, 177, 0.5);
+  outline: none;
+  border-color: #0073b1;
+  box-shadow: 0 0 5px rgba(0, 115, 177, 0.5);
 }
 
 select:hover {
-    border-color: #aaa;
+  border-color: #aaa;
 }
 
 .delete-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: rgba(255, 0, 0, 0.7);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
 }
 
 .delete-btn:hover {
-    background-color: rgba(255, 0, 0, 1);
+  background-color: rgba(255, 0, 0, 1);
 }
 
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    text-align: center;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .modal button {
-    margin: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
+  margin: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
 }
 
 .carousel {
-    padding: 0;
-    display: flex;
-    overflow: visible;
-    position: relative;
-    transition: transform 0.5s ease;
+  padding: 0;
+  display: flex;
+  overflow: visible;
+  position: relative;
+  transition: transform 0.5s ease;
 }
 
 .fa-trash {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: red;
-    font-size: 24px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: red;
+  font-size: 24px;
 }
 
 .carousel-item i.edit-icon {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
 }
 
 /* Conteneur pour aligner les boutons et les inputs */
 #replaceFileInput,
 #replaceMediaButton {
-    display: none;
-    margin-top: 15px;
+  display: none;
+  margin-top: 15px;
 }
 
 /* Afficher les éléments lorsque l'édition est active */
 #replaceFileInput.active,
 #replaceMediaButton.active {
-    display: inline-block;
-    margin: 0;
-    padding: 10px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    outline: none;
-    font-size: 16px;
+  display: inline-block;
+  margin: 0;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  font-size: 16px;
 }
 #replaceFileInput.active {
-    margin-left: 10px; /* Espacement à gauche du bouton */
-    position: relative;
-   /*l'input replaceFileInput.active est positionné à gauche du bouton replaceMediaButton.active , */
-   left: 16.9vw;
-   top: 8vh;
-    
+  margin-left: 10px; /* Espacement à gauche du bouton */
+  position: relative;
+  /*l'input replaceFileInput.active est positionné à gauche du bouton replaceMediaButton.active , */
+  left: 16.9vw;
+  top: 8vh;
 }
 #replaceMediaButton.active {
-    display: inline-block;
-    background-color: #0073b1;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    margin: 0;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-left: 10px; /* Espacement à gauche du bouton */
-    position: relative;
-    left: 33.7vw;
+  display: inline-block;
+  background-color: #0073b1;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  margin: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px; /* Espacement à gauche du bouton */
+  position: relative;
+  left: 33.7vw;
 }
 #replaceMediaButton.active:hover {
-    background-color: #005f8b;
+  background-color: #005f8b;
 }
 
 /* Alignement en ligne des champs dans le conteneur */
 .input-group {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 /* Conteneur d'édition */
 .upload-container {
-    position: relative; /* Permet à l'input et au bouton de se positionner relativement */
-    display: flex;
-    justify-content: center; /* Garde les éléments centrés */
-    align-items: center;
-    margin-bottom: 20px;
+  position: relative; /* Permet à l'input et au bouton de se positionner relativement */
+  display: flex;
+  justify-content: center; /* Garde les éléments centrés */
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 /* Input et bouton d'édition sont cachés par défaut */
 #replaceFileInput,
 #replaceMediaButton {
-    position: absolute; /* Pour qu'ils se superposent sans déplacer les autres éléments */
-    top: 75%; /* Ajuste en fonction du placement souhaité */
-    right: 25%; /* Peut aussi être left selon où tu veux le positionner */
-    display: none; /* Caché par défaut */
+  position: absolute; /* Pour qu'ils se superposent sans déplacer les autres éléments */
+  top: 75%; /* Ajuste en fonction du placement souhaité */
+  right: 25%; /* Peut aussi être left selon où tu veux le positionner */
+  display: none; /* Caché par défaut */
 }
 
 /* Afficher l'input et le bouton lorsque l'édition est active */
 #replaceFileInput.active,
 #replaceMediaButton.active {
-    display: inline-block;
+  display: inline-block;
 }
 
 /* Style pour ne pas décaler les éléments lors de l'édition */
 .upload-container.active .carousel-item {
-    justify-content: center; /* Maintient centré les autres éléments */
+  justify-content: center; /* Maintient centré les autres éléments */
 }
 .replace-container {
-
- position: relative;
- left:1vw;
- bottom: 5vh;
+  position: relative;
+  left: 1vw;
+  bottom: 5vh;
 }
 #replaceMediaButton {
-    position: relative;
-    top: 4vh;
-    left:32vw;
-  
+  position: relative;
+  top: 4vh;
+  left: 32vw;
 }
-input:disabled, select:disabled, button:disabled {
-    background-color: #e0e0e0; /* Couleur de fond grisée */
-    cursor: not-allowed; /* Changement du curseur pour indiquer que c'est désactivé */
-    opacity: 0.6; /* Rendre les éléments un peu transparents */
+input:disabled,
+select:disabled,
+button:disabled {
+  background-color: #e0e0e0; /* Couleur de fond grisée */
+  cursor: not-allowed; /* Changement du curseur pour indiquer que c'est désactivé */
+  opacity: 0.6; /* Rendre les éléments un peu transparents */
 }
 .finish-btn {
-    background-color: #4CAF50; /* Vert */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px; /* Ajoute un espacement */
+  background-color: #4caf50; /* Vert */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px; /* Ajoute un espacement */
 }
 
 .finish-btn:hover {
-    background-color: #45a049; /* Couleur au survol */
+  background-color: #45a049; /* Couleur au survol */
 }
 #previewModal {
-    display: none;
-    width: 80%; /* Largeur du modal */
-    max-width: 600px; /* Largeur maximale */
-    margin: auto; /* Centre le modal */
-    padding: 20px; /* Padding pour le contenu */
-    background-color: white; /* Fond blanc */
-    border-radius: 8px; /* Coins arrondis */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre */
+  display: none;
+  width: 80%; /* Largeur du modal */
+  max-width: 600px; /* Largeur maximale */
+  margin: auto; /* Centre le modal */
+  padding: 20px; /* Padding pour le contenu */
+  background-color: white; /* Fond blanc */
+  border-radius: 8px; /* Coins arrondis */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre */
 }
 
 #previewVideo {
-    width: 100%; /* La vidéo prend toute la largeur du modal */
-    height: 0; /* Initialiser la hauteur à 0 */
-    padding-bottom: 56.25%; /* Maintenir le rapport d'aspect 16:9 (9/16 = 0.5625) */
-    position: relative; /* Positionner la vidéo */
+  width: 100%; /* La vidéo prend toute la largeur du modal */
+  height: 0; /* Initialiser la hauteur à 0 */
+  padding-bottom: 56.25%; /* Maintenir le rapport d'aspect 16:9 (9/16 = 0.5625) */
+  position: relative; /* Positionner la vidéo */
 }
 
 #previewVideo > video {
-    position: absolute; /* Positionner la vidéo à l'intérieur du conteneur */
-    top: 0; /* Alignement en haut */
-    left: 0; /* Alignement à gauche */
-    width: 100%; /* La vidéo prend toute la largeur */
-    height: 100%;/* La vidéo prend toute la hauteur */
+  position: absolute; /* Positionner la vidéo à l'intérieur du conteneur */
+  top: 0; /* Alignement en haut */
+  left: 0; /* Alignement à gauche */
+  width: 100%; /* La vidéo prend toute la largeur */
+  height: 100%; /* La vidéo prend toute la hauteur */
 }
 
-
 /* Styles pour le modal */
-/* Styles pour le modal *//* Styles pour le modal */
+/* Styles pour le modal */ /* Styles pour le modal */
 .modal {
-    display: none; /* Masqué par défaut */
-    position: fixed;
-    top: 50%; /* Centré verticalement */
-    transform: translateY(-50%); /* Ajuste le centrage vertical */
-    width: 300px; /* Largeur par défaut */
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000; /* Assurez-vous que c'est au-dessus des autres éléments */
-    transition: width 0.3s ease; /* Animation de largeur */
+  display: none; /* Masqué par défaut */
+  position: fixed;
+  top: 50%; /* Centré verticalement */
+  transform: translateY(-50%); /* Ajuste le centrage vertical */
+  width: 300px; /* Largeur par défaut */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000; /* Assurez-vous que c'est au-dessus des autres éléments */
+  transition: width 0.3s ease; /* Animation de largeur */
 }
 
 /* État rétracté */
 #previewModal.collapsed {
-    max-width: 300px; /* Largeur lorsque réduit (juste pour le header) */
+  max-width: 300px; /* Largeur lorsque réduit (juste pour le header) */
 }
 
 /* Contenu de l'aperçu */
 .preview-content {
-    opacity: 1; /* Rendre le contenu visible */
-    transition: opacity 0.3s ease; /* Animation pour opacité */
+  opacity: 1; /* Rendre le contenu visible */
+  transition: opacity 0.3s ease; /* Animation pour opacité */
 }
 
 /* État caché du contenu */
 .modal.collapsed .preview-content {
-    opacity: 0; /* Rendre le contenu invisible */
-    height: 0; /* Optionnel : réduire la hauteur */
-    overflow: hidden; /* Empêche le contenu de déborder */
+  opacity: 0; /* Rendre le contenu invisible */
+  height: 0; /* Optionnel : réduire la hauteur */
+  overflow: hidden; /* Empêche le contenu de déborder */
 }
 
 /* Styles pour le header du modal */
 .preview-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px; /* Ajout de padding pour le header */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px; /* Ajout de padding pour le header */
 }
 /* Style de la modal */
 #previewContent {
-    width: 700px;
-    max-width: 90%;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin: 20px auto;
-    position: relative;
+  width: 700px;
+  max-width: 90%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
+  position: relative;
 }
 
 /* Centrage du titre */
 #previewContent h3 {
-    font-size: 1.4em;
-    margin-bottom: 15px;
-    text-align: center;
-    color: #333;
+  font-size: 1.4em;
+  margin-bottom: 15px;
+  text-align: center;
+  color: #333;
 }
 
 /* Style de la vidéo */
 #previewVideo {
-    width: 100%;
-    height: auto;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Style du bouton 'Ajouter l'audio et lancer la prévisualisation' */
 #addAudioAndPreview {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 1em;
-    cursor: pointer;
-    margin-bottom: 20px;
-    transition: background-color 0.3s;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s;
 }
 
 #addAudioAndPreview:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
 /* Style des boutons 'Confirmer' et 'Annuler' */
 #previewContent div button {
-    padding: 10px 15px;
-    font-size: 1em;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    margin-right: 10px;
-    transition: background-color 0.3s;
+  padding: 10px 15px;
+  font-size: 1em;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s;
 }
 
 /* Bouton 'Confirmer' */
-#confirmPreview,#addMediaButton {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    /* cursor: pointer; */
-    transition: background-color 0.3s ease;
+#confirmPreview,
+#addMediaButton {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  /* cursor: pointer; */
+  transition: background-color 0.3s ease;
 }
 
 #confirmPreview:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 /* Bouton 'Annuler' */
 #cancelPreview {
-    background-color: #f44336;
-    color: #fff;
+  background-color: #f44336;
+  color: #fff;
 }
 
 #cancelPreview:hover {
-    background-color: #d32f2f;
+  background-color: #d32f2f;
 }
 
 /* Conteneur de l'upload audio */
 .audio-upload {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    overflow: hidden; /* Empêche le débordement du contenu */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow: hidden; /* Empêche le débordement du contenu */
 }
 
 /* Label pour le choix de l'audio */
 .audio-upload label {
-    font-size: 1em;
-    color: #555;
-    white-space: nowrap;
+  font-size: 1em;
+  color: #555;
+  white-space: nowrap;
 }
 
 /* Input pour le fichier audio */
@@ -569,64 +566,65 @@ input:disabled, select:disabled, button:disabled {
 
 /* Style pour le nom de fichier sélectionné */
 .file-name {
-    max-width: 200px; /* Limite la largeur */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #333;
-    font-size: 0.9em;
+  max-width: 200px; /* Limite la largeur */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #333;
+  font-size: 0.9em;
 }
 /* Conteneur pour chaque étape */
 .step {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
-    width: fit-content;
-    min-width: 24vw;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  width: fit-content;
+  min-width: 24vw;
 }
 
 /* Icône de l'étape */
 .step-icon {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    background-color: #4CAF50; /* Couleur de fond des icônes */
-    color: #fff; /* Couleur du texte des icônes */
-    border-radius: 50%; /* Forme circulaire */
-    font-weight: bold;
-    font-size: 1rem;
-    flex-shrink: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  background-color: #4caf50; /* Couleur de fond des icônes */
+  color: #fff; /* Couleur du texte des icônes */
+  border-radius: 50%; /* Forme circulaire */
+  font-weight: bold;
+  font-size: 1rem;
+  flex-shrink: 0;
 }
 
 /* Style pour les éléments de formulaire */
-.step select, .step input[type="file"], .step button {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    min-width: 150px;
-    flex-grow: 1;
+.step select,
+.step input[type="file"],
+.step button {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 150px;
+  flex-grow: 1;
 }
 
 /* Ajustement du bouton */
 .step button {
-    padding: 5px 10px;
-    margin-left: 10px;
+  padding: 5px 10px;
+  margin-left: 10px;
 }
-#mediaFormat{
-    padding-right: 15px;
+#mediaFormat {
+  padding-right: 15px;
 }
-#onOff
-{
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: transparent;
-    flex-shrink: 0;
+#onOff {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: transparent;
+  flex-shrink: 0;
 }
