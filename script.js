@@ -640,7 +640,7 @@ async function generatePreview() {
           const soundArrayBuffer = await soundBlob.arrayBuffer();
       
           // Écrire le fichier audio dans FFmpeg
-          console.log(`Écriture du fichier audio: ${selectedSound}...`);
+          console.log(`Écriture du fichier audio: ${selectedSound}`);
           ffmpeg.FS("writeFile", selectedSound, new Uint8Array(soundArrayBuffer));
       
           // Confirmer que le fichier est bien écrit
