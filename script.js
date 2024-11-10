@@ -107,24 +107,25 @@ async function fetchSounds() {
     
     try {
       const response = await fetch(url);
-      
-      // Log la réponse brute avant de tenter de la parser
-      const textResponse = await response.text();
-      console.log(textResponse); // Vérifie ce que l'API renvoie vraiment
-      
-      // Si la réponse est en JSON valide, on peut la parser
-      const data = JSON.parse(textResponse);
-      
-      // Vérifie la structure de la réponse JSON
-      console.log(data); // Log la réponse JSON
+      const data = await response.json();
+  
+      console.log(data); // Vérifie ce que l'API renvoie complètement
       
       if (data.results && Array.isArray(data.results)) {
         data.results.forEach(sound => {
+          // Logue l'objet complet pour mieux comprendre sa structure
+          console.log(sound);
+  
+          // Essaye d'accéder à l'URL de prévisualisation
           if (sound.previews && sound.previews['preview-hq-mp3']) {
+            console.log(`Nom du son : ${sound.name}, URL du preview : ${sound.previews['preview-hq-mp3']}`);
+            
             const option = document.createElement('option');
             option.value = sound.previews['preview-hq-mp3']; // Lien vers le son MP3 de haute qualité
             option.textContent = sound.name; // Le nom du son
             soundSelector.appendChild(option);
+          } else {
+            console.log(`Pas de prévisualisation disponible pour ${sound.name}`);
           }
         });
       } else {
