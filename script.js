@@ -626,7 +626,7 @@ async function generatePreview() {
   
     if (selectedSound) {
       // En fonction de la valeur sélectionnée, vous associez un fichier audio
-      const soundFileName = `${selectedSound}.mp3`; // Par exemple, 'sound1.mp3'
+      const soundFileName = `${selectedSound}`; // Par exemple, 'sound1.mp3'
       
       // Si vous avez une liste de fichiers audio sur votre serveur ou dans un répertoire spécifique,
       // vous pouvez les charger ici de la même manière que pour les fichiers locaux.
