@@ -76,25 +76,53 @@ togglePreviewButton.addEventListener("click", () => {
 });
 
 const apiKey = 'BnTMdvUVteCn8xR13DR7r82iBdpATBZoKQYpGMYW';
+const soundSelector = document.getElementById("soundSelector"); // Sélecteur HTML
+let currentAudio = null; // Variable pour stocker le son actuel joué
 
+// Fonction pour récupérer les sons depuis l'API
+async function fetchSounds() {
+  const url = `https://freesound.org/apiv2/sounds/search/?query=music&token=${apiKey}&filter=duration:[0+ TO +30]`; // Récupère des sons courts (moins de 30 secondes)
+  
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
 
-// Fonction de vérification pour tester la connexion et récupérer des sons
-function testFreesoundAPI() {
-    fetch(`https://freesound.org/apiv2/search/text/?query=background&filter=duration:[0 TO 10]&fields=id,name&token=${apiKey}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erreur lors de la récupération des données');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Liste des sons récupérés:', data.results);
-        })
-        .catch(error => console.error('Erreur:', error));
+    // Ajouter les sons dans le sélecteur
+    data.results.forEach(sound => {
+      const option = document.createElement('option');
+      option.value = sound.previews['preview-hq-mp3']; // URL du son (MP3)
+      option.textContent = sound.name; // Nom du son
+      soundSelector.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Erreur lors de la récupération des sons:", error);
+  }
 }
 
-// Exécute la fonction pour tester l'API
-testFreesoundAPI();
+// Fonction pour jouer le son sélectionné
+function playSound(url) {
+  // Si un son est déjà joué, on l'arrête
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0; // Rewind à 0
+  }
+
+  // Créer un objet Audio avec l'URL du son sélectionné
+  currentAudio = new Audio(url);
+  currentAudio.play(); // Joue le son
+}
+
+// Écouter l'événement de changement du sélecteur pour jouer le son sélectionné
+soundSelector.addEventListener("change", (event) => {
+  const selectedSoundUrl = event.target.value;
+  if (selectedSoundUrl) {
+    playSound(selectedSoundUrl);
+  }
+});
+
+// Charger les sons au démarrage de la page
+window.onload = fetchSounds;
+
 
 
 
