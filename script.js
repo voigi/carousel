@@ -596,6 +596,8 @@ document
   .addEventListener("click", async () => {
     // Appel de la fonction pour générer l'aperçu avec l'audio
     await generatePreview();
+    audioFileInput.value = "";
+    soundSelector.selectedIndex = 0;
   });
 
 async function generatePreview() {
