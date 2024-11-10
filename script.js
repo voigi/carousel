@@ -620,6 +620,22 @@ async function generatePreview() {
     ffmpeg.FS("writeFile", audioFileName, new Uint8Array(audioArrayBuffer));
   }
 
+    // Vérifier si un son est sélectionné dans le select 'soundSelector'
+    const soundSelector = document.getElementById("soundSelector");
+    const selectedSound = soundSelector.value; // Récupère la valeur sélectionnée
+  
+    if (selectedSound) {
+      // En fonction de la valeur sélectionnée, vous associez un fichier audio
+      const soundFileName = `${selectedSound}.mp3`; // Par exemple, 'sound1.mp3'
+      
+      // Si vous avez une liste de fichiers audio sur votre serveur ou dans un répertoire spécifique,
+      // vous pouvez les charger ici de la même manière que pour les fichiers locaux.
+      const soundBlob = await fetch(`/sounds/${soundFileName}`).then((r) => r.blob());
+      const soundArrayBuffer = await soundBlob.arrayBuffer();
+      ffmpeg.FS("writeFile", soundFileName, new Uint8Array(soundArrayBuffer));
+      audioFileName = soundFileName; // Nom du fichier audio sélectionné
+    }
+
   for (const item of items) {
     const mediaElement = item.querySelector("img, video");
     const mediaType = mediaElement.tagName.toLowerCase();
