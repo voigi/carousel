@@ -75,7 +75,27 @@ togglePreviewButton.addEventListener("click", () => {
   }
 });
 
-//si previewModal est chargé alors le container a une position relative et un left de 16%
+const apiKey = 'BnTMdvUVteCn8xR13DR7r82iBdpATBZoKQYpGMYW';
+
+
+// Fonction de vérification pour tester la connexion et récupérer des sons
+function testFreesoundAPI() {
+    fetch(`https://freesound.org/apiv2/search/text/?query=background&filter=duration:[0 TO 10]&fields=id,name&token=${apiKey}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des données');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Liste des sons récupérés:', data.results);
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+
+// Exécute la fonction pour tester l'API
+testFreesoundAPI();
+
 
 
 
