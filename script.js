@@ -103,7 +103,7 @@ testFreesoundAPI();
 
 const apiKey = 'BnTMdvUVteCn8xR13DR7r82iBdpATBZoKQYpGMYW';
 async function fetchSounds() {
-    const url = `https://freesound.org/apiv2/search/text/?query=music&filter=samplerate:44100%20type:wav%20channels:2%20duration:[30.0%20TO%2060.0]&fields=name,previews&token=${apiKey}`; // Par exemple, pour récupérer des sons courts
+    const url = `https://freesound.org/apiv2/search/text/?query=music&filter=samplerate:44100%20type:wav%20channels:2%20duration:[10.0%20TO%2015.0]&fields=name,previews&token=${apiKey}`; // Par exemple, pour récupérer des sons courts
     
     try {
       const response = await fetch(url);
