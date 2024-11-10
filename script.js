@@ -625,11 +625,12 @@ async function generatePreview() {
     const selectedSound = soundSelector.value; // Récupère la valeur sélectionnée
   
     if (selectedSound) {
-        const soundUrl = `${selectedSound}`;  // URL de l'audio
+        // Extraire le nom du fichier audio depuis l'URL
+        const soundFileName = selectedSound.split("/").pop(); // Extrait la dernière partie de l'URL comme nom de fichier
         
-        // Charger et vérifier le fichier audio
+        // Charger le fichier audio depuis l'URL
         try {
-          const soundBlob = await fetch(soundUrl).then((response) => {
+          const soundBlob = await fetch(selectedSound).then((response) => {
             if (!response.ok) {
               console.error('Erreur de récupération du fichier audio:', response.status);
               throw new Error('Fichier audio non récupéré');
