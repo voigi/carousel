@@ -625,16 +625,33 @@ async function generatePreview() {
     const selectedSound = soundSelector.value; // Récupère la valeur sélectionnée
   
     if (selectedSound) {
-      // En fonction de la valeur sélectionnée, vous associez un fichier audio
-      const soundFileName = `${selectedSound}`; // Par exemple, 'sound1.mp3'
+        const soundUrl = `https://cdn.freesound.org/previews/335/${selectedSound}.mp3`;  // URL de l'audio
+        
+        // Charger et vérifier le fichier audio
+        try {
+          const soundBlob = await fetch(soundUrl).then((response) => {
+            if (!response.ok) {
+              console.error('Erreur de récupération du fichier audio:', response.status);
+              throw new Error('Fichier audio non récupéré');
+            }
+            return response.blob();
+          });
       
-      // Si vous avez une liste de fichiers audio sur votre serveur ou dans un répertoire spécifique,
-      // vous pouvez les charger ici de la même manière que pour les fichiers locaux.
-      const soundBlob = await fetch(`/sounds/${soundFileName}`).then((r) => r.blob());
-      const soundArrayBuffer = await soundBlob.arrayBuffer();
-      ffmpeg.FS("writeFile", soundFileName, new Uint8Array(soundArrayBuffer));
-      audioFileName = soundFileName; // Nom du fichier audio sélectionné
-    }
+          const soundArrayBuffer = await soundBlob.arrayBuffer();
+      
+          // Écrire le fichier audio dans FFmpeg
+          console.log(`Écriture du fichier audio: ${selectedSound}...`);
+          ffmpeg.FS("writeFile", selectedSound, new Uint8Array(soundArrayBuffer));
+      
+          // Confirmer que le fichier est bien écrit
+          console.log(`Le fichier ${selectedSound} a été écrit dans le système de fichiers FFmpeg.`);
+          
+          audioFileName = selectedSound;
+        } catch (error) {
+          console.error('Erreur lors de l\'écriture du fichier audio dans FFmpeg:', error);
+          return;
+        }
+      }
 
   for (const item of items) {
     const mediaElement = item.querySelector("img, video");
