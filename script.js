@@ -102,52 +102,40 @@ testFreesoundAPI();
 
 
 const apiKey = 'BnTMdvUVteCn8xR13DR7r82iBdpATBZoKQYpGMYW';
-const soundSelector = document.getElementById("soundSelector"); // Sélecteur HTML
-let currentAudio = null; // Variable pour stocker le son actuel joué
-
-// Fonction pour récupérer les sons depuis l'API
 async function fetchSounds() {
-  const url = `https://freesound.org/apiv2/sounds/search/?query=music&token=${apiKey}&filter=duration:[0+ TO +30]`; // Récupère des sons courts (moins de 30 secondes)
+    const url = `https://freesound.org/apiv2/sounds/search/?query=music&token=${apiKey}&filter=duration:[0+ TO +30]`; // Par exemple, pour récupérer des sons courts
+    
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
   
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    // Ajouter les sons dans le sélecteur
-    data.results.forEach(sound => {
-      const option = document.createElement('option');
-      option.value = sound.previews['preview-hq-mp3']; // URL du son (MP3)
-      option.textContent = sound.name; // Nom du son
-      soundSelector.appendChild(option);
-    });
-  } catch (error) {
-    console.error("Erreur lors de la récupération des sons:", error);
+      console.log(data); // Vérifie ce que l'API renvoie complètement
+      
+      if (data.results && Array.isArray(data.results)) {
+        data.results.forEach(sound => {
+          // Logue l'objet complet pour mieux comprendre sa structure
+          console.log(sound);
+  
+          // Essaye d'accéder à l'URL de prévisualisation
+          if (sound.previews && sound.previews['preview-hq-mp3']) {
+            console.log(`Nom du son : ${sound.name}, URL du preview : ${sound.previews['preview-hq-mp3']}`);
+            
+            const option = document.createElement('option');
+            option.value = sound.previews['preview-hq-mp3']; // Lien vers le son MP3 de haute qualité
+            option.textContent = sound.name; // Le nom du son
+            soundSelector.appendChild(option);
+          } else {
+            console.log(`Pas de prévisualisation disponible pour ${sound.name}`);
+          }
+        });
+      } else {
+        console.error("Aucun son trouvé dans la réponse de l'API.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des sons:", error);
+    }
   }
-}
-
-// Fonction pour jouer le son sélectionné
-function playSound(url) {
-  // Si un son est déjà joué, on l'arrête
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.currentTime = 0; // Rewind à 0
-  }
-
-  // Créer un objet Audio avec l'URL du son sélectionné
-  currentAudio = new Audio(url);
-  currentAudio.play(); // Joue le son
-}
-
-// Écouter l'événement de changement du sélecteur pour jouer le son sélectionné
-soundSelector.addEventListener("change", (event) => {
-  const selectedSoundUrl = event.target.value;
-  if (selectedSoundUrl) {
-    playSound(selectedSoundUrl);
-  }
-});
-
-// Charger les sons au démarrage de la page
-window.onload = fetchSounds;
+  
 
 
 
