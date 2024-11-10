@@ -641,13 +641,14 @@ async function generatePreview() {
           const soundArrayBuffer = await soundBlob.arrayBuffer();
       
           // Écrire le fichier audio dans FFmpeg
-          console.log(`Écriture du fichier audio: ${selectedSound}`);
-          ffmpeg.FS("writeFile", selectedSound, new Uint8Array(soundArrayBuffer));
+          console.log(`Écriture du fichier audio: ${soundFileName}`);
+          ffmpeg.FS("writeFile", soundFileName, new Uint8Array(soundArrayBuffer));
       
           // Confirmer que le fichier est bien écrit
-          console.log(`Le fichier ${selectedSound} a été écrit dans le système de fichiers FFmpeg.`);
+          const fileInFS = ffmpeg.FS("readFile", soundFileName);
+          console.log('Contenu du fichier écrit dans FFmpeg:', fileInFS);
           
-          audioFileName = selectedSound;
+          audioFileName = soundFileName;
         } catch (error) {
           console.error('Erreur lors de l\'écriture du fichier audio dans FFmpeg:', error);
           return;
