@@ -625,7 +625,7 @@ async function generatePreview() {
     const selectedSound = soundSelector.value; // Récupère la valeur sélectionnée
   
     if (selectedSound) {
-        const soundUrl = `https://cdn.freesound.org/previews/335/${selectedSound}`;  // URL de l'audio
+        const soundUrl = `${selectedSound}`;  // URL de l'audio
         
         // Charger et vérifier le fichier audio
         try {
