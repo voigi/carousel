@@ -21,6 +21,7 @@ const backgroundAudio = document.getElementById("backgroundAudio");
 const fileNameDisplay = document.getElementById("fileNameDisplay");
 const onOffDefil = document.getElementById("onOff");
 const container = document.getElementById("container");
+const soundSelector = document.getElementById("soundSelector");
 
 const { createFFmpeg, fetchFile } = FFmpeg;
 const ffmpeg = createFFmpeg({
@@ -960,10 +961,5 @@ updateSelectPlaceholder();
 
 // Si l'option du select SoundSelector n'est pas  sur l'option par default alors audioFileInput est desactivé
 
-  if (soundSelector.selectedIndex!= 0) {
-    audioFileInput.disabled = false;
-  } else {
-    audioFileInput.disabled = true;
-  }
-
+ 
 
