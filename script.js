@@ -74,6 +74,14 @@ togglePreviewButton.addEventListener("click", () => {
     }
   }
 });
+// remise à zero entre l'audio selecteur et l'audio file input selon l'option choisi par l'utilisateur 
+if(audioFileInput.value !== "")
+{
+  soundSelector.selectedIndex = 0;
+}else if(soundSelector.selectedIndex !== 0)
+{
+  audioFileInput.value = "";
+}
 
 const apiKeytest = 'BnTMdvUVteCn8xR13DR7r82iBdpATBZoKQYpGMYW'; // Remplace par ta clé API
 
@@ -596,10 +604,10 @@ document
   .addEventListener("click", async () => {
     // Appel de la fonction pour générer l'aperçu avec l'audio
     await generatePreview();
-    audioFileInput.value = "";
-    soundSelector.selectedIndex = 0;
+  
   });
 
+ 
 async function generatePreview() {
   if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
