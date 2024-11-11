@@ -22,6 +22,7 @@ const fileNameDisplay = document.getElementById("fileNameDisplay");
 const onOffDefil = document.getElementById("onOff");
 const container = document.getElementById("container");
 const soundSelector = document.getElementById("soundSelector");
+const confirmPreview = document.getElementById("confirmPreview");
 
 const { createFFmpeg, fetchFile } = FFmpeg;
 const ffmpeg = createFFmpeg({
@@ -795,6 +796,13 @@ async function generatePreview() {
   container.style.position = "relative";
   container.style.left = "16%";
 }
+
+//event click
+
+confirmPreview.addEventListener("click",()=>{
+    createVideoFromCarousel();
+  document.getElementById("previewModal").style.display = "none";
+})
 
 async function createVideoFromCarousel() {
   if (!ffmpeg.isLoaded()) await ffmpeg.load();
