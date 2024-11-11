@@ -826,6 +826,7 @@ async function createVideoFromCarousel() {
         const audioArrayBuffer = await audioBlob.arrayBuffer();
         audioFileName = `background_audio.mp3`;
         ffmpeg.FS("writeFile", audioFileName, new Uint8Array(audioArrayBuffer));
+        console.log("Audio local chargé et écrit dans FFmpeg")
       
     } else if (selectedSound) {
       // Utiliser un son prédéfini à partir de l'URL
