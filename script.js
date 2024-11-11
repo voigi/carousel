@@ -805,115 +805,155 @@ confirmPreview.addEventListener("click",()=>{
 })
 
 async function createVideoFromCarousel() {
-  if (!ffmpeg.isLoaded()) await ffmpeg.load();
-
-  const items = document.querySelectorAll(".carousel-item");
-  const durationPerImage = 1.5;
-  const videoWidth = 1280;
-  const videoHeight = 720;
-
-  let fileIndex = 0;
-  const inputs = [];
-
-  for (const item of items) {
-    const mediaElement = item.querySelector("img, video");
-    const mediaType = mediaElement.tagName.toLowerCase();
-
-    if (mediaType === "img") {
-      // Traitement de l'image sans piste audio
-      const imageBlob = await fetch(mediaElement.src).then((r) => r.blob());
-      const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
-      const imageFileName = `image${fileIndex}.jpg`;
-
-      ffmpeg.FS("writeFile", imageFileName, imageFile);
+    if (!ffmpeg.isLoaded()) await ffmpeg.load();
+  
+    const items = document.querySelectorAll(".carousel-item");
+    const durationPerImage = 1.5;
+    const videoWidth = 1280;
+    const videoHeight = 720;
+  
+    let fileIndex = 0;
+    const inputs = [];
+    let audioFileName = null;
+  
+    // Vérifier si un fichier audio est sélectionné via 'audioFileInput' ou 'soundSelector'
+    const audioInput = document.getElementById("audioFileInput");
+    const soundSelector = document.getElementById("soundSelector");
+    const selectedSound = soundSelector && soundSelector.value;
+  
+    if (audioInput && audioInput.files.length > 0) {
+      // Utiliser le fichier audio local
+      const audioBlob = audioInput.files[0];
+      const audioArrayBuffer = await audioBlob.arrayBuffer();
+      audioFileName = "background_audio.mp3";
+      ffmpeg.FS("writeFile", audioFileName, new Uint8Array(audioArrayBuffer));
+    } else if (selectedSound) {
+      // Utiliser un son prédéfini à partir de l'URL
+      const audioBlob = await fetch(selectedSound).then((r) => r.blob());
+      const audioArrayBuffer = await audioBlob.arrayBuffer();
+      audioFileName = "background_audio.mp3";
+      ffmpeg.FS("writeFile", audioFileName, new Uint8Array(audioArrayBuffer));
+    }
+  
+    // Traitement des éléments du carousel (images et vidéos)
+    for (const item of items) {
+      const mediaElement = item.querySelector("img, video");
+      const mediaType = mediaElement.tagName.toLowerCase();
+  
+      if (mediaType === "img") {
+        const imageBlob = await fetch(mediaElement.src).then((r) => r.blob());
+        const imageFile = new Uint8Array(await imageBlob.arrayBuffer());
+        const imageFileName = `image${fileIndex}.jpg`;
+  
+        ffmpeg.FS("writeFile", imageFileName, imageFile);
+        await ffmpeg.run(
+          "-loop",
+          "1",
+          "-t",
+          durationPerImage.toString(),
+          "-i",
+          imageFileName,
+          "-vf",
+          `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+          "-c:v",
+          "libx264",
+          "-preset",
+          "ultrafast",
+          `temp_image_${fileIndex}.mp4`
+        );
+        inputs.push(`temp_image_${fileIndex}.mp4`);
+      } else if (mediaType === "video") {
+        const videoBlob = await fetch(mediaElement.src).then((r) => r.blob());
+        const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
+        const videoFileName = `video${fileIndex}.mp4`;
+  
+        ffmpeg.FS("writeFile", videoFileName, videoFile);
+        await ffmpeg.run(
+          "-i",
+          videoFileName,
+          "-vf",
+          `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+          "-c:v",
+          "libx264",
+          "-c:a",
+          "aac",
+          "-b:a",
+          "128k",
+          "-ar",
+          "48000",
+          "-preset",
+          "ultrafast",
+          `temp_video_${fileIndex}.mp4`
+        );
+        inputs.push(`temp_video_${fileIndex}.mp4`);
+      }
+      fileIndex++;
+    }
+  
+    // Création du fichier input.txt pour la concaténation
+    const inputFileList = inputs.map((input) => `file '${input}'`).join("\n");
+    ffmpeg.FS("writeFile", "input.txt", new TextEncoder().encode(inputFileList));
+  
+    // Concaténation finale des fichiers, avec audio si disponible
+    if (audioFileName) {
       await ffmpeg.run(
-        "-loop",
-        "1",
-        "-t",
-        durationPerImage.toString(),
+        "-f",
+        "concat",
+        "-safe",
+        "0",
         "-i",
-        imageFileName,
-        "-vf",
-        `scale=${videoWidth}:${videoHeight},format=yuv420p`,
-        "-c:v",
-        "libx264",
-        "-preset",
-        "ultrafast",
-        `temp_image_${fileIndex}.mp4`
-      );
-      inputs.push(`temp_image_${fileIndex}.mp4`);
-    } else if (mediaType === "video") {
-      // Traitement de la vidéo avec piste audio
-      const videoBlob = await fetch(mediaElement.src).then((r) => r.blob());
-      const videoFile = new Uint8Array(await videoBlob.arrayBuffer());
-      const videoFileName = `video${fileIndex}.mp4`;
-
-      ffmpeg.FS("writeFile", videoFileName, videoFile);
-      await ffmpeg.run(
+        "input.txt",
         "-i",
-        videoFileName,
-        "-vf",
-        `scale=${videoWidth}:${videoHeight},format=yuv420p`,
+        audioFileName,
         "-c:v",
         "libx264",
         "-c:a",
         "aac",
+        "-shortest", // Troncature de la musique pour correspondre à la longueur de la vidéo
         "-b:a",
         "128k",
-        "-ar",
-        "48000",
+        "-pix_fmt",
+        "yuv420p",
         "-preset",
         "ultrafast",
-        `temp_video_${fileIndex}.mp4`
+        "-vsync",
+        "passthrough",
+        "adaptive_carousel_with_audio.mp4"
       );
-      inputs.push(`temp_video_${fileIndex}.mp4`);
+    } else {
+      await ffmpeg.run(
+        "-f",
+        "concat",
+        "-safe",
+        "0",
+        "-i",
+        "input.txt",
+        "-c:v",
+        "libx264",
+        "-pix_fmt",
+        "yuv420p",
+        "-preset",
+        "ultrafast",
+        "-vsync",
+        "passthrough",
+        "adaptive_carousel.mp4"
+      );
     }
-    fileIndex++;
-  }
-
-  // Création du fichier input.txt pour concaténation
-  const inputFileList = inputs.map((input) => `file '${input}'`).join("\n");
-  ffmpeg.FS("writeFile", "input.txt", new TextEncoder().encode(inputFileList));
-
-  // Concaténation stricte des fichiers pour synchroniser correctement audio et vidéo
-  await ffmpeg.run(
-    "-f",
-    "concat",
-    "-safe",
-    "0",
-    "-i",
-    "input.txt",
-    "-c:v",
-    "libx264",
-    "-c:a",
-    "aac",
-    "-b:a",
-    "128k",
-    "-pix_fmt",
-    "yuv420p",
-    "-preset",
-    "ultrafast",
-    "-vsync",
-    "passthrough",
-    "adaptive_carousel.mp4"
-  );
-
-  // Téléchargement de la vidéo générée
-  const data = ffmpeg.FS("readFile", "adaptive_carousel.mp4");
-  const videoURL = URL.createObjectURL(
-    new Blob([data.buffer], { type: "video/mp4" })
-  );
-  const a = document.createElement("a");
-  a.href = videoURL;
-  a.download = "adaptive_carousel.mp4";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-
-  alert("Vidéo générée avec succès!");
-
   
-}
+    // Téléchargement de la vidéo générée
+    const outputFile = audioFileName ? "adaptive_carousel_with_audio.mp4" : "adaptive_carousel.mp4";
+    const data = ffmpeg.FS("readFile", outputFile);
+    const videoURL = URL.createObjectURL(new Blob([data.buffer], { type: "video/mp4" }));
+    const a = document.createElement("a");
+    a.href = videoURL;
+    a.download = outputFile;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  
+    alert("Vidéo avec musique de fond générée avec succès!");
+  }
+  
 
 // N'appelez pas la fonction ici, laissez-la être appelée par votre code principal
 
