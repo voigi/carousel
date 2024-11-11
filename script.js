@@ -821,7 +821,7 @@ async function createVideoFromCarousel() {
     const soundSelector = document.getElementById("soundSelector");
     const selectedSound = soundSelector && soundSelector.value;
   
-    if (audioInput && audioInput.files.length > 0) {
+    if (audioInput.value!="") {
         const audioBlob = audioInput.files[0];
         const audioArrayBuffer = await audioBlob.arrayBuffer();
         audioFileName = `background_audio.mp3`;
