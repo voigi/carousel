@@ -958,12 +958,9 @@ function updateSelectPlaceholder() {
 }
 updateSelectPlaceholder();
 
-audioFileInput.addEventListener('change', (event) => {
+// Si l'option du select SoundSelector n'est pas  sur l'option par default alors audioFileInput est desactivé
+soundSelector.addEventListener("change", () => {
+  if (soundSelector.value === "") {
     audioFileInput.disabled = true;
-    SoundSelector.disabled = false;
-});
-
-SoundSelector.addEventListener('change', (event) => {
-    audioFileInput.disabled = false;
-    SoundSelector.disabled = true;
+  } 
 });
