@@ -932,6 +932,10 @@ addCancelButton.addEventListener("click", () => {
   mediaFormatSelect.selectedIndex = 0;
   console.log("cancel button clicked");
 });
+addMediaButton.addEventListener("click", () => {
+  uploadFileInput.value = "";
+  mediaFormatSelect.selectedIndex = 0;
+});
 
 document.getElementById("finishButton").addEventListener("click", function () {
   showModalFinish();
