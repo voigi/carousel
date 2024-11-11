@@ -817,7 +817,7 @@ async function createVideoFromCarousel() {
     let audioFileName = null;
   
     // Vérifier si un fichier audio est sélectionné via 'audioFileInput' ou 'soundSelector'
-    const audioInput = document.getElementById("audioFileInput");
+    const audioInput = document.getElementById("audioFile");
     const soundSelector = document.getElementById("soundSelector");
     const selectedSound = soundSelector && soundSelector.value;
     
