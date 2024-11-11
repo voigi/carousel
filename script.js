@@ -77,10 +77,10 @@ togglePreviewButton.addEventListener("click", () => {
 // remise à zero entre l'audio selecteur et l'audio file input selon l'option choisi par l'utilisateur 
 if(audioFileInput.value !== "")
 {
-  soundSelector.selectedIndex = 0;
+  console.log(soundSelector.selectedIndex) ;
 }else if(soundSelector.selectedIndex !== 0)
 {
-  audioFileInput.value = "";
+  console.log(audioFileInput.value);
 }
 
 const apiKeytest = 'BnTMdvUVteCn8xR13DR7r82iBdpATBZoKQYpGMYW'; // Remplace par ta clé API
