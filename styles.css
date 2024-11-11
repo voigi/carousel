@@ -633,4 +633,14 @@ button:disabled {
   flex-direction: column;
   justify-content: space-between;
   height: 100px;
+  margin-top: 2px;
+}
+.etape-audio{
+    display: flex;
+}
+.etape-audio p
+{
+    position: relative;
+    top: 4px;
+    left: 2px;    
 }
