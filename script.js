@@ -75,10 +75,10 @@ togglePreviewButton.addEventListener("click", () => {
   }
 });
 // remise à zero entre l'audio selecteur et l'audio file input selon l'option choisi par l'utilisateur 
-if(audioFileInput.value !== "")
+if(audioFileInput.value != "")
 {
   console.log(soundSelector.selectedIndex) ;
-}else if(soundSelector.selectedIndex !== 0)
+}else if(soundSelector.selectedIndex != 0)
 {
   console.log(audioFileInput.value);
 }
