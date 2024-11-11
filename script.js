@@ -963,6 +963,7 @@ updateSelectPlaceholder();
 soundSelector.addEventListener("change", () => {
     audioFileInput.value="";
     audioFileInput.disabled = soundSelector.value !== "";
+    console.log("j'ai changé");
 });
 
  
