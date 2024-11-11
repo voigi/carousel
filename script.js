@@ -74,14 +74,16 @@ togglePreviewButton.addEventListener("click", () => {
     }
   }
 });
-// remise à zero entre l'audio selecteur et l'audio file input selon l'option choisi par l'utilisateur 
-if(audioFileInput.value != "")
-{
-  console.log(soundSelector.selectedIndex) ;
-}else if(soundSelector.selectedIndex != 0)
-{
-  console.log(audioFileInput.value);
-}
+//si l'utilisateur selectionne un son predefini alors audiofileInput est desactivé et si l'utilisateur utilise audioFileinput SoundSelector est desactivé
+audioFileInput.addEventListener('change', (event) => {
+    audioFileInput.disabled = true;
+    SoundSelector.disabled = false;
+});
+
+SoundSelector.addEventListener('change', (event) => {
+    audioFileInput.disabled = false;
+    SoundSelector.disabled = true;
+});
 
 const apiKeytest = 'BnTMdvUVteCn8xR13DR7r82iBdpATBZoKQYpGMYW'; // Remplace par ta clé API
 
