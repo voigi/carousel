@@ -143,7 +143,10 @@ async function fetchSounds() {
   soundSelector.addEventListener("change", () => {
     console.log("Changement détecté dans soundSelector");
     audioFileInput.value = ""; // Réinitialise le champ de fichier
-    audioFileInput.disabled = soundSelector.value !== ""; // Désactive si une option de son est sélectionnée
+  });
+  audioFileInput.addEventListener("change", () => {
+    console.log("Changement détecté dans audioFileInput");
+    soundSelector.selectedIndex=0; // Réinitialise le selecteur de son
   });
 
 
