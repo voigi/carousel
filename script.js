@@ -961,10 +961,10 @@ updateSelectPlaceholder();
 
 // Si l'option du select SoundSelector n'est pas  sur l'option par default alors audioFileInput est desactivé
 soundSelector.addEventListener("change", () => {
-    audioFileInput.value="";
-    audioFileInput.disabled = soundSelector.value !== "";
-    console.log("j'ai changé");
-});
+    console.log("Changement détecté dans soundSelector");
+    audioFileInput.value = ""; // Réinitialise le champ de fichier
+    audioFileInput.disabled = soundSelector.value !== ""; // Désactive si une option de son est sélectionnée
+  });
 
  
 
