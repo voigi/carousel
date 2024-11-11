@@ -960,6 +960,13 @@ function updateSelectPlaceholder() {
 updateSelectPlaceholder();
 
 // Si l'option du select SoundSelector n'est pas  sur l'option par default alors audioFileInput est desactivé
+soundSelector.addEventListener("change", (event) => {
+  if (soundSelector.value) {
+    audioFileInput.disabled = true;
+  } else {
+    audioFileInput.disabled = false;
+  }
+});
 
  
 
