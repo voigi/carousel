@@ -627,3 +627,10 @@ button:disabled {
   background-color: transparent;
   flex-shrink: 0;
 }
+#step-audio
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100px;
+}
