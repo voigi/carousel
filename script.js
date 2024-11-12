@@ -106,11 +106,7 @@ function showAlert() {
   notyf.success({
     message: 'J\'ai reussi',
     duration: 9000,
-    icon: {
-      className: 'material-icons',
-        tagName: 'i',
-        text: 'warning'
-    }
+    icon: true
   })
  
 }
