@@ -99,11 +99,11 @@ function testFreesoundAPI() {
 testFreesoundAPI();
 
 
-
+const notyf = new Notyf
 
 
 function showAlert() {
-  const notyf = new Notyf({
+  ({
     duration: 1000,
     types: [
       {
