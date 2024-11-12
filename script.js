@@ -105,11 +105,16 @@ const notyf = new Notyf
 function showAlert() {
  
 
-  notyf.error({
-    message: 'Accept the terms before moving forward',
-    duration: 9000,
-    icon: '<i class="fa-solid fa-triangle-exclamation"></i>'
+  notyf.success({
+    duration: 3000,
+    message: 'Opération réussie !',
+    icon: {
+      className: 'fa-solid fa-check-circle my-custom-icon', // Classe personnalisée pour ajouter une marge
+      tagName: 'i',
+      color: '#4CAF50' // Vert pour indiquer le succès
+    }
   });
+  
  
 }
 
