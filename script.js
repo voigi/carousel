@@ -106,14 +106,16 @@ function showAlert() {
  
 
   notyf.success({
-    duration: 3000,
-    message: 'Opération réussie !',
+    
+    message: 'Média ajouté au carrousel avec succès',
+    position: { x: 'right', y: 'top' },
+    timeout: 3000,
     icon: {
-      className: 'fa-solid fa-check-circle my-custom-icon', // Classe personnalisée pour ajouter une marge
-      tagName: 'i',
-      color: 'black' // Vert pour indiquer le succès
+      className: 'fa fa-check',
+      tagName: 'i'
     }
   });
+
   
  
 }
