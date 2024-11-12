@@ -100,14 +100,28 @@ testFreesoundAPI();
 
 
 
-const notyf = new Notyf();
+
 
 function showAlert() {
-  notyf.success({
-    message: 'J\'ai reussi',
-    duration: 9000,
-    icon: true
-  })
+  const notyf = new Notyf({
+    duration: 1000,
+    types: [
+      {
+        type: 'warning',
+        backgroundColor: 'orange',
+        icon: {
+          className: 'material-icons',
+          tagName: 'i',
+          text: 'warning'
+        }
+      },
+      {
+        type: 'error',
+        backgroundColor: 'indianred',
+        duration: 2000
+      }
+    ]
+  });
  
 }
 
