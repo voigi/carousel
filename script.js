@@ -104,6 +104,7 @@ testFreesoundAPI();
 
 function showAlert() {
   swal.fire('Hello world!');
+  console.log(' alert Hello world!');
 }
 
 window.onload = showAlert;
