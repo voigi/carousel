@@ -103,10 +103,14 @@ testFreesoundAPI();
 const notyf = new Notyf();
 
 function showAlert() {
-  notyf.error({
-    message: 'Accept the terms before moving forward',
+  notyf.success({
+    message: 'J\'ai reussi',
     duration: 9000,
-    icon: false
+    icon: {
+      className: 'material-icons',
+        tagName: 'i',
+        text: 'warning'
+    }
   })
  
 }
