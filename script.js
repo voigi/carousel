@@ -100,11 +100,15 @@ testFreesoundAPI();
 
 
 
-
+const notyf = new Notyf();
 
 function showAlert() {
-  swal.fire('Hello world!');
-  console.log(' alert Hello world!');
+  notyf.error({
+    message: 'Accept the terms before moving forward',
+    duration: 9000,
+    icon: false
+  })
+ 
 }
 
 showAlert();
