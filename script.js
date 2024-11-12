@@ -103,7 +103,7 @@ const notyf = new Notyf
 
 
 function showAlert() {
-  const notyf = new Notyf();
+ 
 
   notyf.error({
     message: 'Accept the terms before moving forward',
