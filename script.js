@@ -111,7 +111,7 @@ function showAlert() {
     icon: {
       className: 'fa-solid fa-check-circle my-custom-icon', // Classe personnalisée pour ajouter une marge
       tagName: 'i',
-      color: '#4CAF50' // Vert pour indiquer le succès
+      
     }
   });
   
