@@ -99,14 +99,14 @@ function testFreesoundAPI() {
 testFreesoundAPI();
 
 
-const {swal}= Swal;
+
 
 
 function showAlert() {
   swal.fire('Hello world!');
 }
 
-window.onload= showAlert;
+window.onload = showAlert;
 
 
 
