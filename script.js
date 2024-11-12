@@ -103,24 +103,12 @@ const notyf = new Notyf
 
 
 function showAlert() {
-  ({
-    duration: 1000,
-    types: [
-      {
-        type: 'warning',
-        backgroundColor: 'orange',
-        icon: {
-          className: 'material-icons',
-          tagName: 'i',
-          text: 'warning'
-        }
-      },
-      {
-        type: 'error',
-        backgroundColor: 'indianred',
-        duration: 2000
-      }
-    ]
+  const notyf = new Notyf();
+
+  notyf.error({
+    message: 'Accept the terms before moving forward',
+    duration: 9000,
+    icon: '<i class="fa-solid fa-triangle-exclamation"></i>'
   });
  
 }
