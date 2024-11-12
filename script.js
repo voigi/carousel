@@ -107,7 +107,7 @@ function showAlert() {
   console.log(' alert Hello world!');
 }
 
-window.onload = showAlert;
+showAlert();
 
 
 
