@@ -162,7 +162,7 @@ async function fetchSounds() {
   window.onload = fetchSounds;
 
 
-  console.log(audioFileInput.value);
+  console.log(audioFileInput.value.trim());
 
   soundSelector.addEventListener("change", () => {
     console.log("Changement détecté dans soundSelector");
