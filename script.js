@@ -180,10 +180,14 @@ soundSelector.addEventListener("change", () => {
     
     // Réinitialise le champ de fichier
     audioFileInput.value = ""; 
+  
     
     // Met à jour l'état du bouton
     updateButtonState();
 });
+if(soundSelector.selectedIndex ===0){
+  confirmPreview.disabled = true;
+}
 
 // Événement pour le changement dans audioFileInput
 audioFileInput.addEventListener("change", () => {
