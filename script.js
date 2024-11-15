@@ -164,19 +164,40 @@ async function fetchSounds() {
 
   
 
-  // Fonction pour mettre à jour l'état du bouton
-function toggleButtonState() {
-  // Vérifie que le champ de saisie est vide ET que le select est sur "default"
-  const bothAreEmpty = soundSelector.selectedIndex === 0 && audioFileInput.value.trim() === "";
-
-  // Désactive le bouton si les deux sont vides, sinon l'active
-  confirmPreview.disabled = bothAreEmpty;
+  function updateButtonState() {
+    // Désactive le bouton si soundSelector est sur sa valeur par défaut ET audioFileInput est vide
+    if (soundSelector.selectedIndex === 0 && audioFileInput.value.trim() === "") {
+        confirmPreview.disabled = true;
+    } else {
+        confirmPreview.disabled = false;
+    }
 }
 
-// Ajoute les écouteurs d'événements
-soundSelector.addEventListener('change', toggleButtonState);
-audioFileInput.addEventListener('input', toggleButtonState);
+// Événement pour le changement dans soundSelector
+soundSelector.addEventListener("change", () => {
+    console.log("Changement détecté dans soundSelector");
+    console.log(`Index sélectionné : ${soundSelector.selectedIndex}`);
+    
+    // Réinitialise le champ de fichier
+    audioFileInput.value = ""; 
+    
+    // Met à jour l'état du bouton
+    updateButtonState();
+});
 
+// Événement pour le changement dans audioFileInput
+audioFileInput.addEventListener("change", () => {
+    console.log("Changement détecté dans audioFileInput");
+
+    // Réinitialise le sélecteur de son
+    soundSelector.selectedIndex = 0; 
+
+    // Met à jour l'état du bouton
+    updateButtonState();
+});
+
+// Initialisation de l'état du bouton au chargement
+updateButtonState();
 
 
 
