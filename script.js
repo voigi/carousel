@@ -166,12 +166,12 @@ async function fetchSounds() {
 
   function updateButtonState() {
     // Désactive le bouton si soundSelector est sur sa valeur par défaut ET audioFileInput est vide
-    if (soundSelector.selectedIndex === 0 && audioFileInput.value.trim() === "") {
+    if (soundSelector.selectedIndex === 0 && audioFileInput.value.trim() === ""||soundSelector.selectedIndex === 0 )  {
         confirmPreview.disabled = true;
     } else {
         confirmPreview.disabled = false;
     }
-}
+  }
 
 // Événement pour le changement dans soundSelector
 soundSelector.addEventListener("change", () => {
@@ -185,9 +185,7 @@ soundSelector.addEventListener("change", () => {
     // Met à jour l'état du bouton
     updateButtonState();
 });
-if(soundSelector.selectedIndex ===0){
-  confirmPreview.disabled = true;
-}
+
 
 // Événement pour le changement dans audioFileInput
 audioFileInput.addEventListener("change", () => {
