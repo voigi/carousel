@@ -169,8 +169,12 @@ async function fetchSounds() {
     // Désactive le bouton si soundSelector est sur sa valeur par défaut ET audioFileInput est vide
     if (soundSelector.selectedIndex === 0 && audioFileInput.value.trim() === "") {
         confirmPreview.disabled = true;
+        document.getElementById("addAudioAndPreview") .disabled = true;
+  
+        
     } else {
         confirmPreview.disabled = false;
+        document.getElementById("addAudioAndPreview") .disabled = false;
     }
     
   }
