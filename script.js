@@ -171,11 +171,11 @@ async function fetchSounds() {
     } else {
         confirmPreview.disabled = false;
     }
-    if(soundSelector.selectedIndex === 0){
+    
+  }
+if(soundSelector.selectedIndex === 0){
       audioFileInput.value = "";
     }
-  }
-
 // Événement pour le changement dans soundSelector
 soundSelector.addEventListener("change", () => {
     console.log("Changement détecté dans soundSelector");
