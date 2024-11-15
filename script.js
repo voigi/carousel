@@ -182,9 +182,6 @@ async function fetchSounds() {
     // Réinitialise le sélecteur de son
     soundSelector.selectedIndex = 0; 
 
-    // Réinitialise le champ de texte
-    audioTextInput.value = ""; 
-
     // Réinitialise l'état du bouton
     updateButtonState();
 
