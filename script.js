@@ -161,10 +161,13 @@ async function fetchSounds() {
   
   window.onload = fetchSounds;
 
+
+  console.log(audioFileInput.value);
+
   soundSelector.addEventListener("change", () => {
     console.log("Changement détecté dans soundSelector");
     console.log(soundSelector.selectedIndex);
-    console.log(audioFileInput.value);
+    
     // activer confirmPreview
     confirmPreview.disabled = false;
     audioFileInput.value = ""; // Réinitialise le champ de fichier
