@@ -173,9 +173,7 @@ async function fetchSounds() {
     }
     
   }
-if(soundSelector.selectedIndex === 0){
-      audioFileInput.value = "";
-    }
+
 // Événement pour le changement dans soundSelector
 soundSelector.addEventListener("change", () => {
     console.log("Changement détecté dans soundSelector");
