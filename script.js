@@ -166,10 +166,13 @@ async function fetchSounds() {
 
   function updateButtonState() {
     // Désactive le bouton si soundSelector est sur sa valeur par défaut ET audioFileInput est vide
-    if (soundSelector.selectedIndex === 0 && audioFileInput.value.trim() === ""||soundSelector.selectedIndex === 0 )  {
+    if (soundSelector.selectedIndex === 0 && audioFileInput.value.trim() === "") {
         confirmPreview.disabled = true;
     } else {
         confirmPreview.disabled = false;
+    }
+    if(soundSelector.selectedIndex === 0){
+      audioFileInput.value = "";
     }
   }
 
