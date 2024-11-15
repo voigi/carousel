@@ -175,9 +175,10 @@ async function fetchSounds() {
     soundSelector.selectedIndex=0; // Réinitialise le selecteur de son
   });
   // si le select soundSelector est sur sa valeur parv default et audioFileInput n'as pas de  valeur alors  le bouton confirmPreview est desactivé
-  if (soundSelector.selectedIndex=0 && audioFileInput.value === "") {
+  if (soundSelector.selectedIndex === 0 && audioFileInput.value === "") {
     confirmPreview.disabled = true;
-  } 
+}
+
 
 
 
