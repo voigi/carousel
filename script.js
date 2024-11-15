@@ -173,6 +173,9 @@ async function fetchSounds() {
     confirmPreview.disabled = false;
     soundSelector.selectedIndex=0; // Réinitialise le selecteur de son
   });
+  if(soundSelector.selectedIndex=0 && audioFileInput.value==""){
+    cancelButton.disabled=true;
+  }
 
 
 
