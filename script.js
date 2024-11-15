@@ -164,25 +164,19 @@ async function fetchSounds() {
 
   
 
-  soundSelector.addEventListener("change", () => {
-    console.log("Changement détecté dans soundSelector");
-    console.log(soundSelector.selectedIndex);
-    
-    // activer confirmPreview
-    confirmPreview.disabled = false;
-    audioFileInput.value = ""; // Réinitialise le champ de fichier
-  });
-  audioFileInput.addEventListener("change", () => {
-    console.log("Changement détecté dans audioFileInput");
-    
-    // activer confirmPreview
-    confirmPreview.disabled = false;
-    soundSelector.selectedIndex=0; // Réinitialise le selecteur de son
-  });
-  // si le select soundSelector est sur sa valeur parv default et audioFileInput n'as pas de  valeur alors  le bouton confirmPreview est desactivé
-  if (soundSelector.selectedIndex === 0 && audioFileInput.value.trim() === "") {
-    confirmPreview.disabled = true;
+  // Fonction pour mettre à jour l'état du bouton
+function toggleButtonState() {
+  // Vérifie que le champ de saisie est vide ET que le select est sur "default"
+  const bothAreEmpty = soundSelector.selectedIndex === 0 && audioFileInput.value.trim() === "";
+
+  // Désactive le bouton si les deux sont vides, sinon l'active
+  confirmPreview.disabled = bothAreEmpty;
 }
+
+// Ajoute les écouteurs d'événements
+soundSelector.addEventListener('change', toggleButtonState);
+audioFileInput.addEventListener('input', toggleButtonState);
+
 
 
 
