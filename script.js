@@ -23,6 +23,7 @@ const onOffDefil = document.getElementById("onOff");
 const container = document.getElementById("container");
 const soundSelector = document.getElementById("soundSelector");
 const confirmPreview = document.getElementById("confirmPreview");
+const cancelPreview = document.getElementById("cancelPreview");
 
 const { createFFmpeg, fetchFile } = FFmpeg;
 const ffmpeg = createFFmpeg({
@@ -173,6 +174,23 @@ async function fetchSounds() {
     }
     
   }
+  //lorsque je clique sur cancelpreview soundSelector.selectedIndex === 0 && audioFileInput.value.trim() === ""
+  cancelPreview.addEventListener("click", () => {
+    // Réinitialise le champ de fichier
+    audioFileInput.value = "";
+
+    // Réinitialise le sélecteur de son
+    soundSelector.selectedIndex = 0; 
+
+    // Réinitialise le champ de texte
+    audioTextInput.value = ""; 
+
+    // Réinitialise l'état du bouton
+    updateButtonState();
+
+    // Désactive la modal de confirmation
+    deleteModal.style.display = "none";
+  });
 
 // Événement pour le changement dans soundSelector
 soundSelector.addEventListener("change", () => {
