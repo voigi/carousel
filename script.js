@@ -170,6 +170,7 @@ async function fetchSounds() {
   });
   audioFileInput.addEventListener("change", () => {
     console.log("Changement détecté dans audioFileInput");
+    console.log(audioFileInput.value);
     // activer confirmPreview
     confirmPreview.disabled = false;
     soundSelector.selectedIndex=0; // Réinitialise le selecteur de son
