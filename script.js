@@ -110,7 +110,7 @@ function showAlert() {
     
     message: 'Média ajouté au carrousel avec succès',
     position: { x: 'right', y: 'top' },
-    timeout: 9000,
+    timeout: 5000,
     icon: {
       className: 'fa fa-check',
       tagName: 'i'
