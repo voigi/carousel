@@ -168,7 +168,7 @@ async function fetchSounds() {
     audioFileInput.value = ""; // Réinitialise le champ de fichier
   });
   audioFileInput.addEventListener("change", () => {
-    console.log("Changement détecté dans audioFileInput");
+   // console.log("Changement détecté dans audioFileInput");
     console.log("Bonjour");
     // activer confirmPreview
     confirmPreview.disabled = false;
